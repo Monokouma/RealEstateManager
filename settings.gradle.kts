@@ -15,4 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "RealEstateManagerKotlin"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":ui")
