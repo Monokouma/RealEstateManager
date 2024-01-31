@@ -7,7 +7,7 @@
         android:usesCleartextTraffic="true"
         >
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".splash_screen.SplashScreenActivity"
             android:exported="true"
             >
             <intent-filter>

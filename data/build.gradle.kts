@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlinx.kover")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -58,6 +59,7 @@ dependencies {
     
     implementation("com.google.code.gson:gson:2.10")
     implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("com.google.firebase:firebase-firestore:24.10.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     
     implementation("androidx.room:room-ktx:2.6.1")
