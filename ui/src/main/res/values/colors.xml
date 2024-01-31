@@ -2,4 +2,18 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Light Mode Color -->
+    <color name="primaryColorLight">#3B5452</color>
+    <color name="secondaryColorLight">#BEA2AF</color>
+    <color name="accentColorLight">#816A5A</color>
+    <color name="textColorLight">#111817</color>
+    <color name="backgroundColorLight">#EAF0F0</color>
+    <!-- Dark Mode Color -->
+    <color name="primaryColorDark">#ABC4C2</color>
+    <color name="secondaryColorDark">#5D414E</color>
+    <color name="accentColorDark">#A58E7E</color>
+    <color name="textColorDark">#E7EEED</color>
+    <color name="backgroundColorDark">#0F1515</color>
+
 </resources>

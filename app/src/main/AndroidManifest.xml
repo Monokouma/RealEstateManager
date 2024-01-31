@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     >
-
+    
     <application
         android:name=".RealEstateManagerApplication"
         android:allowBackup="true"
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Base.Theme.RealEstateManager"
+        android:theme="@style/Theme.RealEstateManager"
         tools:targetApi="31"
         />
 
