@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">RealEstateManagerKotlin</string>
+    <string name="app_name">RealEstateManager</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="login_greetings">To whom have I the honor ?</string>
 </resources>
