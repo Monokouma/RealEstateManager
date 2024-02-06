@@ -8,6 +8,12 @@
         android:usesCleartextTraffic="true"
         >
         <activity
+            android:name=".main.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.RealEstateManagerKotlin"
+            />
+        <activity
             android:name=".login.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_main"

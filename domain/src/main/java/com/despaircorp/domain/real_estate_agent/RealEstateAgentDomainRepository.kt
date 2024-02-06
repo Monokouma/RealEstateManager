@@ -8,4 +8,10 @@ interface RealEstateAgentDomainRepository {
     suspend fun insertRealEstateAgentEntities(realEstateAgentEntities: List<RealEstateAgentEntity>)
     
     suspend fun isRealEstateAgentTableExist(): Boolean
+    
+    suspend fun getLoggedRealEstateAgentEntity(): RealEstateAgentEntity
+    
+    suspend fun logChosenAgent(agentId: Int)
+    suspend fun disconnect(agentId: Int): Int
+    suspend fun isUserCurrentlyLogged(): Boolean
 }

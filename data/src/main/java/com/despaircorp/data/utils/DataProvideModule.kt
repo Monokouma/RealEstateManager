@@ -29,4 +29,8 @@ class DataProvideModule {
     fun provideRealEstateAgentDao(application: Application): RealEstateAgentDao =
         RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
             .getRealEstateAgentDao()
+    
+    @Provides
+    @Singleton
+    fun provideEntitiesMaperinator(): EntitiesMaperinator = EntitiesMaperinator()
 }

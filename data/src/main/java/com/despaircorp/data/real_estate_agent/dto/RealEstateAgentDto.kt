@@ -8,5 +8,6 @@ data class RealEstateAgentDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val name: String,
-    val imageResource: Int
+    val imageResource: Int,
+    val isLoggedIn: Boolean
 )

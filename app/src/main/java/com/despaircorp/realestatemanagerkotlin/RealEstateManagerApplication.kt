@@ -27,32 +27,36 @@ class RealEstateManagerApplication : Application() {
                         RealEstateAgentEntity(
                             name = "Darius",
                             id = 1,
-                            imageResource = randomProfilePicturinator()
+                            imageResource = randomProfilePicturinator(),
+                            isLoggedIn = false
                         ),
                         RealEstateAgentEntity(
                             name = "Cassio",
                             id = 2,
-                            imageResource = randomProfilePicturinator()
+                            imageResource = randomProfilePicturinator(),
+                            isLoggedIn = false
                         ),
                         RealEstateAgentEntity(
                             name = "Lucian",
                             id = 3,
-                            imageResource = randomProfilePicturinator()
+                            imageResource = randomProfilePicturinator(),
+                            isLoggedIn = false
                         ),
                         RealEstateAgentEntity(
                             name = "Bard",
                             id = 4,
-                            imageResource = randomProfilePicturinator()
+                            imageResource = randomProfilePicturinator(),
+                            isLoggedIn = false
                         ),
                         RealEstateAgentEntity(
                             name = "Nilah",
                             id = 5,
-                            imageResource = randomProfilePicturinator()
+                            imageResource = randomProfilePicturinator(),
+                            isLoggedIn = false
                         )
                     )
                 )
             }
         }
-        
     }
 }

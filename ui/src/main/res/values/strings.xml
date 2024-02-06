@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">RealEstateManager</string>
+    <string name="app_name_formated">Real Estate Manager</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="login_greetings">To whom have I the honor ?</string>
+    <string name="continue_button">Continue</string>
+    <string name="chose_someone">Chose Someone</string>
+    <string name="you_have_to_chose_a_profile_to_continue">You have to chose a profile to continue</string>
+    <string name="logout">Log Out</string>
 </resources>
