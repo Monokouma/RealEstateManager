@@ -141,7 +141,7 @@ fun PopupFormDialog(
                     defaultElevation = 6.dp
                 ),
                 colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.primary,
                 )
             ) {
                 Column(
