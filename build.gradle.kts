@@ -1,10 +1,9 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     dependencies {
-        classpath("com.google.gms:google-services:4.4.0")
+        classpath("com.google.gms:google-services:4.4.1")
     }
 }
 
@@ -15,9 +14,8 @@ plugins {
     id("com.android.library") version "8.2.2" apply false
     id("com.google.devtools.ksp") version "1.9.0-1.0.13" apply false
     id("com.google.dagger.hilt.android") version "2.48.1" apply false
-    id("org.jetbrains.kotlinx.kover") version "0.6.1"
+    id("org.jetbrains.kotlinx.kover") version "0.7.5" apply false
 }
-
 
 subprojects {
     tasks.withType<KotlinCompile>().configureEach {
@@ -31,8 +29,12 @@ subprojects {
     
     tasks.withType<Test>().configureEach {
         testLogging {
-            events = setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-            exceptionFormat = TestExceptionFormat.FULL
+            events = setOf(
+                TestLogEvent.STANDARD_OUT,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.FAILED
+            )
+            exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
             showExceptions = true
             showCauses = true
             showStackTraces = true

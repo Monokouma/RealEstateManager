@@ -1,6 +1,6 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.data.utils
 
-import com.despaircorp.ui.R
+import com.despaircorp.data.R
 
 fun randomProfilePicturinator(): Int {
     

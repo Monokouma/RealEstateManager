@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.despaircorp.data.real_estate_agent.dto.RealEstateAgentDto
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface RealEstateAgentDao {
@@ -15,6 +16,9 @@ interface RealEstateAgentDao {
     @Query("SELECT * FROM real_estate_agent")
     suspend fun getAllRealEstateAgentDto(): List<RealEstateAgentDto>
     
+    @Query("SELECT * FROM real_estate_agent")
+    fun getAllRealEstateAgentDtoAsFlow(): Flow<List<RealEstateAgentDto>>
+    
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(realEstateAgentEntities: List<RealEstateAgentDto>)
     
@@ -22,7 +26,7 @@ interface RealEstateAgentDao {
     suspend fun getLoggedRealEstateAgentEntity(): RealEstateAgentDto
     
     @Query("UPDATE real_estate_agent SET isLoggedIn = 1 WHERE id=:agentId")
-    suspend fun logChosenAgent(agentId: Int)
+    suspend fun logChosenAgent(agentId: Int): Int
     
     @Query("UPDATE real_estate_agent SET isLoggedIn = 0 WHERE id=:agentId")
     suspend fun disconnect(agentId: Int): Int

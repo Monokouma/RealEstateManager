@@ -5,7 +5,7 @@
     >
     
     <application
-        android:name=".RealEstateManagerApplication"
+        android:name=".main.RealEstateManagerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

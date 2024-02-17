@@ -22,13 +22,13 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,17 +52,19 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity : ComponentActivity() {
     private val viewModel: LoginViewModel by viewModels()
     
-    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
         setContent {
             RealEstateManagerKotlinTheme {
+                Scaffold {
+                    LoginMain(
+                        modifier = Modifier.padding(it),
+                        viewModel = viewModel
+                    )
+                }
                 // A surface container using the 'background' color from the theme
-                LoginMain(
-                    modifier = Modifier,
-                    viewModel
-                )
+                
             }
         }
         
@@ -79,32 +81,36 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginMain(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
-    val isSplashScreenShown by viewModel.isSplashScreenShownLiveData.observeAsState(initial = false)
-    val realEstateAgentEntities by viewModel.realEstateAgentEntitiesLiveDate.observeAsState(
-        emptyList()
-    )
-    val isAgentCurrentlyLoggedIn by viewModel.isAgentCurrentlyLoggedInLiveData.observeAsState(false)
-    
-    LaunchedEffect(Unit) {
-        viewModel.startSplashScreenTime()
-        viewModel.fetchRealEstateAgentList()
-        viewModel.isAgentAlreadyLoggedIn()
-    }
+    val uiState by viewModel.uiStateFlow.collectAsState()
     
     Surface(modifier = modifier, color = MaterialTheme.colorScheme.background) {
         val activity = (LocalContext.current as? Activity)
         
-        if (isSplashScreenShown) {
-            //Show Login
-            if (isAgentCurrentlyLoggedIn) {
+        when (val state = uiState) {
+            LoginState.AlreadyLoggedInAgent -> {
                 activity?.startActivity(MainActivity.navigate(activity.applicationContext))
                 activity?.finish()
-            } else {
-                Login(modifier, realEstateAgentEntities, viewModel)
             }
-        } else {
-            //Show Splash Screen
-            SplashScreen(modifier)
+            
+            LoginState.CountDown -> {
+                SplashScreen(modifier)
+            }
+            
+            is LoginState.Error -> {
+                Toast.makeText(activity, activity?.getString(state.error), Toast.LENGTH_SHORT)
+                    .show()
+            }
+            
+            is LoginState.ShowRealEstateAgentEntities -> {
+                Login(modifier, state.realEstateAgentEntities, onClick = {
+                    viewModel.onSelectedRealEstateAgent(it)
+                })
+            }
+            
+            LoginState.SuccessLogin -> {
+                activity?.startActivity(MainActivity.navigate(activity.applicationContext))
+                activity?.finish()
+            }
         }
     }
 }
@@ -146,7 +152,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 fun Login(
     modifier: Modifier = Modifier,
     realEstateAgentEntities: List<RealEstateAgentEntity>,
-    viewModel: LoginViewModel
+    onClick: (Int) -> Unit
 ) {
     
     Column(
@@ -165,7 +171,7 @@ fun Login(
             color = MaterialTheme.colorScheme.outline
         )
         
-        RealEstateAgentDropDown(realEstateAgentEntities, modifier, viewModel)
+        RealEstateAgentDropDown(realEstateAgentEntities, modifier, onClick)
         
     }
 }
@@ -176,9 +182,8 @@ fun Login(
 fun RealEstateAgentDropDown(
     realEstateAgentEntities: List<RealEstateAgentEntity>,
     modifier: Modifier,
-    viewModel: LoginViewModel,
-    
-    ) {
+    onClick: (Int) -> Unit
+) {
     val text = stringResource(R.string.chose_someone)
     var isExpanded by remember {
         mutableStateOf(false)
@@ -272,7 +277,6 @@ fun RealEstateAgentDropDown(
             modifier = Modifier
                 .padding(vertical = 24.dp),
             onClick = {
-                
                 if (selectedId == 0) {
                     Toast.makeText(
                         activity?.applicationContext,
@@ -280,9 +284,7 @@ fun RealEstateAgentDropDown(
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    viewModel.onSelectedAgent(selectedId)
-                    activity?.startActivity(MainActivity.navigate(activity.applicationContext))
-                    activity?.finish()
+                    onClick.invoke(selectedId)
                 }
             }
         ) {
@@ -296,6 +298,6 @@ fun RealEstateAgentDropDown(
 @Composable
 fun GreetingPreview() {
     RealEstateManagerKotlinTheme {
-        //Login(realEstateAgentEntities = emptyList(), viewModel = viewModel)
+        //ShowRealEstateAgentEntities(realEstateAgentEntities = emptyList(), viewModel = viewModel)
     }
 }

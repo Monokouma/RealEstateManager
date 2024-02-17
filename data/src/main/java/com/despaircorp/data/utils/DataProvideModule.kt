@@ -2,6 +2,7 @@ package com.despaircorp.data.utils
 
 import android.app.Application
 import android.content.res.Resources
+import androidx.work.WorkManager
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
 import com.despaircorp.data.room_database.RealEstateManagerRoomDatabase
 import dagger.Module
@@ -32,5 +33,11 @@ class DataProvideModule {
     
     @Provides
     @Singleton
-    fun provideEntitiesMaperinator(): EntitiesMaperinator = EntitiesMaperinator()
+    fun provideEntitiesMaperinator(): EntitiesMaperinator = EntitiesMaperinator
+    
+    @Provides
+    @Singleton
+    fun provideWorkManager(application: Application): WorkManager {
+        return WorkManager.getInstance(application)
+    }
 }

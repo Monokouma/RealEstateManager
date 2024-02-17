@@ -48,9 +48,10 @@ hilt {
 }
 
 dependencies {
+    
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
-    
+    testImplementation(project(":stubs"))
     // region Hilt x Worker https://developer.android.com/training/dependency-injection/hilt-jetpack#workmanager
     ksp("androidx.hilt:hilt-compiler:1.1.0")
     
@@ -63,7 +64,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("app.cash.turbine:turbine:1.0.0")
- 
+    
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

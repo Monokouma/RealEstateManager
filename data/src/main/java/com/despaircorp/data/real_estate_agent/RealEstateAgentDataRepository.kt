@@ -1,17 +1,24 @@
 package com.despaircorp.data.real_estate_agent
 
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
+import com.despaircorp.data.real_estate_agent.workers.RealEstateAgentInitWorker
+import com.despaircorp.data.utils.CoroutineDispatcherProvider
 import com.despaircorp.data.utils.EntitiesMaperinator
 import com.despaircorp.domain.real_estate_agent.RealEstateAgentDomainRepository
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
-import com.despaircorp.domain.utils.CoroutineDispatcherProvider
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RealEstateAgentDataRepository @Inject constructor(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider,
     private val realEstateAgentDao: RealEstateAgentDao,
-    private val entitiesMaperinator: EntitiesMaperinator
+    private val entitiesMaperinator: EntitiesMaperinator,
+    private val workManager: WorkManager
 ) : RealEstateAgentDomainRepository {
     override suspend fun getRealEstateAgentEntities(): List<RealEstateAgentEntity> =
         withContext(coroutineDispatcherProvider.io) {
@@ -37,7 +44,7 @@ class RealEstateAgentDataRepository @Inject constructor(
             entitiesMaperinator.mapRealEstateAgentDtoToEntity(realEstateAgentDao.getLoggedRealEstateAgentEntity())
         }
     
-    override suspend fun logChosenAgent(agentId: Int) =
+    override suspend fun logChosenAgent(agentId: Int): Int =
         withContext(coroutineDispatcherProvider.io) {
             realEstateAgentDao.logChosenAgent(agentId)
         }
@@ -51,4 +58,16 @@ class RealEstateAgentDataRepository @Inject constructor(
         withContext(coroutineDispatcherProvider.io) {
             realEstateAgentDao.isAgentLoggedOn()
         }
+    
+    override fun enqueueRealEstateAgentInitWorker() {
+        val realEstateAgentInitWorkRequest: OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<RealEstateAgentInitWorker>()
+                .build()
+        
+        workManager.enqueue(realEstateAgentInitWorkRequest)
+    }
+    
+    override suspend fun getRealEstateAgentEntitiesAsFlow(): Flow<List<RealEstateAgentEntity>> =
+        entitiesMaperinator.mapRealEstateAgentDtoToEntitiesAsFlow(realEstateAgentDao.getAllRealEstateAgentDtoAsFlow())
+            .flowOn(coroutineDispatcherProvider.io)
 }

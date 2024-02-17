@@ -4,7 +4,6 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlinx.kover")
-    id("com.google.gms.google-services")
 }
 
 android {
@@ -15,7 +14,6 @@ android {
         minSdk = 26
         
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
         
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -36,6 +34,8 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+        
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -56,10 +56,10 @@ hilt {
 
 dependencies {
     implementation(project(":domain"))
-    
-    implementation("com.google.code.gson:gson:2.10")
+    testImplementation(project(":stubs"))
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.dagger:hilt-android:2.48.1")
-    implementation("com.google.firebase:firebase-firestore:24.10.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     
     implementation("androidx.room:room-ktx:2.6.1")
@@ -67,7 +67,9 @@ dependencies {
     
     // region Hilt x Worker https://developer.android.com/training/dependency-injection/hilt-jetpack#workmanager
     ksp("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("androidx.hilt:hilt-work:1.1.0")
     
+    implementation("androidx.work:work-runtime-ktx:2.8.1")
     
     testImplementation("androidx.arch.core:core-testing:2.1.0") {
         // Removes the Mockito dependency bundled with arch core (wtf android ??)
@@ -77,6 +79,8 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     testImplementation("io.mockk:mockk:1.13.4")
     testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
+    implementation("org.slf4j:slf4j-nop:2.0.7")
 }
 
 class RoomSchemaArgProvider(

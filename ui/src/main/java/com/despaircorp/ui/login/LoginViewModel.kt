@@ -1,15 +1,14 @@
 package com.despaircorp.ui.login
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCase
 import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
-import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
+import com.despaircorp.ui.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,42 +20,32 @@ class LoginViewModel @Inject constructor(
     private val isAgentCurrentlyLoggedInUseCase: IsAgentCurrentlyLoggedInUseCase
 ) : ViewModel() {
     
-    private val isSplashScreenShownMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isSplashScreenShownLiveData: LiveData<Boolean> = isSplashScreenShownMutableLiveData
+    val uiStateFlow: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.CountDown)
     
-    private val realEstateAgentEntitiesMutableLiveData: MutableLiveData<List<RealEstateAgentEntity>> =
-        MutableLiveData<List<RealEstateAgentEntity>>()
-    val realEstateAgentEntitiesLiveDate: LiveData<List<RealEstateAgentEntity>> =
-        realEstateAgentEntitiesMutableLiveData
-    
-    private val isAgentCurrentlyLoggedInMutableLiveData: MutableLiveData<Boolean> =
-        MutableLiveData()
-    val isAgentCurrentlyLoggedInLiveData: LiveData<Boolean> =
-        isAgentCurrentlyLoggedInMutableLiveData
-    
-    
-    fun startSplashScreenTime() {
+    init {
         viewModelScope.launch {
-            isSplashScreenShownMutableLiveData.value = countDownSplashScreenUseCase.invoke()
+            getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
+                if (countDownSplashScreenUseCase.invoke()) {
+                    if (isAgentCurrentlyLoggedInUseCase.invoke()) {
+                        uiStateFlow.value = LoginState.AlreadyLoggedInAgent
+                    } else {
+                        uiStateFlow.value =
+                            LoginState.ShowRealEstateAgentEntities(realEstateAgentEntities = realEstateAgentEntities)
+                    }
+                } else {
+                    uiStateFlow.value = LoginState.CountDown
+                }
+            }
         }
     }
     
-    fun fetchRealEstateAgentList() {
+    fun onSelectedRealEstateAgent(realEstateAgentId: Int) {
         viewModelScope.launch {
-            realEstateAgentEntitiesMutableLiveData.value =
-                getRealEstateAgentEntitiesUseCase.invoke()
-        }
-    }
-    
-    fun onSelectedAgent(selectedId: Int) {
-        viewModelScope.launch {
-            logChosenAgentUseCase.invoke(selectedId)
-        }
-    }
-    
-    fun isAgentAlreadyLoggedIn() {
-        viewModelScope.launch {
-            isAgentCurrentlyLoggedInMutableLiveData.value = isAgentCurrentlyLoggedInUseCase.invoke()
+            uiStateFlow.value = if (logChosenAgentUseCase.invoke(realEstateAgentId)) {
+                LoginState.SuccessLogin
+            } else {
+                LoginState.Error(R.string.error)
+            }
         }
     }
 }

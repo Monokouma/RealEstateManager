@@ -7,4 +7,10 @@
     <string name="chose_someone">Chose Someone</string>
     <string name="you_have_to_chose_a_profile_to_continue">You have to chose a profile to continue</string>
     <string name="logout">Log Out</string>
+    <string name="error">An error has occurred</string>
+    <string name="darius">Darius</string>
+    <string name="cassio">Cassio</string>
+    <string name="lucian">Lucian</string>
+    <string name="bard">Bard</string>
+    <string name="nilah">Nilah</string>
 </resources>

@@ -67,6 +67,8 @@ import com.despaircorp.ui.theme.RealEstateManagerKotlinTheme
 import com.despaircorp.ui.theme.merriweatherSans
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.annotation.processing.Generated
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -229,7 +231,6 @@ fun SimpleTopAppBar(
                     )
                 }
             }
-            
             
         },
         content = {
