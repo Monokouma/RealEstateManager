@@ -5,7 +5,7 @@
     >
     
     <application
-        android:name=".RealEstateManagerApplication"
+        android:name=".main.RealEstateManagerApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -13,7 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.RealEstateManager"
+        android:theme="@style/Theme.RealEstateManagerKotlin"
         tools:targetApi="31"
         />
 
