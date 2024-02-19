@@ -1,4 +1,4 @@
-package com.despaircorp.ui.login
+package com.despaircorp.ui.login.activity
 
 import android.app.Activity
 import android.content.Context
@@ -43,7 +43,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.ui.R
-import com.despaircorp.ui.main.MainActivity
+import com.despaircorp.ui.login.LoginState
+import com.despaircorp.ui.login.LoginViewModel
+import com.despaircorp.ui.main.activity.MainActivity
 import com.despaircorp.ui.theme.RealEstateManagerKotlinTheme
 import com.despaircorp.ui.theme.merriweatherSans
 import dagger.hilt.android.AndroidEntryPoint

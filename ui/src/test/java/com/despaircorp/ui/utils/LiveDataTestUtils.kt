@@ -1,4 +1,4 @@
-package com.despaircorp.data.utils
+package com.despaircorp.ui.utils
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer

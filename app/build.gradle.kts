@@ -102,6 +102,8 @@ koverReport {
                 "dagger.hilt.internal.aggregatedroot.codegen",
             )
             classes(
+                "com.despaircorp.ui.login.activity.*",
+                "com.despaircorp.ui.main.activity.*",
                 // Hilt
                 // Delete when this is fixed: https://github.com/Kotlin/kotlinx-kover/issues/331
                 "*_*Factory\$*",

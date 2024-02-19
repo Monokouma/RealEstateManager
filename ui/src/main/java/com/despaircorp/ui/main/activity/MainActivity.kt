@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.main.activity
 
 import android.app.Activity
 import android.content.Context
@@ -52,7 +52,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -62,12 +61,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.ui.R
-import com.despaircorp.ui.login.LoginActivity
+import com.despaircorp.ui.login.activity.LoginActivity
+import com.despaircorp.ui.main.MainViewModel
 import com.despaircorp.ui.theme.RealEstateManagerKotlinTheme
 import com.despaircorp.ui.theme.merriweatherSans
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.annotation.processing.Generated
 
 
 @AndroidEntryPoint

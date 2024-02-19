@@ -24,16 +24,14 @@ class LoginViewModel @Inject constructor(
     
     init {
         viewModelScope.launch {
-            getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
-                if (countDownSplashScreenUseCase.invoke()) {
+            if (countDownSplashScreenUseCase.invoke()) {
+                getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
                     if (isAgentCurrentlyLoggedInUseCase.invoke()) {
                         uiStateFlow.value = LoginState.AlreadyLoggedInAgent
                     } else {
                         uiStateFlow.value =
                             LoginState.ShowRealEstateAgentEntities(realEstateAgentEntities = realEstateAgentEntities)
                     }
-                } else {
-                    uiStateFlow.value = LoginState.CountDown
                 }
             }
         }

@@ -91,7 +91,7 @@ dependencies {
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    
+    testImplementation("app.cash.turbine:turbine:1.0.0")
     
     testImplementation("androidx.arch.core:core-testing:2.1.0") {
         // Removes the Mockito dependency bundled with arch core (wtf android ??)
