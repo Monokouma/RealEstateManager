@@ -56,7 +56,9 @@ hilt {
 
 dependencies {
     implementation(project(":domain"))
+    
     testImplementation(project(":stubs"))
+    
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.dagger:hilt-android:2.48.1")

@@ -47,7 +47,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,6 +62,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.ui.R
 import com.despaircorp.ui.login.activity.LoginActivity
@@ -104,7 +104,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
-    val uiState = viewModel.uiState.collectAsState()
+    
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     
     val activity = (LocalContext.current as? Activity)
     

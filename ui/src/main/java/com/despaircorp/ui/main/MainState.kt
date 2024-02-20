@@ -6,7 +6,7 @@ sealed class MainState {
     data class MainStateView(val currentLoggedInAgent: RealEstateAgentEntity) : MainState()
     object Loading : MainState()
     
-    object Disconnected : MainState()
+    object Disconnected : MainState() //To data class onClick
     
     data class Error(val errorMessageRes: Int) : MainState()
 }

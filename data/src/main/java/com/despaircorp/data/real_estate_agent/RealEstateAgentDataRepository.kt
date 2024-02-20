@@ -1,5 +1,6 @@
 package com.despaircorp.data.real_estate_agent
 
+import android.util.Log
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -27,6 +28,7 @@ class RealEstateAgentDataRepository @Inject constructor(
     
     override suspend fun insertRealEstateAgentEntities(realEstateAgentEntities: List<RealEstateAgentEntity>) =
         withContext(coroutineDispatcherProvider.io) {
+            Log.i("Monokouma", realEstateAgentEntities.toString())
             realEstateAgentDao.insert(
                 entitiesMaperinator.mapRealEstateAgentEntitiesToRealEstateAgentDto(
                     realEstateAgentEntities

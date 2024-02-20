@@ -27,7 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.ui.R
 import com.despaircorp.ui.login.LoginState
@@ -83,7 +83,7 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginMain(modifier: Modifier = Modifier, viewModel: LoginViewModel) {
-    val uiState by viewModel.uiStateFlow.collectAsState()
+    val uiState by viewModel.uiStateFlow.collectAsStateWithLifecycle() //Collect as lifecycle
     
     Surface(modifier = modifier, color = MaterialTheme.colorScheme.background) {
         val activity = (LocalContext.current as? Activity)

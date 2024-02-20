@@ -1,9 +1,11 @@
 package com.despaircorp.data.utils
 
 import com.despaircorp.data.real_estate_agent.dto.RealEstateAgentDto
+import com.despaircorp.data.real_estate_agent.workers.DefaultAgentEnum
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlin.enums.EnumEntries
 
 object EntitiesMaperinator {
     
@@ -48,5 +50,15 @@ object EntitiesMaperinator {
                     isLoggedIn = it.isLoggedIn
                 )
             }
+        }
+    
+    fun mapDefaultAgentEnumToRealEstateAgentEntity(entries: EnumEntries<DefaultAgentEnum>): List<RealEstateAgentEntity> =
+        entries.map { defaultAgentEnum ->
+            RealEstateAgentEntity(
+                defaultAgentEnum.displayNameRes,
+                defaultAgentEnum.id,
+                defaultAgentEnum.imageRes,
+                defaultAgentEnum.defaultIsLoggedIn
+            )
         }
 }
