@@ -4,16 +4,21 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -42,9 +47,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -62,6 +66,7 @@ import androidx.compose.ui.unit.dp
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.ui.R
 import com.despaircorp.ui.login.activity.LoginActivity
+import com.despaircorp.ui.main.MainState
 import com.despaircorp.ui.main.MainViewModel
 import com.despaircorp.ui.theme.RealEstateManagerKotlinTheme
 import com.despaircorp.ui.theme.merriweatherSans
@@ -72,6 +77,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -82,7 +88,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting(viewModel = viewModel)
+                    Main(viewModel = viewModel)
                 }
             }
         }
@@ -97,30 +103,244 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(modifier: Modifier = Modifier, viewModel: MainViewModel) {
-    val loggedInRealEstateAgentEntity =
-        viewModel.loggedRealEstateAgentEntityLiveData.observeAsState()
-    val isUserDisconnected = viewModel.isUserDisconnectedLiveData.observeAsState(false)
+fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+    val uiState = viewModel.uiState.collectAsState()
+    
     val activity = (LocalContext.current as? Activity)
     
-    LaunchedEffect(Unit) {
-        viewModel.fetchLoggedRealEstateAgentEntity()
+    Surface {
+        when (val state = uiState.value) {
+            MainState.Disconnected -> {
+                activity?.startActivity(LoginActivity.navigate(activity.applicationContext))
+                activity?.finish()
+            }
+            
+            is MainState.Error -> {
+                Toast.makeText(
+                    activity,
+                    activity?.getString(state.errorMessageRes),
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+            
+            MainState.Loading -> {}
+            is MainState.MainStateView -> {
+                MainScreen(state.currentLoggedInAgent, modifier, onClick = {
+                    viewModel.onDisconnect(it)
+                })
+            }
+        }
     }
-    
-    if (isUserDisconnected.value) {
-        activity?.startActivity(LoginActivity.navigate(activity.applicationContext))
-        activity?.finish()
-    }
-    
+}
+
+@Composable
+fun MainScreen(
+    realEstateAgentEntity: RealEstateAgentEntity,
+    modifier: Modifier,
+    onClick: (Int) -> Unit
+) {
     Column {
-        SimpleTopAppBar(loggedInRealEstateAgentEntity.value ?: return@Column, modifier, viewModel)
+        Holder(realEstateAgentEntity, modifier, onClick)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Holder(
+    realEstateAgentEntity: RealEstateAgentEntity,
+    modifier: Modifier,
+    onClick: (Int) -> Unit
+) {
+    val scope = rememberCoroutineScope()
+    
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    
+    var isAddPopUpVisibleActivityCallback by remember {
+        mutableStateOf(false)
+    }
+    
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            DrawerModal(
+                modifier = modifier,
+                realEstateAgentEntity = realEstateAgentEntity,
+                onClick = onClick
+            )
+        },
+        content = {
+            Scaffold(
+                topBar = {
+                    MainTopBar(
+                        onClickDrawer = {
+                            scope.launch { drawerState.open() }
+                        },
+                        onClickIcon = {
+                            isAddPopUpVisibleActivityCallback =
+                                !isAddPopUpVisibleActivityCallback
+                        }
+                    )
+                },
+                content = { innerPadding ->
+                    ScreenContent(
+                        modifier = modifier,
+                        innerPadding,
+                        isAddPopUpVisibleActivityCallback,
+                        onNavigationIconClicked = {
+                            isAddPopUpVisibleActivityCallback =
+                                !isAddPopUpVisibleActivityCallback
+                        })
+                },
+            )
+        }
+    )
+}
+
+@Composable
+fun ScreenContent(
+    modifier: Modifier,
+    innerPadding: PaddingValues,
+    isAddPopUpVisibleActivityCallback: Boolean,
+    onNavigationIconClicked: () -> Unit,
+) {
+    Box(
+        modifier = modifier.padding(innerPadding),
+    ) {
+        Column {
+            Text(text = "TEST")
+        }
+        if (isAddPopUpVisibleActivityCallback) {
+            PopupFormDialog(onSurfaceClicked = {
+                onNavigationIconClicked.invoke()
+                
+            }, modifier)
+            
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainTopBar(
+    onClickDrawer: () -> Unit,
+    onClickIcon: () -> Unit
+) {
+    
+    TopAppBar(
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            titleContentColor = MaterialTheme.colorScheme.outline,
+        ),
+        title = {
+            Text(
+                stringResource(id = R.string.app_name_formated),
+                
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = {
+                onClickDrawer.invoke()
+                
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Menu,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = {
+                onClickIcon.invoke()
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Localized description"
+                )
+            }
+            IconButton(onClick = { /* do something */ }) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Localized description"
+                )
+            }
+            IconButton(onClick = { /* do something */ }) {
+                Icon(
+                    imageVector = Icons.Filled.Search,
+                    contentDescription = "Localized description"
+                )
+            }
+        },
+    )
+}
+
+@Composable
+fun DrawerModal(
+    modifier: Modifier,
+    realEstateAgentEntity: RealEstateAgentEntity,
+    onClick: (Int) -> Unit
+) {
+    val items = listOf(Icons.Filled.ExitToApp)
+    
+    val selectedItem = remember { mutableStateOf(items[0]) }
+    
+    ModalDrawerSheet {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(NavigationDrawerItemDefaults.ItemPadding),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.drawer_house),
+                contentDescription = ""
+            )
+        }
+        Row(
+            modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = painterResource(id = realEstateAgentEntity.imageResource),
+                contentDescription = "",
+                modifier = modifier.padding(8.dp)
+            )
+            Text(
+                text = realEstateAgentEntity.name,
+                modifier = modifier.padding(8.dp),
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.outline
+            )
+        }
         
+        Divider(
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = modifier.padding(16.dp)
+        )
+        
+        items.forEach { item ->
+            NavigationDrawerItem(
+                icon = { Icon(item, null) },
+                label = { Text(stringResource(id = R.string.logout)) },
+                selected = item == selectedItem.value,
+                onClick = {
+                    selectedItem.value = item
+                    onClick.invoke(realEstateAgentEntity.id)
+                },
+                modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+            )
+        }
     }
 }
 
 @Composable
 fun PopupFormDialog(
-    onSurfaceClicked: () -> Unit
+    onSurfaceClicked: () -> Unit,
+    modifier: Modifier
 ) {
     Box(
         modifier = Modifier
@@ -130,8 +350,7 @@ fun PopupFormDialog(
             .background(Color.Black.copy(alpha = 0.8f)) // Semi-transparent black
     
     ) {
-        // Place your content here
-        // Example: A text composable
+        
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
@@ -146,164 +365,114 @@ fun PopupFormDialog(
                 )
             ) {
                 Column(
-                    verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = "LOL", Modifier.padding(20.dp))
+                    Text(
+                        text = stringResource(id = R.string.what_you_wanna_add),
+                        Modifier.padding(20.dp),
+                        fontFamily = merriweatherSans,
+                        fontWeight = FontWeight.Normal,
+                    )
+                    
+                    Row(horizontalArrangement = Arrangement.SpaceEvenly) {
+                        Spacer(modifier = modifier.padding(20.dp))
+                        PopUpAgentAdd(
+                            onClick = {
+                                Log.i("Monokouma", "clicked Agent")
+                            },
+                            modifier
+                        )
+                        Spacer(modifier = modifier.padding(40.dp))
+                        PopUpEstateAdd(
+                            onClick = {
+                                Log.i("Monokouma", "clicked property")
+                                
+                            },
+                            modifier
+                        )
+                        Spacer(modifier = modifier.padding(20.dp))
+                    }
                     
                 }
             }
-            
         }
-        
-        
-        // You can add more composables here as needed
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SimpleTopAppBar(
-    realEstateAgentEntity: RealEstateAgentEntity,
-    modifier: Modifier,
-    viewModel: MainViewModel
+fun PopUpEstateAdd(
+    onClick: () -> Unit,
+    modifier: Modifier
 ) {
-    val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val items = listOf(Icons.Filled.ExitToApp)
-    var isAddPopUpVisibleActivityCallback by remember {
-        mutableStateOf(false)
-    }
-    
-    val selectedItem = remember { mutableStateOf(items[0]) }
-    
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(NavigationDrawerItemDefaults.ItemPadding),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.drawer_house),
-                        contentDescription = ""
-                    )
-                }
-                Row(
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Image(
-                        painter = painterResource(id = realEstateAgentEntity.imageResource),
-                        contentDescription = "",
-                        modifier = modifier.padding(8.dp)
-                    )
-                    Text(
-                        text = realEstateAgentEntity.name,
-                        modifier = modifier.padding(8.dp),
-                        fontFamily = merriweatherSans,
-                        fontWeight = FontWeight.Normal,
-                        color = MaterialTheme.colorScheme.outline
-                    )
-                }
-                
-                Divider(
-                    thickness = 2.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = modifier.padding(16.dp)
-                )
-                
-                items.forEach { item ->
-                    NavigationDrawerItem(
-                        icon = { Icon(item, null) },
-                        label = { Text(stringResource(id = R.string.logout)) },
-                        selected = item == selectedItem.value,
-                        onClick = {
-                            selectedItem.value = item
-                            viewModel.onDisconnect(realEstateAgentEntity.id)
-                        },
-                        modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    )
-                }
-            }
-            
+    Card(
+        border = BorderStroke(2.dp, Color.Black),
+        onClick = {
+            onClick.invoke()
         },
-        content = {
-            Scaffold(
-                topBar = {
-                    TopAppBar(
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.background,
-                            titleContentColor = MaterialTheme.colorScheme.outline,
-                        ),
-                        title = {
-                            Text(
-                                stringResource(id = R.string.app_name_formated),
-                                
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                scope.launch { drawerState.open() }
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Menu,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                        },
-                        actions = {
-                            IconButton(onClick = {
-                                isAddPopUpVisibleActivityCallback =
-                                    !isAddPopUpVisibleActivityCallback
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Add,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                            IconButton(onClick = { /* do something */ }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Edit,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                            IconButton(onClick = { /* do something */ }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                        },
-                    )
-                },
-                content = { innerPadding ->
-                    Box(
-                        modifier = modifier.padding(innerPadding),
-                    ) {
-                        Column {
-                            Text(text = "TEST")
-                        }
-                        if (isAddPopUpVisibleActivityCallback) {
-                            PopupFormDialog(onSurfaceClicked = {
-                                isAddPopUpVisibleActivityCallback =
-                                    !isAddPopUpVisibleActivityCallback
-                            })
-                            
-                        }
-                        
-                        
-                    }
-                    
-                },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
+        modifier = modifier.padding(8.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.dream_home),
+                contentDescription = "",
+                modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            Text(
+                text = "Estate",
+                modifier = modifier.padding(bottom = 8.dp),
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Normal,
             )
         }
-    )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PopUpAgentAdd(
+    onClick: () -> Unit,
+    modifier: Modifier
+) {
+    Card(
+        border = BorderStroke(2.dp, Color.Black),
+        onClick = {
+            onClick.invoke()
+        },
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+        ),
+        modifier = modifier.padding(8.dp)
+    ) {
+        Column(
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.dream_home),
+                contentDescription = "",
+                modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+            )
+            Text(
+                text = "Agent",
+                modifier = modifier.padding(bottom = 8.dp),
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Normal,
+            )
+        }
+    }
 }
 
 
@@ -311,6 +480,8 @@ fun SimpleTopAppBar(
 @Composable
 fun GreetingPreview2() {
     RealEstateManagerKotlinTheme {
-        PopupFormDialog({})
+        PopupFormDialog({
+        
+        }, Modifier)
     }
 }
