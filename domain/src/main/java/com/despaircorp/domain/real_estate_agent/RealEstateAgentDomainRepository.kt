@@ -1,5 +1,6 @@
 package com.despaircorp.domain.real_estate_agent
 
+import com.despaircorp.domain.real_estate_agent.model.CreatedAgentEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,5 @@ interface RealEstateAgentDomainRepository {
     
     fun enqueueRealEstateAgentInitWorker()
     suspend fun getRealEstateAgentEntitiesAsFlow(): Flow<List<RealEstateAgentEntity>>
+    suspend fun insertCreatedAgent(createdAgentEntity: CreatedAgentEntity): Long
 }

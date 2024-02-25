@@ -6,7 +6,7 @@ import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCas
 import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
-import com.despaircorp.ui.R
+import com.despaircorp.shared.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

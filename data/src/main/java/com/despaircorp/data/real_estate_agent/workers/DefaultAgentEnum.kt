@@ -1,6 +1,7 @@
 package com.despaircorp.data.real_estate_agent.workers
 
-import com.despaircorp.data.R
+import com.despaircorp.shared.R
+
 
 enum class DefaultAgentEnum(
     val displayNameRes: String,

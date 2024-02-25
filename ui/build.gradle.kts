@@ -66,6 +66,7 @@ hilt {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":shared"))
     testImplementation(project(":stubs"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -90,6 +91,7 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.1")
     
     
     ksp("com.google.dagger:hilt-compiler:2.48.1")

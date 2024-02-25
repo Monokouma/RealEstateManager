@@ -56,7 +56,7 @@ hilt {
 
 dependencies {
     implementation(project(":domain"))
-    
+    implementation(project(":shared"))
     testImplementation(project(":stubs"))
     
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")

@@ -33,4 +33,7 @@ interface RealEstateAgentDao {
     
     @Query("SELECT EXISTS(SELECT * FROM real_estate_agent WHERE isLoggedIn = 1)")
     suspend fun isAgentLoggedOn(): Boolean
+    
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertOneAgent(realEstateAgentDto: RealEstateAgentDto): Long
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -42,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
-import com.despaircorp.ui.R
+import com.despaircorp.shared.R
 import com.despaircorp.ui.login.LoginState
 import com.despaircorp.ui.login.LoginViewModel
 import com.despaircorp.ui.main.activity.MainActivity
@@ -137,7 +138,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .padding(vertical = 20.dp),
             color = MaterialTheme.colorScheme.surfaceVariant,
-            trackColor = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.outline,
         )
         
         Text(
@@ -288,9 +289,14 @@ fun RealEstateAgentDropDown(
                 } else {
                     onClick.invoke(selectedId)
                 }
-            }
+            }, colors = ButtonDefaults.buttonColors(
+                containerColor = MaterialTheme.colorScheme.secondary
+            )
         ) {
-            Text(stringResource(R.string.continue_button))
+            Text(
+                stringResource(R.string.continue_button), fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.outline
+            )
         }
     }
 }
