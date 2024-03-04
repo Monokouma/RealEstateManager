@@ -8,9 +8,9 @@ import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCas
 import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
+import com.despaircorp.shared.R
 import com.despaircorp.stubs.EntityProvidinator.provideRealEstateAgentEntities
 import com.despaircorp.stubs.ViewModelinator.provideLoginViewModel
-import com.despaircorp.ui.R
 import com.despaircorp.ui.utils.TestCoroutineRule
 import io.mockk.coEvery
 import io.mockk.mockk
