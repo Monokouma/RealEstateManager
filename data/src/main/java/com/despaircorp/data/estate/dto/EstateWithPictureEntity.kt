@@ -2,20 +2,15 @@ package com.despaircorp.data.estate.dto
 
 import androidx.room.Embedded
 import androidx.room.Entity
-import androidx.room.ForeignKey
+import androidx.room.Relation
 import com.despaircorp.data.picture.dto.PictureDto
 
-@Entity(
-    foreignKeys = [
-        ForeignKey(
-            entity = PictureDto::class,
-            parentColumns = ["id"],
-            childColumns = ["estateId"]
-        )
-    ]
-)
-
+@Entity
 data class EstateWithPictureEntity(
     @Embedded val estateDto: EstateDto,
+    @Relation(
+        parentColumn = "id",
+        entityColumn = "estateId"
+    )
     val pictureList: List<PictureDto>
 )
