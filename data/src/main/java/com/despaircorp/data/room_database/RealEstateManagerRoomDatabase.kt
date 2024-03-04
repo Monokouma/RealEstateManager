@@ -4,18 +4,30 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.despaircorp.data.estate.dao.EstateDao
+import com.despaircorp.data.estate.dto.EstateDto
+import com.despaircorp.data.picture.dao.PictureDao
+import com.despaircorp.data.picture.dto.PictureDto
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
 import com.despaircorp.data.real_estate_agent.dto.RealEstateAgentDto
+import com.despaircorp.data.utils.TypeConvertinator
 
 @Database(
     entities = [
         RealEstateAgentDto::class,
+        EstateDto::class,
+        PictureDto::class
     ],
     version = 1,
     exportSchema = false
 )
+@TypeConverters(TypeConvertinator::class)
 public abstract class RealEstateManagerRoomDatabase : RoomDatabase() {
     abstract fun getRealEstateAgentDao(): RealEstateAgentDao
+    abstract fun getEstateDao(): EstateDao
+    
+    abstract fun getPictureDao(): PictureDao
     
     companion object {
         // Singleton prevents multiple instances of database opening at the

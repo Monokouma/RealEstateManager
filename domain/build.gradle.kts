@@ -50,6 +50,7 @@ hilt {
 dependencies {
     
     implementation("com.google.dagger:hilt-android:2.48.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     testImplementation(project(":stubs"))
     // region Hilt x Worker https://developer.android.com/training/dependency-injection/hilt-jetpack#workmanager

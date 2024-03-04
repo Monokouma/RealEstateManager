@@ -3,6 +3,8 @@ package com.despaircorp.data.utils
 import android.app.Application
 import android.content.res.Resources
 import androidx.work.WorkManager
+import com.despaircorp.data.estate.dao.EstateDao
+import com.despaircorp.data.picture.dao.PictureDao
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
 import com.despaircorp.data.room_database.RealEstateManagerRoomDatabase
 import dagger.Module
@@ -30,6 +32,18 @@ class DataProvideModule {
     fun provideRealEstateAgentDao(application: Application): RealEstateAgentDao =
         RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
             .getRealEstateAgentDao()
+    
+    @Provides
+    @Singleton
+    fun provideEstateDao(application: Application): EstateDao =
+        RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
+            .getEstateDao()
+    
+    @Provides
+    @Singleton
+    fun providePictureDao(application: Application): PictureDao =
+        RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
+            .getPictureDao()
     
     @Provides
     @Singleton
