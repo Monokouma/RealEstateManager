@@ -1,5 +1,6 @@
 package com.despaircorp.data.real_estate_agent
 
+import android.util.Log
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -8,6 +9,7 @@ import com.despaircorp.data.real_estate_agent.workers.RealEstateAgentInitWorker
 import com.despaircorp.data.utils.CoroutineDispatcherProvider
 import com.despaircorp.data.utils.EntitiesMaperinator
 import com.despaircorp.domain.real_estate_agent.RealEstateAgentDomainRepository
+import com.despaircorp.domain.real_estate_agent.model.CreatedAgentEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -27,6 +29,7 @@ class RealEstateAgentDataRepository @Inject constructor(
     
     override suspend fun insertRealEstateAgentEntities(realEstateAgentEntities: List<RealEstateAgentEntity>) =
         withContext(coroutineDispatcherProvider.io) {
+            Log.i("Monokouma", realEstateAgentEntities.toString())
             realEstateAgentDao.insert(
                 entitiesMaperinator.mapRealEstateAgentEntitiesToRealEstateAgentDto(
                     realEstateAgentEntities
@@ -70,4 +73,11 @@ class RealEstateAgentDataRepository @Inject constructor(
     override suspend fun getRealEstateAgentEntitiesAsFlow(): Flow<List<RealEstateAgentEntity>> =
         entitiesMaperinator.mapRealEstateAgentDtoToEntitiesAsFlow(realEstateAgentDao.getAllRealEstateAgentDtoAsFlow())
             .flowOn(coroutineDispatcherProvider.io)
+    
+    override suspend fun insertCreatedAgent(createdAgentEntity: CreatedAgentEntity): Long =
+        withContext(coroutineDispatcherProvider.io) {
+            realEstateAgentDao.insertOneAgent(
+                entitiesMaperinator.mapCreatedAgentEntityToRealEstateAgentDto(createdAgentEntity)
+            )
+        }
 }

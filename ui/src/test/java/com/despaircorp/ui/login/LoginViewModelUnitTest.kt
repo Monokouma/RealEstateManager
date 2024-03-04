@@ -8,17 +8,17 @@ import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCas
 import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
+import com.despaircorp.shared.R
 import com.despaircorp.stubs.EntityProvidinator.provideRealEstateAgentEntities
+import com.despaircorp.stubs.ViewModelinator.provideLoginViewModel
 import com.despaircorp.ui.utils.TestCoroutineRule
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 
-@Ignore
+
 class LoginViewModelUnitTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
@@ -31,36 +31,93 @@ class LoginViewModelUnitTest {
     private val logChosenAgentUseCase: LogChosenAgentUseCase = mockk()
     private val isAgentCurrentlyLoggedInUseCase: IsAgentCurrentlyLoggedInUseCase = mockk()
     
-    private lateinit var viewModel: LoginViewModel
-    
     companion object {
         private const val DEFAULT_AGENT_ID = 1
     }
     
-    @Before
-    fun setup() {
+    @Test
+    fun `nominal case - log agent success`() = testCoroutineRule.runTest {
         coEvery { getRealEstateAgentEntitiesUseCase.invoke() } returns flowOf(
             provideRealEstateAgentEntities()
         )
-        
-        coEvery { logChosenAgentUseCase.invoke(DEFAULT_AGENT_ID) } returns true
+        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns false
         coEvery { countDownSplashScreenUseCase.invoke() } returns true
         
+        coEvery { logChosenAgentUseCase.invoke(DEFAULT_AGENT_ID) } returns true
         
-        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns true
-        
-        viewModel = LoginViewModel(
-            countDownSplashScreenUseCase = countDownSplashScreenUseCase,
-            getRealEstateAgentEntitiesUseCase = getRealEstateAgentEntitiesUseCase,
-            logChosenAgentUseCase = logChosenAgentUseCase,
-            isAgentCurrentlyLoggedInUseCase = isAgentCurrentlyLoggedInUseCase
+        val viewModel = provideLoginViewModel(
+            countDownSplashScreenUseCase,
+            getRealEstateAgentEntitiesUseCase,
+            logChosenAgentUseCase,
+            isAgentCurrentlyLoggedInUseCase
         )
+        
+        
+        
+        viewModel.uiStateFlow.test {
+            awaitItem()
+            viewModel.onSelectedRealEstateAgent(DEFAULT_AGENT_ID)
+            awaitItem()
+            val result = awaitItem()
+            
+            assertThat(result).isEqualTo(
+                LoginState.SuccessLogin
+            )
+        }
+    }
+    
+    @Test
+    fun `error case - log agent failure`() = testCoroutineRule.runTest {
+        coEvery { getRealEstateAgentEntitiesUseCase.invoke() } returns flowOf(
+            provideRealEstateAgentEntities()
+        )
+        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns false
+        coEvery { countDownSplashScreenUseCase.invoke() } returns true
+        
+        coEvery { logChosenAgentUseCase.invoke(DEFAULT_AGENT_ID) } returns false
+        
+        val viewModel = provideLoginViewModel(
+            countDownSplashScreenUseCase,
+            getRealEstateAgentEntitiesUseCase,
+            logChosenAgentUseCase,
+            isAgentCurrentlyLoggedInUseCase
+        )
+        
+        viewModel.onSelectedRealEstateAgent(DEFAULT_AGENT_ID)
+        
+        viewModel.uiStateFlow.test {
+            awaitItem()
+            viewModel.onSelectedRealEstateAgent(DEFAULT_AGENT_ID)
+            awaitItem()
+            val result = awaitItem()
+            
+            assertThat(result).isEqualTo(
+                LoginState.Error(R.string.error)
+            )
+        }
     }
     
     @Test
     fun `nominal case - no agent logged should show list`() = testCoroutineRule.runTest {
+        coEvery { getRealEstateAgentEntitiesUseCase.invoke() } returns flowOf(
+            provideRealEstateAgentEntities()
+        )
+        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns false
+        coEvery { countDownSplashScreenUseCase.invoke() } returns true
+        
+        val viewModel = provideLoginViewModel(
+            countDownSplashScreenUseCase,
+            getRealEstateAgentEntitiesUseCase,
+            logChosenAgentUseCase,
+            isAgentCurrentlyLoggedInUseCase
+        )
+        
         viewModel.uiStateFlow.test {
-            assertThat(awaitItem()).isEqualTo(
+            awaitItem()
+            
+            val result = awaitItem()
+            
+            assertThat(result).isEqualTo(
                 LoginState.ShowRealEstateAgentEntities(
                     provideRealEstateAgentEntities()
                 )
@@ -69,12 +126,52 @@ class LoginViewModelUnitTest {
     }
     
     @Test
-    fun `nominal case - already logged in agent`() = testCoroutineRule.runTest {
-        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns false
-        viewModel.uiStateFlow.test {
+    fun `nominal case - count down return false should show splash screen`() =
+        testCoroutineRule.runTest {
+            coEvery { getRealEstateAgentEntitiesUseCase.invoke() } returns flowOf(
+                provideRealEstateAgentEntities()
+            )
+            coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns false
+            coEvery { countDownSplashScreenUseCase.invoke() } returns false
             
-            println(awaitItem())
+            val viewModel = provideLoginViewModel(
+                countDownSplashScreenUseCase,
+                getRealEstateAgentEntitiesUseCase,
+                logChosenAgentUseCase,
+                isAgentCurrentlyLoggedInUseCase
+            )
+            
+            viewModel.uiStateFlow.test {
+                val result = awaitItem()
+                
+                assertThat(result).isEqualTo(
+                    LoginState.CountDown
+                )
+            }
+        }
+    
+    @Test
+    fun `nominal case - logged agent should go next screen`() = testCoroutineRule.runTest {
+        coEvery { getRealEstateAgentEntitiesUseCase.invoke() } returns flowOf(
+            provideRealEstateAgentEntities()
+        )
+        coEvery { isAgentCurrentlyLoggedInUseCase.invoke() } returns true
+        coEvery { countDownSplashScreenUseCase.invoke() } returns true
+        
+        val viewModel = provideLoginViewModel(
+            countDownSplashScreenUseCase,
+            getRealEstateAgentEntitiesUseCase,
+            logChosenAgentUseCase,
+            isAgentCurrentlyLoggedInUseCase
+        )
+        
+        viewModel.uiStateFlow.test {
+            awaitItem()
+            val result = awaitItem()
+            
+            assertThat(result).isEqualTo(
+                LoginState.AlreadyLoggedInAgent
+            )
         }
     }
-    
 }

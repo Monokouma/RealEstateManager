@@ -6,7 +6,7 @@ import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCas
 import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
-import com.despaircorp.ui.R
+import com.despaircorp.shared.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -24,14 +24,18 @@ class LoginViewModel @Inject constructor(
     
     init {
         viewModelScope.launch {
-            if (countDownSplashScreenUseCase.invoke()) {
-                getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
+            getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
+                if (countDownSplashScreenUseCase.invoke()) {
+                    
                     if (isAgentCurrentlyLoggedInUseCase.invoke()) {
                         uiStateFlow.value = LoginState.AlreadyLoggedInAgent
                     } else {
                         uiStateFlow.value =
                             LoginState.ShowRealEstateAgentEntities(realEstateAgentEntities = realEstateAgentEntities)
+                        
                     }
+                } else {
+                    uiStateFlow.value = LoginState.CountDown
                 }
             }
         }

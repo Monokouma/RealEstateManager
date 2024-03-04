@@ -9,6 +9,7 @@ import assertk.assertions.isTrue
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
 import com.despaircorp.data.utils.EntitiesMaperinator
 import com.despaircorp.data.utils.TestCoroutineRule
+import com.despaircorp.stubs.EntityProvidinator.provideCreatedAgentEntity
 import com.despaircorp.stubs.EntityProvidinator.provideLoggedRealEstateAgentDto
 import com.despaircorp.stubs.EntityProvidinator.provideLoggedRealEstateAgentEntity
 import com.despaircorp.stubs.EntityProvidinator.provideRealEstateAgentEntities
@@ -18,6 +19,7 @@ import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.confirmVerified
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -70,6 +72,16 @@ class RealEstateAgentDataRepositoryUnitTest {
         coEvery {
             entitiesMaperinator.mapRealEstateAgentDtoToEntity(provideLoggedRealEstateAgentDto())
         } returns provideLoggedRealEstateAgentEntity()
+        
+        coEvery { realEstateAgentDao.getAllRealEstateAgentDtoAsFlow() } returns flowOf(
+            provideRealEstateDtoEntities()
+        )
+        
+        coEvery {
+            entitiesMaperinator.mapRealEstateAgentDtoToEntitiesAsFlow(
+                flowOf(provideRealEstateDtoEntities())
+            )
+        } returns flowOf(provideRealEstateAgentEntities())
         
         coEvery {
             realEstateAgentDao.logChosenAgent(DEFAULT_AGENT_ID)
@@ -240,5 +252,27 @@ class RealEstateAgentDataRepositoryUnitTest {
             confirmVerified(workManager)
         }
     
+    @Test
+    fun `nominal case - insert created agent success`() = testCoroutineRule.runTest {
+        coEvery {
+            entitiesMaperinator.mapCreatedAgentEntityToRealEstateAgentDto(
+                provideCreatedAgentEntity()
+            )
+        } returns provideLoggedRealEstateAgentDto()
+        coEvery { realEstateAgentDao.insertOneAgent(provideLoggedRealEstateAgentDto()) } returns 1L
+        
+        val result = repository.insertCreatedAgent(provideCreatedAgentEntity())
+        
+        assertThat(result).isEqualTo(1L)
+        
+        coVerify {
+            entitiesMaperinator.mapCreatedAgentEntityToRealEstateAgentDto(
+                provideCreatedAgentEntity()
+            )
+            realEstateAgentDao.insertOneAgent(provideLoggedRealEstateAgentDto())
+        }
+        
+        confirmVerified(entitiesMaperinator, realEstateAgentDao)
+    }
     
 }

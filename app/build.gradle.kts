@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":data"))
     testImplementation(project(":stubs"))
+    implementation(project(":shared"))
     
     implementation("androidx.hilt:hilt-work:1.1.0")
     implementation("androidx.work:work-runtime-ktx:2.8.1")

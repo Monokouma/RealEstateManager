@@ -1,40 +1,69 @@
 package com.despaircorp.ui.main
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
-import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
+import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
+import com.despaircorp.shared.R
+import com.despaircorp.ui.utils.ProfilePictureRandomizator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.despaircorp.ui.main.Error as StateError
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getLoggedRealEstateAgentEntityUseCase: GetLoggedRealEstateAgentEntityUseCase,
-    private val disconnectAgentUseCase: DisconnectAgentUseCase
+    private val disconnectAgentUseCase: DisconnectAgentUseCase,
+    private val profilePictureRandomizator: ProfilePictureRandomizator,
+    private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase
 ) : ViewModel() {
     
-    private val loggedRealEstateAgentEntityMutableLiveData: MutableLiveData<RealEstateAgentEntity> =
-        MutableLiveData()
-    val loggedRealEstateAgentEntityLiveData: LiveData<RealEstateAgentEntity> =
-        loggedRealEstateAgentEntityMutableLiveData
+    val uiState: MutableStateFlow<MainState> = MutableStateFlow(MainState.Loading)
     
-    private val isUserDisconnectedMutableLiveData: MutableLiveData<Boolean> = MutableLiveData()
-    val isUserDisconnectedLiveData: LiveData<Boolean> = isUserDisconnectedMutableLiveData
+    private var agentName: String? = null
     
-    fun fetchLoggedRealEstateAgentEntity() {
+    init {
         viewModelScope.launch {
-            loggedRealEstateAgentEntityMutableLiveData.value =
-                getLoggedRealEstateAgentEntityUseCase.invoke()
+            val currentLoggedInAgent = getLoggedRealEstateAgentEntityUseCase.invoke()
+            uiState.value = MainState.MainStateView(currentLoggedInAgent, StateError(0, false), OnCreateAgentSuccess(false, 0))
         }
     }
     
     fun onDisconnect(id: Int) {
         viewModelScope.launch {
-            isUserDisconnectedMutableLiveData.value = disconnectAgentUseCase.invoke(id)
+            uiState.value = if (disconnectAgentUseCase.invoke(id)) {
+                MainState.Disconnected
+            } else {
+                MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.error, true), OnCreateAgentSuccess(false, 0))
+            }
+        }
+    }
+    
+    fun onRealEstateAgentNameTextChange(agentNameInput: String) {
+        agentName = agentNameInput
+    }
+    
+    fun onCreateAgentClick() {
+        viewModelScope.launch {
+            uiState.value = if (agentName.isNullOrEmpty()) {
+                //Throw error
+                 MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.empty_text, true), OnCreateAgentSuccess(false, 0))
+            } else {
+                if (insertCreatedAgentUseCase.invoke(
+                        agentName ?: return@launch,
+                        profilePictureRandomizator.provideRandomProfilePicture()
+                    )
+                ) {
+                    MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(0, false), OnCreateAgentSuccess(true, R.string.agent_created))
+                    
+                } else {
+                    MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.error, true), OnCreateAgentSuccess(false, 0))
+                    
+                }
+            }
         }
     }
 }

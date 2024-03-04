@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "real_estate_agent")
 data class RealEstateAgentDto(
     @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: Int = 0,
     val name: String,
     val imageResource: Int,
     val isLoggedIn: Boolean

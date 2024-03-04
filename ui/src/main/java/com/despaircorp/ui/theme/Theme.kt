@@ -16,17 +16,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-val primaryColorLight = Color(0xFF3B5452)
-val secondaryColorLight = Color(0xFFBEA2AF)
-val accentColorLight = Color(0xFF816A5A)
-val textColorLight = Color(0xFF111817)
-val backgroundColorLight = Color(0xFFEAF0F0)
+val primaryColorLight = Color(0xFF5D71AC)
+val secondaryColorLight = Color(0xFFCDA4D0)
+val accentColorLight = Color(0xFFBF82AB)
+val textColorLight = Color(0xFF0C0E17)
+val backgroundColorLight = Color(0xFFF8F9FC)
 
-val primaryColorDark = Color(0xFFABC4C2)
-val secondaryColorDark = Color(0xFF5D414E)
-val accentColorDark = Color(0xFFA58E7E)
-val textColorDark = Color(0xFFE7EEED)
-val backgroundColorDark = Color(0xFF0F1515)
+val primaryColorDark = Color(0xFF5367A2)
+val secondaryColorDark = Color(0xFF582F5B)
+val accentColorDark = Color(0xFF7D4068)
+val textColorDark = Color(0xFFE8EAF3)
+val backgroundColorDark = Color(0xFF0B0128)
 
 private val DarkColorScheme = darkColorScheme(
     primary = primaryColorDark,

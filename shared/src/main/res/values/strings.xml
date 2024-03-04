@@ -13,4 +13,10 @@
     <string name="lucian">Lucian</string>
     <string name="bard">Bard</string>
     <string name="nilah">Nilah</string>
+    <string name="what_you_wanna_add">What do you want to add</string>
+    <string name="estate">Estate</string>
+    <string name="agent">Agent</string>
+    <string name="agent_creation">Agent Creation</string>
+    <string name="empty_text">Text could not be empty</string>
+    <string name="agent_created">Agent created !</string>
 </resources>
