@@ -1,8 +1,13 @@
 package com.despaircorp.data.utils
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.io.ByteArrayOutputStream
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object TypeConvertinator {
     @TypeConverter
@@ -15,5 +20,31 @@ object TypeConvertinator {
     fun fromList(list: List<String>): String {
         val gson = Gson()
         return gson.toJson(list)
+    }
+    
+    @TypeConverter
+    fun fromBitmap(bitmap: Bitmap): ByteArray {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return outputStream.toByteArray()
+    }
+    
+    @TypeConverter
+    fun toBitmap(byteArray: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+    }
+    
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE
+    
+    @TypeConverter
+    fun fromLocalDate(value: LocalDate?): String? {
+        return value?.format(formatter)
+    }
+    
+    @TypeConverter
+    fun toLocalDate(value: String?): LocalDate? {
+        return value?.let {
+            return LocalDate.parse(it, formatter)
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.despaircorp.stubs
 
+import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCase
@@ -30,11 +31,13 @@ object ViewModelinator {
         getLoggedRealEstateAgentEntityUseCase: GetLoggedRealEstateAgentEntityUseCase,
         disconnectAgentUseCase: DisconnectAgentUseCase,
         profilePictureRandomizator: ProfilePictureRandomizator,
-        insertCreatedAgentUseCase: InsertCreatedAgentUseCase
+        insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
+        getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase
     ) = MainViewModel(
         getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
         disconnectAgentUseCase = disconnectAgentUseCase,
         profilePictureRandomizator = profilePictureRandomizator,
-        insertCreatedAgentUseCase = insertCreatedAgentUseCase
+        insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+        getEstateWithPictureEntityAsFlowUseCase
     )
 }

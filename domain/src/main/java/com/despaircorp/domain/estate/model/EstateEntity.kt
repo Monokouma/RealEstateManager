@@ -1,12 +1,11 @@
 package com.despaircorp.domain.estate.model
 
-import com.despaircorp.domain.picture.model.EstatePicture
 import com.google.android.gms.maps.model.LatLng
+import java.time.LocalDate
 
 
 data class EstateEntity(
     val id: Int,
-    val picturesUrl: List<EstatePicture>,
     val description: String,
     val surface: String,
     val roomNumber: Int,
@@ -15,4 +14,8 @@ data class EstateEntity(
     val location: LatLng,
     val estateType: String,
     val price: String,
+    val pointOfInterest: List<String>,
+    val sellingDate: LocalDate?,
+    val entryDate: LocalDate,
+    val status: EstateStatus,
 )

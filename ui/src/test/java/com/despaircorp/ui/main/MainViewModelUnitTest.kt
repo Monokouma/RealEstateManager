@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
+import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
@@ -16,6 +17,8 @@ import com.despaircorp.ui.utils.ProfilePictureRandomizator
 import com.despaircorp.ui.utils.TestCoroutineRule
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,6 +34,13 @@ class MainViewModelUnitTest {
     private val disconnectAgentUseCase: DisconnectAgentUseCase = mockk()
     private val profilePictureRandomizator: ProfilePictureRandomizator = mockk()
     private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase = mockk()
+    private val getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase =
+        mockk()
+    
+    @Before
+    fun setup() {
+        coEvery { getEstateWithPictureEntityAsFlowUseCase.invoke() } returns flowOf(emptyList())
+    }
     
     @Test
     fun `nominal case - init should return agent entity with no error`() =
@@ -41,7 +51,8 @@ class MainViewModelUnitTest {
                 getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
                 disconnectAgentUseCase = disconnectAgentUseCase,
                 profilePictureRandomizator = profilePictureRandomizator,
-                insertCreatedAgentUseCase = insertCreatedAgentUseCase
+                insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+                getEstateWithPictureEntityAsFlowUseCase
             )
             
             viewModel.uiState.test {
@@ -66,7 +77,8 @@ class MainViewModelUnitTest {
             getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
             disconnectAgentUseCase = disconnectAgentUseCase,
             profilePictureRandomizator = profilePictureRandomizator,
-            insertCreatedAgentUseCase = insertCreatedAgentUseCase
+            insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+            getEstateWithPictureEntityAsFlowUseCase
         )
         
         viewModel.uiState.test {
@@ -88,7 +100,8 @@ class MainViewModelUnitTest {
             getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
             disconnectAgentUseCase = disconnectAgentUseCase,
             profilePictureRandomizator = profilePictureRandomizator,
-            insertCreatedAgentUseCase = insertCreatedAgentUseCase
+            insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+            getEstateWithPictureEntityAsFlowUseCase
         )
         
         viewModel.uiState.test {
@@ -117,7 +130,8 @@ class MainViewModelUnitTest {
             getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
             disconnectAgentUseCase = disconnectAgentUseCase,
             profilePictureRandomizator = profilePictureRandomizator,
-            insertCreatedAgentUseCase = insertCreatedAgentUseCase
+            insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+            getEstateWithPictureEntityAsFlowUseCase
         )
         
         viewModel.uiState.test {
@@ -147,7 +161,8 @@ class MainViewModelUnitTest {
             getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
             disconnectAgentUseCase = disconnectAgentUseCase,
             profilePictureRandomizator = profilePictureRandomizator,
-            insertCreatedAgentUseCase = insertCreatedAgentUseCase
+            insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+            getEstateWithPictureEntityAsFlowUseCase
         )
         
         viewModel.uiState.test {
@@ -177,7 +192,8 @@ class MainViewModelUnitTest {
             getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
             disconnectAgentUseCase = disconnectAgentUseCase,
             profilePictureRandomizator = profilePictureRandomizator,
-            insertCreatedAgentUseCase = insertCreatedAgentUseCase
+            insertCreatedAgentUseCase = insertCreatedAgentUseCase,
+            getEstateWithPictureEntityAsFlowUseCase
         )
         
         viewModel.uiState.test {

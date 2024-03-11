@@ -6,7 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.despaircorp.data.estate.dto.EstateDto
-import com.despaircorp.data.estate.dto.EstateWithPictureEntity
+import com.despaircorp.data.estate.dto.EstateWithPictureDto
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,5 +19,5 @@ interface EstateDao {
     
     @Transaction
     @Query("SELECT * FROM estate_table")
-    fun getEstateWithPictureAsFlow(): Flow<List<EstateWithPictureEntity>>
+    fun getEstateWithPictureAsFlow(): Flow<List<EstateWithPictureDto>>
 }

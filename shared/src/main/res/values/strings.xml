@@ -19,4 +19,14 @@
     <string name="agent_creation">Agent Creation</string>
     <string name="empty_text">Text could not be empty</string>
     <string name="agent_created">Agent created !</string>
+    <string name="first_house_desc">This stunning modern house boasts an architectural design that combines sleek, clean lines with elegant simplicity. The exterior is characterized by a combination of smooth white render, large glass windows, and natural wood accents, creating a harmonious balance between modernity and warmth. The house features a flat or low-pitched roof, adding to its contemporary aesthetic.</string>
+    <string name="house">House</string>
+    <string name="schools">Schools</string>
+    <string name="shops">Shops</string>
+    <string name="parks">Parks</string>
+    <string name="second_house_desc">Classic Victorian architectural style, infused with a sense of eerie grandeur and mystery. This imposing structure is located in a historic neighborhood, exuding an old-world charm that belies its more sinister history.</string>
+    <string name="third_house_desc">A Parisian apartment typically embodies the essence of classic French elegance combined with modern chic. Nestled within a charming Haussmannian building, recognized for its stone facade, wrought iron balconies, and mansard roofs, the apartment exudes an air of historic sophistication.</string>
+    <string name="apartment">Apartment</string>
+    <string name="subway">Subway</string>
+    <string name="fourth_house_desc">A New York apartment in the Upper East Side exudes a blend of contemporary luxury and timeless sophistication, characteristic of one of Manhattan\'s most prestigious neighborhoods. These apartments, often located in classic pre-war buildings or sleek modern high-rises, offer a unique urban living experience.</string>
 </resources>

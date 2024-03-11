@@ -2,6 +2,8 @@ package com.despaircorp.data.estate.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.despaircorp.domain.estate.model.EstateStatus
+import java.time.LocalDate
 
 @Entity(
     tableName = "estate_table"
@@ -19,7 +21,7 @@ data class EstateDto(
     val estateType: String,
     val price: String,
     val pointOfInterest: List<String>,
-    val sellingDate: String,
-    val entryDate: String,
-    val status: String,
+    val sellingDate: LocalDate?,
+    val entryDate: LocalDate,
+    val status: EstateStatus
 )

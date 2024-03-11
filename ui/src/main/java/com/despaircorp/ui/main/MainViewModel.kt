@@ -1,7 +1,9 @@
 package com.despaircorp.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
@@ -18,7 +20,8 @@ class MainViewModel @Inject constructor(
     private val getLoggedRealEstateAgentEntityUseCase: GetLoggedRealEstateAgentEntityUseCase,
     private val disconnectAgentUseCase: DisconnectAgentUseCase,
     private val profilePictureRandomizator: ProfilePictureRandomizator,
-    private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase
+    private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
+    private val getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase
 ) : ViewModel() {
     
     val uiState: MutableStateFlow<MainState> = MutableStateFlow(MainState.Loading)
@@ -28,7 +31,16 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val currentLoggedInAgent = getLoggedRealEstateAgentEntityUseCase.invoke()
-            uiState.value = MainState.MainStateView(currentLoggedInAgent, StateError(0, false), OnCreateAgentSuccess(false, 0))
+            uiState.value = MainState.MainStateView(
+                currentLoggedInAgent,
+                StateError(0, false),
+                OnCreateAgentSuccess(false, 0)
+            )
+            Log.i("Monokouma", "here")
+            getEstateWithPictureEntityAsFlowUseCase.invoke().collect { list ->
+                Log.i("Monokouma", list.toString())
+                
+            }
         }
     }
     
@@ -37,7 +49,11 @@ class MainViewModel @Inject constructor(
             uiState.value = if (disconnectAgentUseCase.invoke(id)) {
                 MainState.Disconnected
             } else {
-                MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.error, true), OnCreateAgentSuccess(false, 0))
+                MainState.MainStateView(
+                    getLoggedRealEstateAgentEntityUseCase.invoke(),
+                    StateError(R.string.error, true),
+                    OnCreateAgentSuccess(false, 0)
+                )
             }
         }
     }
@@ -50,17 +66,29 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             uiState.value = if (agentName.isNullOrEmpty()) {
                 //Throw error
-                 MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.empty_text, true), OnCreateAgentSuccess(false, 0))
+                MainState.MainStateView(
+                    getLoggedRealEstateAgentEntityUseCase.invoke(),
+                    StateError(R.string.empty_text, true),
+                    OnCreateAgentSuccess(false, 0)
+                )
             } else {
                 if (insertCreatedAgentUseCase.invoke(
                         agentName ?: return@launch,
                         profilePictureRandomizator.provideRandomProfilePicture()
                     )
                 ) {
-                    MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(0, false), OnCreateAgentSuccess(true, R.string.agent_created))
+                    MainState.MainStateView(
+                        getLoggedRealEstateAgentEntityUseCase.invoke(),
+                        StateError(0, false),
+                        OnCreateAgentSuccess(true, R.string.agent_created)
+                    )
                     
                 } else {
-                    MainState.MainStateView(getLoggedRealEstateAgentEntityUseCase.invoke(), StateError(R.string.error, true), OnCreateAgentSuccess(false, 0))
+                    MainState.MainStateView(
+                        getLoggedRealEstateAgentEntityUseCase.invoke(),
+                        StateError(R.string.error, true),
+                        OnCreateAgentSuccess(false, 0)
+                    )
                     
                 }
             }
