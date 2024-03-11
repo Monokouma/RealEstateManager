@@ -29,7 +29,6 @@ class RealEstateAgentDataRepository @Inject constructor(
     
     override suspend fun insertRealEstateAgentEntities(realEstateAgentEntities: List<RealEstateAgentEntity>) =
         withContext(coroutineDispatcherProvider.io) {
-            Log.i("Monokouma", realEstateAgentEntities.toString())
             realEstateAgentDao.insert(
                 entitiesMaperinator.mapRealEstateAgentEntitiesToRealEstateAgentDto(
                     realEstateAgentEntities
