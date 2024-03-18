@@ -20,7 +20,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -63,6 +66,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -94,7 +98,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Main(viewModel = viewModel)
+                    val properties = listOf(
+                        Property(1, "Flat Manhattan", "$17,870,000", "A luxury flat in Manhattan."),
+                        Property(
+                            2,
+                            "House Montauk",
+                            "$21,130,000",
+                            "A beautiful house in Montauk."
+                        ),
+                        // Add more fake properties as needed
+                    )
+                    //  Main(viewModel = viewModel)
+                    RealEstateApp(properties)
                 }
             }
         }
@@ -105,6 +120,89 @@ class MainActivity : ComponentActivity() {
             context,
             MainActivity::class.java
         )
+    }
+}
+
+data class Property(
+    val id: Int,
+    val title: String,
+    val price: String,
+    val description: String
+)
+
+@Composable
+fun RealEstateApp(properties: List<Property>) {
+    var selectedProperty by remember { mutableStateOf(properties.first()) }
+    
+    Row(Modifier.fillMaxSize()) {
+        MasterList(properties = properties, selectedProperty = selectedProperty) { property ->
+            selectedProperty = property
+        }
+        PropertyDetail(property = selectedProperty)
+    }
+}
+
+@Composable
+fun MasterList(
+    properties: List<Property>,
+    selectedProperty: Property,
+    onSelect: (Property) -> Unit
+) {
+    LazyColumn {
+        items(properties) { property ->
+            PropertyListItem(property = property, isSelected = property == selectedProperty) {
+                onSelect(property)
+            }
+        }
+    }
+}
+
+@Composable
+fun PropertyListItem(property: Property, isSelected: Boolean, onSelect: () -> Unit) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { onSelect() }
+    ) {
+        Column(Modifier.padding(16.dp)) {
+            Text(property.title, style = MaterialTheme.typography.displayMedium)
+            Text(property.price, style = MaterialTheme.typography.displayMedium)
+        }
+    }
+}
+
+@Composable
+fun PropertyDetail(property: Property) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text("Property Details", style = MaterialTheme.typography.displayMedium)
+        Spacer(Modifier.height(8.dp))
+        Text("Title: ${property.title}", style = MaterialTheme.typography.bodyMedium)
+        Text("Price: ${property.price}", style = MaterialTheme.typography.labelSmall)
+        Text(property.description, textAlign = TextAlign.Justify)
+        Spacer(Modifier.height(16.dp))
+        // Placeholder for images
+        Image(
+            painter = painterResource(android.R.drawable.ic_menu_gallery),
+            contentDescription = "Property Image",
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+        )
+        Spacer(Modifier.height(16.dp))
+        // Placeholder for a map
+        Box(
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Map Placeholder")
+        }
     }
 }
 
@@ -180,7 +278,7 @@ fun Holder(
     onClick: (Int) -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
-    ) {
+) {
     val scope = rememberCoroutineScope()
     
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -486,9 +584,11 @@ fun AgentCreationForm(
                     containerColor = MaterialTheme.colorScheme.secondary
                 )
             ) {
-                Text("Create", fontFamily = merriweatherSans,
+                Text(
+                    "Create", fontFamily = merriweatherSans,
                     fontWeight = FontWeight.Normal,
-                    color = MaterialTheme.colorScheme.outline)
+                    color = MaterialTheme.colorScheme.outline
+                )
             }
         }
     }
@@ -637,10 +737,11 @@ fun PopUpAgentAdd(
 @Composable
 fun GreetingPreview2() {
     RealEstateManagerKotlinTheme {
-        AgentCreationForm(Modifier, onValueAgentNameTextChange = {
-        
-        }, onCreateAgentClick = {
-        
-        })
+        val properties = listOf(
+            Property(1, "Flat Manhattan", "$17,870,000", "A luxury flat in Manhattan."),
+            Property(2, "House Montauk", "$21,130,000", "A beautiful house in Montauk."),
+            // Add more fake properties as needed
+        )
+        RealEstateApp(properties)
     }
 }
