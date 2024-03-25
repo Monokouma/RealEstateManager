@@ -1,6 +1,5 @@
 package com.despaircorp.ui.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
@@ -31,15 +30,13 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val currentLoggedInAgent = getLoggedRealEstateAgentEntityUseCase.invoke()
-            uiState.value = MainState.MainStateView(
-                currentLoggedInAgent,
-                StateError(0, false),
-                OnCreateAgentSuccess(false, 0)
-            )
-            Log.i("Monokouma", "here")
             getEstateWithPictureEntityAsFlowUseCase.invoke().collect { list ->
-                Log.i("Monokouma", list.toString())
-                
+                uiState.value = MainState.MainStateView(
+                    currentLoggedInAgent,
+                    StateError(0, false),
+                    OnCreateAgentSuccess(false, 0),
+                    list
+                )
             }
         }
     }
@@ -52,7 +49,8 @@ class MainViewModel @Inject constructor(
                 MainState.MainStateView(
                     getLoggedRealEstateAgentEntityUseCase.invoke(),
                     StateError(R.string.error, true),
-                    OnCreateAgentSuccess(false, 0)
+                    OnCreateAgentSuccess(false, 0),
+                    emptyList()
                 )
             }
         }
@@ -69,7 +67,8 @@ class MainViewModel @Inject constructor(
                 MainState.MainStateView(
                     getLoggedRealEstateAgentEntityUseCase.invoke(),
                     StateError(R.string.empty_text, true),
-                    OnCreateAgentSuccess(false, 0)
+                    OnCreateAgentSuccess(false, 0),
+                    emptyList()
                 )
             } else {
                 if (insertCreatedAgentUseCase.invoke(
@@ -80,14 +79,16 @@ class MainViewModel @Inject constructor(
                     MainState.MainStateView(
                         getLoggedRealEstateAgentEntityUseCase.invoke(),
                         StateError(0, false),
-                        OnCreateAgentSuccess(true, R.string.agent_created)
+                        OnCreateAgentSuccess(true, R.string.agent_created),
+                        emptyList()
                     )
                     
                 } else {
                     MainState.MainStateView(
                         getLoggedRealEstateAgentEntityUseCase.invoke(),
                         StateError(R.string.error, true),
-                        OnCreateAgentSuccess(false, 0)
+                        OnCreateAgentSuccess(false, 0),
+                        emptyList()
                     )
                     
                 }

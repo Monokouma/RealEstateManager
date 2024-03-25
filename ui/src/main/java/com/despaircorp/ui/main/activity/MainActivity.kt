@@ -3,11 +3,17 @@ package com.despaircorp.ui.main.activity
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,10 +26,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -39,6 +44,7 @@ import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -50,29 +56,35 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
+import androidx.compose.material3.adaptive.layout.AnimatedPane
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
+import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
+import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.despaircorp.domain.estate.model.EstateWithPictureEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.shared.R
 import com.despaircorp.ui.login.activity.LoginActivity
@@ -98,18 +110,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val properties = listOf(
-                        Property(1, "Flat Manhattan", "$17,870,000", "A luxury flat in Manhattan."),
-                        Property(
-                            2,
-                            "House Montauk",
-                            "$21,130,000",
-                            "A beautiful house in Montauk."
-                        ),
-                        // Add more fake properties as needed
-                    )
-                    //  Main(viewModel = viewModel)
-                    RealEstateApp(properties)
+                    val isTablet = isTablet()
+                    Log.i("Monokouma", isTablet.toString())
+                    if (isTablet) {
+                        MainTablet(viewModel = viewModel)
+                    } else {
+                        MainSmartphone(viewModel = viewModel)
+                    }
+                    
                 }
             }
         }
@@ -123,91 +131,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-data class Property(
-    val id: Int,
-    val title: String,
-    val price: String,
-    val description: String
-)
-
 @Composable
-fun RealEstateApp(properties: List<Property>) {
-    var selectedProperty by remember { mutableStateOf(properties.first()) }
-    
-    Row(Modifier.fillMaxSize()) {
-        MasterList(properties = properties, selectedProperty = selectedProperty) { property ->
-            selectedProperty = property
-        }
-        PropertyDetail(property = selectedProperty)
-    }
-}
-
-@Composable
-fun MasterList(
-    properties: List<Property>,
-    selectedProperty: Property,
-    onSelect: (Property) -> Unit
-) {
-    LazyColumn {
-        items(properties) { property ->
-            PropertyListItem(property = property, isSelected = property == selectedProperty) {
-                onSelect(property)
-            }
-        }
-    }
-}
-
-@Composable
-fun PropertyListItem(property: Property, isSelected: Boolean, onSelect: () -> Unit) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-            .clickable { onSelect() }
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Text(property.title, style = MaterialTheme.typography.displayMedium)
-            Text(property.price, style = MaterialTheme.typography.displayMedium)
-        }
-    }
-}
-
-@Composable
-fun PropertyDetail(property: Property) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Text("Property Details", style = MaterialTheme.typography.displayMedium)
-        Spacer(Modifier.height(8.dp))
-        Text("Title: ${property.title}", style = MaterialTheme.typography.bodyMedium)
-        Text("Price: ${property.price}", style = MaterialTheme.typography.labelSmall)
-        Text(property.description, textAlign = TextAlign.Justify)
-        Spacer(Modifier.height(16.dp))
-        // Placeholder for images
-        Image(
-            painter = painterResource(android.R.drawable.ic_menu_gallery),
-            contentDescription = "Property Image",
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth()
-        )
-        Spacer(Modifier.height(16.dp))
-        // Placeholder for a map
-        Box(
-            modifier = Modifier
-                .height(200.dp)
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Map Placeholder")
-        }
-    }
-}
-
-@Composable
-fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+fun MainSmartphone(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
     
@@ -246,6 +171,54 @@ fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     onClick = { viewModel.onDisconnect(it) },
                     onValueAgentNameTextChange = { viewModel.onRealEstateAgentNameTextChange(it) },
                     onCreateAgentClick = { viewModel.onCreateAgentClick() },
+                    state.estates
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun MainTablet(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+    
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    
+    val activity = (LocalContext.current as? Activity)
+    
+    Surface {
+        when (val state = uiState.value) {
+            MainState.Disconnected -> {
+                activity?.startActivity(LoginActivity.navigate(activity.applicationContext))
+                activity?.finish()
+            }
+            
+            
+            MainState.Loading -> {}
+            
+            is MainState.MainStateView -> {
+                if (state.error.showError) {
+                    Toast.makeText(
+                        activity,
+                        activity?.getString(state.error.errorMessageRes),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if (state.onCreateAgentSuccess.showSuccess) {
+                    Toast.makeText(
+                        activity,
+                        activity?.getString(state.onCreateAgentSuccess.successMessageRes),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    
+                }
+                
+                MainScreen(
+                    realEstateAgentEntity = state.currentLoggedInAgent,
+                    modifier = modifier,
+                    onClick = { viewModel.onDisconnect(it) },
+                    onValueAgentNameTextChange = { viewModel.onRealEstateAgentNameTextChange(it) },
+                    onCreateAgentClick = { viewModel.onCreateAgentClick() },
+                    state.estates
                 )
             }
         }
@@ -259,6 +232,7 @@ fun MainScreen(
     onClick: (Int) -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
+    estateWithPictureEntities: List<EstateWithPictureEntity>
 ) {
     Column {
         Holder(
@@ -267,6 +241,7 @@ fun MainScreen(
             onClick = onClick,
             onValueAgentNameTextChange = onValueAgentNameTextChange,
             onCreateAgentClick = onCreateAgentClick,
+            estateWithPictureEntities
         )
     }
 }
@@ -278,6 +253,7 @@ fun Holder(
     onClick: (Int) -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
+    estateWithPictureEntities: List<EstateWithPictureEntity>
 ) {
     val scope = rememberCoroutineScope()
     
@@ -322,7 +298,8 @@ fun Holder(
                             onCreateAgentClick.invoke()
                             isAddPopUpVisibleActivityCallback =
                                 !isAddPopUpVisibleActivityCallback
-                        }
+                        },
+                        estateWithPictureEntities
                     )
                 },
             )
@@ -330,6 +307,7 @@ fun Holder(
     )
 }
 
+@OptIn(ExperimentalMaterial3AdaptiveApi::class)
 @Composable
 fun ScreenContent(
     modifier: Modifier,
@@ -338,13 +316,49 @@ fun ScreenContent(
     onNavigationIconClicked: () -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
+    estateWithPictureEntities: List<EstateWithPictureEntity>
 ) {
     Box(
         modifier = modifier.padding(innerPadding),
     ) {
-        Column {
-            Text(text = "TEST")
+        
+        var selectedItem: MyItem? by rememberSaveable(stateSaver = MyItem.Saver) {
+            mutableStateOf(null)
         }
+
+// Create the ListDetailPaneScaffoldState
+        val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
+        
+        BackHandler(navigator.canNavigateBack()) {
+            navigator.navigateBack()
+        }
+        
+        ListDetailPaneScaffold(
+            directive = navigator.scaffoldDirective,
+            value = navigator.scaffoldValue,
+            listPane = {
+                AnimatedPane(Modifier) {
+                    MyList(
+                        onItemClick = { id ->
+                            // Set current item
+                            selectedItem = id
+                            // Display the detail pane
+                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
+                        },
+                        estateWithPictureEntities
+                    )
+                }
+            },
+            detailPane = {
+                AnimatedPane(Modifier) {
+                    // Show the detail pane content if selected item is available
+                    selectedItem?.let { item ->
+                        MyDetails(item)
+                    }
+                }
+            },
+        )
+        
         if (isAddPopUpVisibleActivityCallback) {
             PopupFormDialog(onSurfaceClicked = {
                 onNavigationIconClicked.invoke()
@@ -353,6 +367,84 @@ fun ScreenContent(
             
         }
     }
+}
+
+@Composable
+fun MyList(
+    onItemClick: (MyItem) -> Unit,
+    estateWithPictureEntities: List<EstateWithPictureEntity>
+) {
+    Card {
+        LazyColumn {
+            estateWithPictureEntities.forEachIndexed { id, item ->
+                item {
+                    ListItem(
+                        modifier = Modifier
+                            .background(Color.Magenta)
+                            .clickable {
+                                onItemClick(MyItem(id))
+                            },
+                        headlineContent = {
+                            Text(
+                                text = item.estateEntity.estateType,
+                            )
+                        },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyDetails(item: MyItem) {
+    val text = "${item.id}"
+    Card {
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            Text(
+                text = "Details page for $text",
+                fontSize = 24.sp,
+            )
+            Spacer(Modifier.size(16.dp))
+            Text(
+                text = "TODO: Add great details here"
+            )
+        }
+    }
+}
+
+class MyItem(val id: Int) {
+    companion object {
+        val Saver: Saver<MyItem?, Int> = Saver(
+            { it?.id },
+            ::MyItem,
+        )
+    }
+}
+
+@Composable
+fun isTablet(): Boolean {
+    val configuration = LocalConfiguration.current
+    return if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        configuration.screenWidthDp > 840
+    } else {
+        configuration.screenWidthDp > 600
+    }
+}
+
+@Composable
+fun EstateItem(
+    modifier: Modifier,
+    pictureBitmap: Bitmap,
+    estateType: String,
+    location: String,
+    price: String
+) {
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -733,15 +825,11 @@ fun PopUpAgentAdd(
     }
 }
 
-@Preview(showBackground = true, device = Devices.TABLET)
+@RequiresApi(Build.VERSION_CODES.P)
+@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun GreetingPreview2() {
+fun GreetingPreview() {
     RealEstateManagerKotlinTheme {
-        val properties = listOf(
-            Property(1, "Flat Manhattan", "$17,870,000", "A luxury flat in Manhattan."),
-            Property(2, "House Montauk", "$21,130,000", "A beautiful house in Montauk."),
-            // Add more fake properties as needed
-        )
-        RealEstateApp(properties)
+    
     }
 }

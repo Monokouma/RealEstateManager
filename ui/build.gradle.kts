@@ -67,6 +67,8 @@ hilt {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation-android:1.0.0-alpha09")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout-android:1.0.0-alpha09")
     testImplementation(project(":stubs"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -112,5 +114,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
     
-    
+    implementation("androidx.compose.material3.adaptive:adaptive:1.0.0-alpha09")
+    implementation("androidx.compose.material3.adaptive:adaptive-layout:1.0.0-alpha09")
+    implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.0.0-alpha09")
 }
