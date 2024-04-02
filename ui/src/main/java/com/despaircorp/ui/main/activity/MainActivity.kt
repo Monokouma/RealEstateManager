@@ -4,10 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -24,17 +22,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.sharp.ExitToApp
+import androidx.compose.material.icons.sharp.ShoppingCart
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -45,6 +49,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
@@ -62,6 +67,9 @@ import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffoldRole
 import androidx.compose.material3.adaptive.navigation.rememberListDetailPaneScaffoldNavigator
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,19 +80,24 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
+import com.despaircorp.domain.picture.model.EstatePicture
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.shared.R
 import com.despaircorp.ui.login.activity.LoginActivity
@@ -100,6 +113,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -110,13 +124,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val isTablet = isTablet()
-                    Log.i("Monokouma", isTablet.toString())
-                    if (isTablet) {
-                        MainTablet(viewModel = viewModel)
-                    } else {
-                        MainSmartphone(viewModel = viewModel)
-                    }
+                    val windowsSize = calculateWindowSizeClass(activity = this).widthSizeClass
+                    Main(viewModel = viewModel)
                     
                 }
             }
@@ -132,10 +141,9 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainSmartphone(modifier: Modifier = Modifier, viewModel: MainViewModel) {
+fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
     
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    
     val activity = (LocalContext.current as? Activity)
     
     Surface {
@@ -171,54 +179,8 @@ fun MainSmartphone(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                     onClick = { viewModel.onDisconnect(it) },
                     onValueAgentNameTextChange = { viewModel.onRealEstateAgentNameTextChange(it) },
                     onCreateAgentClick = { viewModel.onCreateAgentClick() },
-                    state.estates
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MainTablet(modifier: Modifier = Modifier, viewModel: MainViewModel) {
-    
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-    
-    val activity = (LocalContext.current as? Activity)
-    
-    Surface {
-        when (val state = uiState.value) {
-            MainState.Disconnected -> {
-                activity?.startActivity(LoginActivity.navigate(activity.applicationContext))
-                activity?.finish()
-            }
-            
-            
-            MainState.Loading -> {}
-            
-            is MainState.MainStateView -> {
-                if (state.error.showError) {
-                    Toast.makeText(
-                        activity,
-                        activity?.getString(state.error.errorMessageRes),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                if (state.onCreateAgentSuccess.showSuccess) {
-                    Toast.makeText(
-                        activity,
-                        activity?.getString(state.onCreateAgentSuccess.successMessageRes),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    
-                }
-                
-                MainScreen(
-                    realEstateAgentEntity = state.currentLoggedInAgent,
-                    modifier = modifier,
-                    onClick = { viewModel.onDisconnect(it) },
-                    onValueAgentNameTextChange = { viewModel.onRealEstateAgentNameTextChange(it) },
-                    onCreateAgentClick = { viewModel.onCreateAgentClick() },
-                    state.estates
+                    state.estates,
+                    onCurrencyClick = { viewModel.onChangeCurrencyClicked() }
                 )
             }
         }
@@ -232,7 +194,8 @@ fun MainScreen(
     onClick: (Int) -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
-    estateWithPictureEntities: List<EstateWithPictureEntity>
+    estateWithPictureEntities: List<EstateWithPictureEntity>,
+    onCurrencyClick: () -> Unit
 ) {
     Column {
         Holder(
@@ -241,7 +204,8 @@ fun MainScreen(
             onClick = onClick,
             onValueAgentNameTextChange = onValueAgentNameTextChange,
             onCreateAgentClick = onCreateAgentClick,
-            estateWithPictureEntities
+            estateWithPictureEntities,
+            onCurrencyClick
         )
     }
 }
@@ -253,7 +217,8 @@ fun Holder(
     onClick: (Int) -> Unit,
     onValueAgentNameTextChange: (String) -> Unit,
     onCreateAgentClick: () -> Unit,
-    estateWithPictureEntities: List<EstateWithPictureEntity>
+    estateWithPictureEntities: List<EstateWithPictureEntity>,
+    onCurrencyClick: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     
@@ -269,7 +234,13 @@ fun Holder(
             DrawerModal(
                 modifier = modifier,
                 realEstateAgentEntity = realEstateAgentEntity,
-                onClick = onClick
+                onClick = onClick,
+                onCurrencyClick = onCurrencyClick,
+                onCloseDrawer = {
+                    scope.launch {
+                        drawerState.close()
+                    }
+                }
             )
         },
         content = {
@@ -319,11 +290,12 @@ fun ScreenContent(
     estateWithPictureEntities: List<EstateWithPictureEntity>
 ) {
     Box(
-        modifier = modifier.padding(innerPadding),
+        modifier = modifier
+            .padding(top = innerPadding.calculateTopPadding())
     ) {
         
         var selectedItem: MyItem? by rememberSaveable(stateSaver = MyItem.Saver) {
-            mutableStateOf(null)
+            mutableStateOf(MyItem(0, estateWithPictureEntities.first()))
         }
 
 // Create the ListDetailPaneScaffoldState
@@ -337,23 +309,24 @@ fun ScreenContent(
             directive = navigator.scaffoldDirective,
             value = navigator.scaffoldValue,
             listPane = {
-                AnimatedPane(Modifier) {
-                    MyList(
+                AnimatedPane(modifier) {
+                    EstateList(
                         onItemClick = { id ->
                             // Set current item
                             selectedItem = id
                             // Display the detail pane
                             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                         },
-                        estateWithPictureEntities
+                        estateWithPictureEntities,
+                        modifier
                     )
                 }
             },
             detailPane = {
-                AnimatedPane(Modifier) {
+                AnimatedPane(Modifier.background(MaterialTheme.colorScheme.background)) {
                     // Show the detail pane content if selected item is available
                     selectedItem?.let { item ->
-                        MyDetails(item)
+                        EstateDetails(item)
                     }
                 }
             },
@@ -369,26 +342,87 @@ fun ScreenContent(
     }
 }
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun MyList(
+fun EstateList(
     onItemClick: (MyItem) -> Unit,
-    estateWithPictureEntities: List<EstateWithPictureEntity>
+    estateWithPictureEntities: List<EstateWithPictureEntity>,
+    modifier: Modifier
 ) {
+    val activity = (LocalContext.current as? Activity)
+    val windowsSize = calculateWindowSizeClass(activity = activity ?: return).widthSizeClass
+    
+    var selectedItem: MyItem? by rememberSaveable(stateSaver = MyItem.Saver) {
+        mutableStateOf(MyItem(0, estateWithPictureEntities.first()))
+    }
+    
     Card {
-        LazyColumn {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             estateWithPictureEntities.forEachIndexed { id, item ->
                 item {
+                    val isSelected = selectedItem?.id == id
+                    
                     ListItem(
-                        modifier = Modifier
-                            .background(Color.Magenta)
+                        modifier = modifier
                             .clickable {
-                                onItemClick(MyItem(id))
+                                selectedItem = MyItem(id, item)
+                                onItemClick(MyItem(id, item))
                             },
+                        
                         headlineContent = {
-                            Text(
-                                text = item.estateEntity.estateType,
-                            )
-                        },
+                            Row(
+                            
+                            ) {
+                                Image(
+                                    bitmap = item.pictures.first().bitmapImage.asImageBitmap(),
+                                    contentDescription = item.pictures.first().description.name,
+                                    contentScale = ContentScale.Crop,
+                                    modifier = modifier
+                                        .width(140.dp)
+                                        .aspectRatio(1f)
+                                        .clip(RoundedCornerShape(4.dp))
+                                )
+                                
+                                Column(
+                                    modifier.padding(horizontal = 8.dp)
+                                ) {
+                                    Text(
+                                        text = item.estateEntity.estateType,
+                                        fontFamily = merriweatherSans,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                    
+                                    Text(
+                                        text = item.estateEntity.city,
+                                        fontFamily = merriweatherSans,
+                                        fontWeight = FontWeight.Normal,
+                                        color = MaterialTheme.colorScheme.outline
+                                    )
+                                    
+                                    Text(
+                                        text = item.estateEntity.price,
+                                        fontFamily = merriweatherSans,
+                                        fontWeight = FontWeight.Normal,
+                                        color = if (windowsSize == WindowWidthSizeClass.Compact || windowsSize == WindowWidthSizeClass.Medium) {
+                                            MaterialTheme.colorScheme.tertiary
+                                        } else {
+                                            if (isSelected) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.tertiary
+                                        }
+                                    )
+                                }
+                            }
+                        }, colors = ListItemDefaults.colors(
+                            containerColor = if (windowsSize == WindowWidthSizeClass.Compact || windowsSize == WindowWidthSizeClass.Medium) {
+                                MaterialTheme.colorScheme.background
+                            } else {
+                                if (isSelected) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.background
+                            }
+                        )
                     )
                 }
             }
@@ -397,54 +431,235 @@ fun MyList(
 }
 
 @Composable
-fun MyDetails(item: MyItem) {
-    val text = "${item.id}"
+fun EstateDetails(entity: MyItem) {
     Card {
         Column(
             Modifier
+                .background(MaterialTheme.colorScheme.background)
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
             Text(
-                text = "Details page for $text",
+                text = stringResource(id = R.string.media),
                 fontSize = 24.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Spacer(Modifier.size(16.dp))
+            ImageCarousel(imageData = entity.estate?.pictures ?: emptyList())
+            Spacer(Modifier.size(16.dp))
+            Text(
+                text = stringResource(id = R.string.description),
+                fontSize = 24.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.outline
             )
             Spacer(Modifier.size(16.dp))
             Text(
-                text = "TODO: Add great details here"
+                text = entity.estate?.estateEntity?.description ?: "",
+                fontSize = 16.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.outline
             )
+            
+            Spacer(Modifier.size(40.dp))
+            
+            Row(
+                Modifier.fillMaxWidth(), // Fill the width of the parent
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                
+                Column(Modifier.weight(1f)) {
+                    EstateSurfaceSize(surface = entity.estate?.estateEntity?.surface ?: "")
+                    Spacer(Modifier.size(8.dp))
+                    EstateRoomNumber(entity.estate?.estateEntity?.roomNumber ?: 0)
+                    Spacer(Modifier.size(8.dp))
+                    EstateBathRoomNumber(entity.estate?.estateEntity?.bathroomNumber ?: 0)
+                    Spacer(Modifier.size(8.dp))
+                    EstateBedRoomNumber(entity.estate?.estateEntity?.numberOfBedrooms ?: 0)
+                    Spacer(Modifier.size(8.dp))
+                }
+                Spacer(Modifier.size(16.dp))
+                Column(Modifier.weight(1f)) {
+                    EstateFullAddress(address = entity.estate?.estateEntity?.address ?: "")
+                }
+                Spacer(Modifier.size(16.dp))
+                Column(Modifier.weight(1f)) {
+                    MapPlaceholder()
+                }
+            }
         }
     }
 }
 
-class MyItem(val id: Int) {
+@Composable
+fun MapPlaceholder() {
+    Box(
+        modifier = Modifier
+            .height(180.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(4.dp))
+            .background(Color.Gray), // Placeholder color, use actual map or image here
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = "Map Placeholder",
+            color = Color.White
+        )
+        // Replace this Box with your actual Map composable or a static image of the map
+    }
+}
+
+@Composable
+fun EstateFullAddress(address: String) {
+    Row() {
+        Icon(
+            painter = painterResource(id = R.drawable.maps_and_flags),
+            contentDescription = "Surface ",
+            tint = MaterialTheme.colorScheme.outline,
+        )
+        
+        Spacer(Modifier.size(16.dp))
+        
+        Column {
+            Text(text = "Location")
+            Spacer(Modifier.size(4.dp))
+            Text(text = address)
+        }
+    }
+}
+
+@Composable
+fun EstateSurfaceSize(surface: String) {
+    
+    Row {
+        Icon(
+            painter = painterResource(id = R.drawable.area),
+            contentDescription = "Surface ",
+            tint = MaterialTheme.colorScheme.outline,
+        )
+        
+        Spacer(Modifier.size(16.dp))
+        
+        Column {
+            Text(text = "Surface")
+            Spacer(Modifier.size(4.dp))
+            Text(text = surface)
+        }
+    }
+}
+
+@Composable
+fun EstateRoomNumber(numberOfRoom: Int) {
+    
+    Row {
+        Icon(
+            painter = painterResource(id = R.drawable.home),
+            contentDescription = "Number of rooms",
+            tint = MaterialTheme.colorScheme.outline,
+        )
+        
+        Spacer(Modifier.size(16.dp))
+        
+        Column {
+            Text(text = "Number of rooms")
+            Spacer(Modifier.size(4.dp))
+            Text(text = numberOfRoom.toString())
+        }
+    }
+}
+
+@Composable
+fun EstateBathRoomNumber(numberOfBathroom: Int) {
+    
+    Row {
+        Icon(
+            painter = painterResource(id = R.drawable.bathtub),
+            contentDescription = "Number of bathrooms",
+            tint = MaterialTheme.colorScheme.outline,
+        )
+        
+        Spacer(Modifier.size(16.dp))
+        
+        Column {
+            Text(text = "Number of bathrooms")
+            Spacer(Modifier.size(4.dp))
+            Text(text = numberOfBathroom.toString())
+        }
+    }
+}
+
+@Composable
+fun EstateBedRoomNumber(bedRoomNumber: Int) {
+    
+    Row {
+        Icon(
+            painter = painterResource(id = R.drawable.bedroom),
+            contentDescription = "Number of bedrooms",
+            tint = MaterialTheme.colorScheme.outline,
+        )
+        
+        Spacer(Modifier.size(16.dp))
+        
+        Column {
+            Text(text = "Number of bedrooms")
+            Spacer(Modifier.size(4.dp))
+            Text(text = bedRoomNumber.toString())
+        }
+    }
+}
+
+@Composable
+fun ImageCarousel(imageData: List<EstatePicture>) {
+    
+    LazyRow() {
+        items(imageData.size) { index -> // Use the size of the list here
+            val data = imageData[index] // Get the item from the list using the index
+            
+            Card(
+                shape = RoundedCornerShape(4.dp),
+                elevation = CardDefaults.cardElevation(2.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+            ) {
+                Box(
+                ) {
+                    Image(
+                        bitmap = data.bitmapImage.asImageBitmap(),
+                        contentDescription = data.description.name, // Accessibility description
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .height(140.dp)
+                            .width(140.dp)
+                    
+                    )
+                    Text(
+                        text = data.description.name.uppercase(),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.outline,
+                        textAlign = TextAlign.Center,
+                        fontFamily = merriweatherSans,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .background(Color(0xAA000000)) // Semi-transparent black
+                            .padding(4.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+class MyItem(val id: Int, val estate: EstateWithPictureEntity?) {
     companion object {
-        val Saver: Saver<MyItem?, Int> = Saver(
-            { it?.id },
-            ::MyItem,
+        val Saver: Saver<MyItem?, Bundle> = Saver(
+            save = { bundleOf("id" to it?.id, "estate" to it?.estate?.estateEntity?.id) },
+            restore = { MyItem(it.getInt("id"), it.getParcelable("estate")) }
         )
     }
-}
-
-@Composable
-fun isTablet(): Boolean {
-    val configuration = LocalConfiguration.current
-    return if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        configuration.screenWidthDp > 840
-    } else {
-        configuration.screenWidthDp > 600
-    }
-}
-
-@Composable
-fun EstateItem(
-    modifier: Modifier,
-    pictureBitmap: Bitmap,
-    estateType: String,
-    location: String,
-    price: String
-) {
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -498,6 +713,7 @@ fun MainTopBar(
                     contentDescription = "Localized description"
                 )
             }
+            
         },
     )
 }
@@ -506,9 +722,11 @@ fun MainTopBar(
 fun DrawerModal(
     modifier: Modifier,
     realEstateAgentEntity: RealEstateAgentEntity,
-    onClick: (Int) -> Unit
+    onClick: (Int) -> Unit,
+    onCurrencyClick: () -> Unit,
+    onCloseDrawer: () -> Unit
 ) {
-    val items = listOf(Icons.Filled.ExitToApp)
+    val items = listOf(Icons.Sharp.ExitToApp)
     
     val selectedItem = remember { mutableStateOf(items[0]) }
     
@@ -551,7 +769,27 @@ fun DrawerModal(
         
         items.forEach { item ->
             NavigationDrawerItem(
-                icon = { Icon(item, null) },
+                icon = {
+                    Icon(Icons.Sharp.ShoppingCart, null)
+                },
+                label = {
+                    Text(
+                        stringResource(id = R.string.change_currency),
+                        color = MaterialTheme.colorScheme.outline
+                    )
+                },
+                selected = item == selectedItem.value,
+                onClick = {
+                    selectedItem.value = item
+                    onCurrencyClick.invoke()
+                    onCloseDrawer.invoke()
+                },
+                modifier = Modifier
+                    .padding(NavigationDrawerItemDefaults.ItemPadding)
+                    .padding(vertical = 16.dp)
+            )
+            NavigationDrawerItem(
+                icon = { Icon(Icons.Sharp.ExitToApp, null) },
                 label = {
                     Text(
                         stringResource(id = R.string.logout),

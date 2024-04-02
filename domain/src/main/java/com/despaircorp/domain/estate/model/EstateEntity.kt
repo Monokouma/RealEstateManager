@@ -18,4 +18,6 @@ data class EstateEntity(
     val sellingDate: LocalDate?,
     val entryDate: LocalDate,
     val status: EstateStatus,
+    val address: String,
+    val city: String
 )

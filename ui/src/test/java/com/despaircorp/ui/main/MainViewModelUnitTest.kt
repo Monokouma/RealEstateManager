@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
+import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase

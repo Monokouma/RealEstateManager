@@ -89,12 +89,12 @@ dependencies {
     
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
-    
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.1")
-    
+    implementation("androidx.compose.ui:ui-util:1.6.4")
     
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
@@ -117,4 +117,6 @@ dependencies {
     implementation("androidx.compose.material3.adaptive:adaptive:1.0.0-alpha09")
     implementation("androidx.compose.material3.adaptive:adaptive-layout:1.0.0-alpha09")
     implementation("androidx.compose.material3.adaptive:adaptive-navigation:1.0.0-alpha09")
+    implementation("androidx.compose.material3:material3-window-size-class")
+    
 }

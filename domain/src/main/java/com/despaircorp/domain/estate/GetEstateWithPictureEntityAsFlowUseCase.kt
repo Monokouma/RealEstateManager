@@ -1,6 +1,5 @@
-package com.despaircorp.domain
+package com.despaircorp.domain.estate
 
-import com.despaircorp.domain.estate.EstateDomainRepository
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
