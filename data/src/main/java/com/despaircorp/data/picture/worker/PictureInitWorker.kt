@@ -132,7 +132,34 @@ class PictureInitWorker @AssistedInject constructor(
                         4,
                         BitmapFactory.decodeStream(assetManager.open("fourth_bathroom.bmp")),
                         EstatePictureType.BATHROOM,
-                    )
+                    ),//5
+                    
+                    EstatePicture(
+                        5,
+                        BitmapFactory.decodeStream(assetManager.open("fifth_facade.bmp")),
+                        EstatePictureType.FACADE,
+                    ),
+                    EstatePicture(
+                        5,
+                        BitmapFactory.decodeStream(assetManager.open("fifth_lounge.bmp")),
+                        EstatePictureType.LOUNGE,
+                    ),
+                    EstatePicture(
+                        5,
+                        BitmapFactory.decodeStream(assetManager.open("fifth_kitchen.bmp")),
+                        EstatePictureType.KITCHEN,
+                    ),
+                    
+                    EstatePicture(
+                        5,
+                        BitmapFactory.decodeStream(assetManager.open("fifth_bedroom.bmp")),
+                        EstatePictureType.BEDROOM,
+                    ),
+                    EstatePicture(
+                        5,
+                        BitmapFactory.decodeStream(assetManager.open("fifth_bathroom.bmp")),
+                        EstatePictureType.BATHROOM,
+                    ),
                 )
             )
         }

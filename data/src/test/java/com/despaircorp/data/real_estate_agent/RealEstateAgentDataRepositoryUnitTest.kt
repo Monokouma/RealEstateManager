@@ -2,6 +2,7 @@ package com.despaircorp.data.real_estate_agent
 
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
+import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.assertions.isFalse
@@ -40,6 +41,7 @@ class RealEstateAgentDataRepositoryUnitTest {
     
     @Before
     fun setup() {
+        
         
         coEvery {
             realEstateAgentDao.getAllRealEstateAgentDto()
@@ -105,6 +107,36 @@ class RealEstateAgentDataRepositoryUnitTest {
             entitiesMaperinator = entitiesMaperinator,
             workManager = workManager
         )
+    }
+    
+    @Test
+    fun `nominal case - get real estate agent entities as flow`() = testCoroutineRule.runTest {
+        coEvery { realEstateAgentDao.getAllRealEstateAgentDtoAsFlow() } returns flowOf(
+            provideRealEstateDtoEntities()
+        )
+        coEvery { entitiesMaperinator.mapRealEstateAgentDtoToEntitiesAsFlow(realEstateAgentDao.getAllRealEstateAgentDtoAsFlow()) } returns flowOf(
+            provideRealEstateAgentEntities()
+        )
+        
+        
+        repository.getRealEstateAgentEntitiesAsFlow().test {
+            val result = awaitItem()
+            awaitComplete()
+            
+            assertThat(
+                result
+            ).isEqualTo(provideRealEstateAgentEntities())
+            
+            coVerify {
+                realEstateAgentDao.getAllRealEstateAgentDtoAsFlow()
+                entitiesMaperinator.mapRealEstateAgentDtoToEntitiesAsFlow(realEstateAgentDao.getAllRealEstateAgentDtoAsFlow())
+            }
+            
+            confirmVerified(
+                realEstateAgentDao,
+                entitiesMaperinator
+            )
+        }
     }
     
     @Test

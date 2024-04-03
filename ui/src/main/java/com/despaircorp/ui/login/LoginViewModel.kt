@@ -24,6 +24,7 @@ class LoginViewModel @Inject constructor(
     
     init {
         viewModelScope.launch {
+            
             getRealEstateAgentEntitiesUseCase.invoke().collect { realEstateAgentEntities ->
                 if (countDownSplashScreenUseCase.invoke()) {
                     

@@ -4,6 +4,8 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlinx.kover")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    
 }
 
 android {
@@ -84,6 +86,7 @@ dependencies {
     testImplementation("app.cash.turbine:turbine:1.0.0")
     testImplementation("com.willowtreeapps.assertk:assertk-jvm:0.25")
     implementation("org.slf4j:slf4j-nop:2.0.7")
+    testImplementation("org.robolectric:robolectric:4.5.1")
 }
 
 class RoomSchemaArgProvider(

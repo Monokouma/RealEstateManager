@@ -1,5 +1,7 @@
 package com.despaircorp.ui.utils
 
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever.BitmapParams
 import com.despaircorp.shared.R
 
 object ProfilePictureRandomizator {

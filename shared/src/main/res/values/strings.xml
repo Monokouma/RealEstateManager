@@ -29,4 +29,10 @@
     <string name="apartment">Apartment</string>
     <string name="subway">Subway</string>
     <string name="fourth_house_desc">A New York apartment in the Upper East Side exudes a blend of contemporary luxury and timeless sophistication, characteristic of one of Manhattan\'s most prestigious neighborhoods. These apartments, often located in classic pre-war buildings or sleek modern high-rises, offer a unique urban living experience.</string>
+    <string name="us_dollar_symbol">$</string>
+    <string name="euro_symbol">€</string>
+    <string name="change_currency">Change Currency</string>
+    <string name="fifth_house_desc">"Nestled in the heart of lush, rolling hills, this magnificent Campaign House Estate offers a tranquil escape into nature's embrace. "</string>
+    <string name="media">Media</string>
+    <string name="description">Description</string>
 </resources>

@@ -93,7 +93,9 @@ object EntitiesMaperinator {
                         pointOfInterest = it.estateDto.pointOfInterest,
                         sellingDate = it.estateDto.sellingDate,
                         entryDate = it.estateDto.entryDate,
-                        status = it.estateDto.status
+                        status = it.estateDto.status,
+                        address = "",
+                        city = ""
                     ),
                     pictures = it.pictureList.map { pictureDto ->
                         EstatePicture(

@@ -1,9 +1,11 @@
 package com.despaircorp.data.utils
 
 import com.despaircorp.data.estate.EstateDataRepository
+import com.despaircorp.data.geocoder.GeocoderDataRepository
 import com.despaircorp.data.picture.PictureDataRepository
 import com.despaircorp.data.real_estate_agent.RealEstateAgentDataRepository
 import com.despaircorp.domain.estate.EstateDomainRepository
+import com.despaircorp.domain.geocoder.GeocoderDomainRepository
 import com.despaircorp.domain.picture.PictureDomainRepository
 import com.despaircorp.domain.real_estate_agent.RealEstateAgentDomainRepository
 import dagger.Binds
@@ -26,4 +28,8 @@ abstract class DataBindModule {
     @Binds
     @Singleton
     abstract fun bindPictureRepository(impl: PictureDataRepository): PictureDomainRepository
+    
+    @Binds
+    @Singleton
+    abstract fun bindGeocoderRepository(impl: GeocoderDataRepository): GeocoderDomainRepository
 }

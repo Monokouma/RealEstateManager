@@ -1,6 +1,8 @@
 package com.despaircorp.stubs
 
-import com.despaircorp.domain.GetEstateWithPictureEntityAsFlowUseCase
+import android.app.Application
+import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
+import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCase
@@ -32,12 +34,16 @@ object ViewModelinator {
         disconnectAgentUseCase: DisconnectAgentUseCase,
         profilePictureRandomizator: ProfilePictureRandomizator,
         insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
-        getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase
+        getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase,
+        application: Application,
+        getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase
     ) = MainViewModel(
         getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
         disconnectAgentUseCase = disconnectAgentUseCase,
         profilePictureRandomizator = profilePictureRandomizator,
         insertCreatedAgentUseCase = insertCreatedAgentUseCase,
-        getEstateWithPictureEntityAsFlowUseCase
+        getEstateWithPictureEntityAsFlowUseCase = getEstateWithPictureEntityAsFlowUseCase,
+        application = application,
+        getAddressFromLatLngUseCase = getAddressFromLatLngUseCase
     )
 }

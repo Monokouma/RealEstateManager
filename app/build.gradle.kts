@@ -113,8 +113,10 @@ koverReport {
                 // Room
                 "*_Impl",
                 "*_Impl\$*",
-                
-                
+                "com.despaircorp.data.picture.*",
+                "com.despaircorp.data.picture.dto.*",
+                "com.despaircorp.ui.BuildConfig",
+                "com.despaircorp.domain.picture.model.*",
                 // Gradle Generated
                 "com.despaircorp.data.BuildConfig",
                 // Delete when this is fixed: https://github.com/Kotlin/kotlinx-kover/issues/331
@@ -124,7 +126,9 @@ koverReport {
                 
                 "com.despaircorp.realestatemanagerkotlin.main.*",
                 // Utils
-                "com.despaircorp.ui.utils.*",
+                "com.despaircorp.ui.utils.CoroutineDispatcherProvider",
+                "com.despaircorp.ui.utils.UiProvideModule",
+                "com.despaircorp.ui.utils.ProfilePictureRandomizator",
                 "com.despaircorp.data.utils.*",
                 "com.despaircorp.domain.utils.*",
                 // Remove below when Kover can handle Android integration tests!

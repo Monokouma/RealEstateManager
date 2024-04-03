@@ -12,5 +12,6 @@ data class EstateWithPictureDto(
         parentColumn = "id",
         entityColumn = "estateId"
     )
+    
     val pictureList: List<PictureDto>
 )

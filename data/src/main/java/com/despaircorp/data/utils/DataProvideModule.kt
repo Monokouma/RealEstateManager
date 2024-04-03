@@ -3,6 +3,7 @@ package com.despaircorp.data.utils
 import android.app.Application
 import android.content.res.AssetManager
 import android.content.res.Resources
+import android.location.Geocoder
 import androidx.work.WorkManager
 import com.despaircorp.data.estate.dao.EstateDao
 import com.despaircorp.data.picture.dao.PictureDao
@@ -60,5 +61,11 @@ class DataProvideModule {
     @Singleton
     fun provideAssetManager(application: Application): AssetManager {
         return application.assets
+    }
+    
+    @Provides
+    @Singleton
+    fun provideGeocoder(application: Application): Geocoder {
+        return Geocoder(application)
     }
 }
