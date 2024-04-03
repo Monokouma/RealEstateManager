@@ -26,12 +26,15 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
@@ -105,6 +108,12 @@ import com.despaircorp.ui.main.MainState
 import com.despaircorp.ui.main.MainViewModel
 import com.despaircorp.ui.theme.RealEstateManagerKotlinTheme
 import com.despaircorp.ui.theme.merriweatherSans
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.CameraPositionState
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -278,7 +287,7 @@ fun Holder(
     )
 }
 
-@OptIn(ExperimentalMaterial3AdaptiveApi::class)
+@OptIn(ExperimentalMaterial3AdaptiveApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun ScreenContent(
     modifier: Modifier,
@@ -289,13 +298,16 @@ fun ScreenContent(
     onCreateAgentClick: () -> Unit,
     estateWithPictureEntities: List<EstateWithPictureEntity>
 ) {
+    val activity = (LocalContext.current as? Activity)
+    val windowsSize = calculateWindowSizeClass(activity = activity ?: return).widthSizeClass
+    
     Box(
         modifier = modifier
             .padding(top = innerPadding.calculateTopPadding())
     ) {
         
-        var selectedItem: MyItem? by rememberSaveable(stateSaver = MyItem.Saver) {
-            mutableStateOf(MyItem(0, estateWithPictureEntities.first()))
+        var selectedItem: EstateWithPictuteViewEntity? by rememberSaveable(stateSaver = EstateWithPictuteViewEntity.Saver) {
+            mutableStateOf(EstateWithPictuteViewEntity(0, estateWithPictureEntities.first()))
         }
 
 // Create the ListDetailPaneScaffoldState
@@ -318,7 +330,8 @@ fun ScreenContent(
                             navigator.navigateTo(ListDetailPaneScaffoldRole.Detail)
                         },
                         estateWithPictureEntities,
-                        modifier
+                        modifier,
+                        windowsSize
                     )
                 }
             },
@@ -326,7 +339,7 @@ fun ScreenContent(
                 AnimatedPane(Modifier.background(MaterialTheme.colorScheme.background)) {
                     // Show the detail pane content if selected item is available
                     selectedItem?.let { item ->
-                        EstateDetails(item)
+                        EstateDetails(item, windowsSize)
                     }
                 }
             },
@@ -342,18 +355,17 @@ fun ScreenContent(
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun EstateList(
-    onItemClick: (MyItem) -> Unit,
+    onItemClick: (EstateWithPictuteViewEntity) -> Unit,
     estateWithPictureEntities: List<EstateWithPictureEntity>,
-    modifier: Modifier
+    modifier: Modifier,
+    windowsSize: WindowWidthSizeClass
 ) {
-    val activity = (LocalContext.current as? Activity)
-    val windowsSize = calculateWindowSizeClass(activity = activity ?: return).widthSizeClass
     
-    var selectedItem: MyItem? by rememberSaveable(stateSaver = MyItem.Saver) {
-        mutableStateOf(MyItem(0, estateWithPictureEntities.first()))
+    
+    var selectedItem: EstateWithPictuteViewEntity? by rememberSaveable(stateSaver = EstateWithPictuteViewEntity.Saver) {
+        mutableStateOf(EstateWithPictuteViewEntity(0, estateWithPictureEntities.first()))
     }
     
     Card {
@@ -369,8 +381,8 @@ fun EstateList(
                     ListItem(
                         modifier = modifier
                             .clickable {
-                                selectedItem = MyItem(id, item)
-                                onItemClick(MyItem(id, item))
+                                selectedItem = EstateWithPictuteViewEntity(id, item)
+                                onItemClick(EstateWithPictuteViewEntity(id, item))
                             },
                         
                         headlineContent = {
@@ -431,7 +443,111 @@ fun EstateList(
 }
 
 @Composable
-fun EstateDetails(entity: MyItem) {
+fun EstateDetails(entity: EstateWithPictuteViewEntity, windowsSize: WindowWidthSizeClass) {
+    if (windowsSize == WindowWidthSizeClass.Expanded) {
+        TabletEstateDetails(entity = entity)
+    } else {
+        SmartphoneEstateDetails(entity)
+    }
+}
+
+@Composable
+fun SmartphoneEstateDetails(entity: EstateWithPictuteViewEntity) {
+    Card() {
+        Column(
+            Modifier
+                .background(MaterialTheme.colorScheme.background)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+        ) {
+            Text(
+                text = stringResource(id = R.string.media),
+                fontSize = 24.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Spacer(Modifier.size(16.dp))
+            ImageCarousel(imageData = entity.estate?.pictures ?: emptyList())
+            Spacer(Modifier.size(16.dp))
+            Text(
+                text = stringResource(id = R.string.description),
+                fontSize = 24.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.outline
+            )
+            Spacer(Modifier.size(16.dp))
+            Text(
+                text = entity.estate?.estateEntity?.description ?: "",
+                fontSize = 16.sp,
+                fontFamily = merriweatherSans,
+                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.outline
+            )
+            
+            Spacer(Modifier.size(40.dp))
+            
+            Column() {
+                Row(
+                    Modifier.fillMaxWidth(), // Fill the width of the parent
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    
+                    Column(Modifier.weight(1f)) {
+                        EstateSurfaceSize(surface = entity.estate?.estateEntity?.surface ?: "")
+                        Spacer(Modifier.size(8.dp))
+                        EstateRoomNumber(entity.estate?.estateEntity?.roomNumber ?: 0)
+                        Spacer(Modifier.size(8.dp))
+                        EstateBathRoomNumber(entity.estate?.estateEntity?.bathroomNumber ?: 0)
+                        Spacer(Modifier.size(8.dp))
+                        EstateBedRoomNumber(entity.estate?.estateEntity?.numberOfBedrooms ?: 0)
+                        Spacer(Modifier.size(8.dp))
+                    }
+                    Spacer(Modifier.size(16.dp))
+                    
+                    Column(Modifier.weight(1f)) {
+                        EstateFullAddress(address = entity.estate?.estateEntity?.address ?: "")
+                    }
+                    Spacer(Modifier.size(16.dp))
+                    
+                }
+                
+                Column {
+                    MapPlaceForSmartphone(
+                        entity.estate?.estateEntity?.location ?: LatLng(0.0, 0.0),
+                        entity.estate?.estateEntity?.city ?: "",
+                        Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 250.dp, max = 600.dp)
+                    )
+                }
+            }
+            
+        }
+    }
+}
+
+@Composable
+fun MapPlaceForSmartphone(estatePosition: LatLng, city: String, modifier: Modifier) {
+    GoogleMap(
+        modifier = modifier,
+        cameraPositionState = CameraPositionState(
+            CameraPosition.fromLatLngZoom(
+                estatePosition,
+                18f
+            )
+        )
+    ) {
+        Marker(
+            state = MarkerState(position = estatePosition),
+            title = city,
+        )
+    }
+}
+
+@Composable
+fun TabletEstateDetails(entity: EstateWithPictuteViewEntity) {
     Card {
         Column(
             Modifier
@@ -487,7 +603,10 @@ fun EstateDetails(entity: MyItem) {
                 }
                 Spacer(Modifier.size(16.dp))
                 Column(Modifier.weight(1f)) {
-                    MapPlaceholder()
+                    MapPlaceForTablet(
+                        entity.estate?.estateEntity?.location ?: LatLng(0.0, 0.0),
+                        entity.estate?.estateEntity?.city ?: ""
+                    )
                 }
             }
         }
@@ -495,22 +614,23 @@ fun EstateDetails(entity: MyItem) {
 }
 
 @Composable
-fun MapPlaceholder() {
-    Box(
-        modifier = Modifier
-            .height(180.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(4.dp))
-            .background(Color.Gray), // Placeholder color, use actual map or image here
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "Map Placeholder",
-            color = Color.White
+fun MapPlaceForTablet(estatePosition: LatLng, city: String) {
+    GoogleMap(
+        modifier = Modifier.fillMaxSize(),
+        cameraPositionState = CameraPositionState(
+            CameraPosition.fromLatLngZoom(
+                estatePosition,
+                18f
+            )
         )
-        // Replace this Box with your actual Map composable or a static image of the map
+    ) {
+        Marker(
+            state = MarkerState(position = estatePosition),
+            title = city,
+        )
     }
 }
+
 
 @Composable
 fun EstateFullAddress(address: String) {
@@ -653,11 +773,11 @@ fun ImageCarousel(imageData: List<EstatePicture>) {
     }
 }
 
-class MyItem(val id: Int, val estate: EstateWithPictureEntity?) {
+class EstateWithPictuteViewEntity(val id: Int, val estate: EstateWithPictureEntity?) {
     companion object {
-        val Saver: Saver<MyItem?, Bundle> = Saver(
+        val Saver: Saver<EstateWithPictuteViewEntity?, Bundle> = Saver(
             save = { bundleOf("id" to it?.id, "estate" to it?.estate?.estateEntity?.id) },
-            restore = { MyItem(it.getInt("id"), it.getParcelable("estate")) }
+            restore = { EstateWithPictuteViewEntity(it.getInt("id"), it.getParcelable("estate")) }
         )
     }
 }
@@ -694,6 +814,7 @@ fun MainTopBar(
         },
         actions = {
             IconButton(onClick = {
+                
                 onClickIcon.invoke()
             }) {
                 Icon(
@@ -713,7 +834,6 @@ fun MainTopBar(
                     contentDescription = "Localized description"
                 )
             }
-            
         },
     )
 }

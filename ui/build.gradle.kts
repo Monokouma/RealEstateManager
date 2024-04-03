@@ -4,6 +4,8 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlinx.kover")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    
 }
 
 android {
@@ -38,9 +40,11 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         compose = true
     }
+    
     
     testOptions {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
@@ -95,7 +99,7 @@ dependencies {
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.08.00"))
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.1")
     implementation("androidx.compose.ui:ui-util:1.6.4")
-    
+    implementation("com.google.maps.android:maps-compose:2.11.4")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")

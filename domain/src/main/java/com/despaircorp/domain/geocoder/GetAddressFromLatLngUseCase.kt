@@ -10,6 +10,7 @@ class GetAddressFromLatLngUseCase @Inject constructor(
         var locationMap = emptyMap<String, String>()
         
         geocoderDomainRepository.resolveAddressFromLatLng(location).forEach {
+            
             locationMap = mapOf(
                 "city" to it.locality,
                 "address" to it.getAddressLine(0)

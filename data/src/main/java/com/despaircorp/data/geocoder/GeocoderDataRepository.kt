@@ -2,8 +2,8 @@ package com.despaircorp.data.geocoder
 
 import android.location.Address
 import android.location.Geocoder
+import com.despaircorp.data.utils.CoroutineDispatcherProvider
 import com.despaircorp.domain.geocoder.GeocoderDomainRepository
-import com.despaircorp.domain.utils.CoroutineDispatcherProvider
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
