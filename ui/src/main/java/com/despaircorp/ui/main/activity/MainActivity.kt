@@ -87,8 +87,9 @@ fun Main(modifier: Modifier = Modifier, viewModel: MainViewModel) {
                         activity?.getString(state.onCreateAgentSuccess.successMessageRes),
                         Toast.LENGTH_SHORT
                     ).show()
-                    
                 }
+                
+                
                 
                 MainScreen(
                     realEstateAgentEntity = state.currentLoggedInAgent,

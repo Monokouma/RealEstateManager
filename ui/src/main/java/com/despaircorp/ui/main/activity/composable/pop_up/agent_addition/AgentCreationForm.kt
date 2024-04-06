@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.activity.composable.form
+package com.despaircorp.ui.main.activity.composable.pop_up.agent_addition
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -38,7 +38,7 @@ fun AgentCreationForm(
             modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextFieldWithIcons(onValueAgentNameTextChange, modifier)
+            TextFieldWithIcons(onValueAgentNameTextChange)
             ElevatedButton(
                 modifier = Modifier
                     .padding(16.dp),
@@ -58,3 +58,4 @@ fun AgentCreationForm(
         }
     }
 }
+

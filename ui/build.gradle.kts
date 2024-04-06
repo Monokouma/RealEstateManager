@@ -73,6 +73,7 @@ dependencies {
     implementation(project(":shared"))
     implementation("androidx.compose.material3.adaptive:adaptive-navigation-android:1.0.0-alpha09")
     implementation("androidx.compose.material3.adaptive:adaptive-layout-android:1.0.0-alpha09")
+    implementation("androidx.navigation:navigation-compose:2.7.7")
     testImplementation(project(":stubs"))
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
@@ -111,7 +112,7 @@ dependencies {
     }
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("io.mockk:mockk:1.13.4")
-    
+    implementation("org.chromium.net:cronet-embedded:76.3809.111")
     
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
