@@ -32,4 +32,6 @@ abstract class DataBindModule {
     @Binds
     @Singleton
     abstract fun bindGeocoderRepository(impl: GeocoderDataRepository): GeocoderDomainRepository
+    
+    
 }

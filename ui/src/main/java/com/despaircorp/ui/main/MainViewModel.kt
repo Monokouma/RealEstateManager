@@ -2,6 +2,7 @@ package com.despaircorp.ui.main
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
@@ -11,6 +12,7 @@ import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUs
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
 import com.despaircorp.shared.R
 import com.despaircorp.ui.main.activity.CurrencyEnum
+import com.despaircorp.ui.utils.ConnectionUtils
 import com.despaircorp.ui.utils.ProfilePictureRandomizator
 import com.despaircorp.ui.utils.getEuroFromDollar
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,7 +31,8 @@ class MainViewModel @Inject constructor(
     private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
     private val getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase,
     private val application: Application,
-    private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase
+    private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
+    private val connectionUtils: ConnectionUtils
 ) : ViewModel() {
     
     val uiState: MutableStateFlow<MainState> = MutableStateFlow(MainState.Loading)
@@ -44,16 +47,22 @@ class MainViewModel @Inject constructor(
             
             combine(
                 getEstateWithPictureEntityAsFlowUseCase.invoke(),
-                actualCurrencyMutableStateFlow
-            ) { estateWithPictureEntities, actualCurrency ->
+                actualCurrencyMutableStateFlow,
+                connectionUtils.asFlow()
+            ) { estateWithPictureEntities, actualCurrency, isConnectedToInternet ->
+                
                 
                 uiState.value = MainState.MainStateView(
                     currentLoggedInAgent,
                     StateError(0, false),
                     OnCreateAgentSuccess(false, 0),
-                    
                     estateWithPictureEntities.map {
-                        val address = getAddressFromLatLngUseCase.invoke(it.estateEntity.location)
+                        
+                        val address = if (isConnectedToInternet) {
+                            getAddressFromLatLngUseCase.invoke(it.estateEntity.location)
+                        } else {
+                            mapOf("address" to "", "city" to "")
+                        }
                         
                         if (actualCurrency == CurrencyEnum.EURO) {
                             EstateWithPictureEntity(

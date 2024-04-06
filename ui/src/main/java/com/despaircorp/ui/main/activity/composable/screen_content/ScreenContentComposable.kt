@@ -50,7 +50,6 @@ fun ScreenContent(
             mutableStateOf(EstateWithPictureViewEntity(0, estateWithPictureEntities.first()))
         }
 
-// Create the ListDetailPaneScaffoldState
         val navigator = rememberListDetailPaneScaffoldNavigator<Nothing>()
         
         BackHandler(navigator.canNavigateBack()) {

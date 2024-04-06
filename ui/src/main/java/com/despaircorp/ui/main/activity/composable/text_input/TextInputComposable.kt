@@ -18,12 +18,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 @Composable
 fun TextFieldWithIcons(
     onValueAgentNameTextChange: (String) -> Unit,
-    modifier: Modifier
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
     return OutlinedTextField(
         value = text,
-        leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "emailIcon") },
+        leadingIcon = { Icon(imageVector = Icons.Default.Edit, contentDescription = "edit icon") },
         onValueChange = {
             text = it
             onValueAgentNameTextChange.invoke(it.text)

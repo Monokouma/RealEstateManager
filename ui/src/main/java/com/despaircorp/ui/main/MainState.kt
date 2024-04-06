@@ -8,14 +8,18 @@ sealed class MainState {
         val currentLoggedInAgent: RealEstateAgentEntity,
         val error: Error,
         val onCreateAgentSuccess: OnCreateAgentSuccess,
-        val estates: List<EstateWithPictureEntity>
-    ) : MainState()
+        val estates: List<EstateWithPictureEntity>,
+        
+        ) : MainState()
     
-    object Loading : MainState()
+    data object Loading : MainState()
     
-    object Disconnected : MainState() //To data class onClick
+    data object Disconnected : MainState() //To data class onClick
+    
+    data class OnInternetChange(val isConnected: Boolean, val message: Int)
     
 }
+
 
 data class Error(val errorMessageRes: Int, val showError: Boolean)
 
