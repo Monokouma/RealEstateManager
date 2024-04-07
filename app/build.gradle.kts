@@ -4,6 +4,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
     id("org.jetbrains.kotlinx.kover")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -145,3 +146,4 @@ koverReport {
         }
     }
 }
+

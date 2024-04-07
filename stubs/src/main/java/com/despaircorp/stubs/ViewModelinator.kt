@@ -12,6 +12,7 @@ import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
 import com.despaircorp.ui.login.LoginViewModel
 import com.despaircorp.ui.main.MainViewModel
+import com.despaircorp.ui.utils.ConnectionUtils
 import com.despaircorp.ui.utils.ProfilePictureRandomizator
 
 
@@ -36,7 +37,8 @@ object ViewModelinator {
         insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
         getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase,
         application: Application,
-        getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase
+        getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
+        connectionUtils: ConnectionUtils
     ) = MainViewModel(
         getLoggedRealEstateAgentEntityUseCase = getLoggedRealEstateAgentEntityUseCase,
         disconnectAgentUseCase = disconnectAgentUseCase,
@@ -44,6 +46,7 @@ object ViewModelinator {
         insertCreatedAgentUseCase = insertCreatedAgentUseCase,
         getEstateWithPictureEntityAsFlowUseCase = getEstateWithPictureEntityAsFlowUseCase,
         application = application,
-        getAddressFromLatLngUseCase = getAddressFromLatLngUseCase
+        getAddressFromLatLngUseCase = getAddressFromLatLngUseCase,
+        connectionUtils
     )
 }

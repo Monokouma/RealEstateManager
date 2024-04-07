@@ -1,0 +1,11 @@
+<resources>
+    
+    <string name="search">Search</string>
+    <string name="edit">Edit</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="room_number">Number of rooms</string>
+    <string name="bathroom_number">Number of bathrooms</string>
+    <string name="bedroom_number">Number of bedrooms</string>
+    <string name="location">Location</string>
+</resources>

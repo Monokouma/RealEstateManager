@@ -10,4 +10,5 @@ interface EstateDomainRepository {
     
     fun getEstateWithPictureEntitiesAsFlow(): Flow<List<EstateWithPictureEntity>>
     suspend fun prePopulateEstateTable(estateEntities: List<EstateEntity>)
+    suspend fun getEstateWithPictureEntityById(estateId: Int): EstateWithPictureEntity
 }

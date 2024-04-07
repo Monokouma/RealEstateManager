@@ -43,4 +43,13 @@ class EstateDataRepository @Inject constructor(
         withContext(coroutineDispatcherProvider.io) {
             estateDao.insertAsList(entitiesMaperinator.mapEstateEntitiesToDto(estateEntities))
         }
+    
+    override suspend fun getEstateWithPictureEntityById(estateId: Int): EstateWithPictureEntity =
+        withContext(coroutineDispatcherProvider.io) {
+            entitiesMaperinator.mapEstateWithPictureDtoToEstateWithPictureEntity(
+                estateDao.getEstateWithPictureDtoById(
+                    estateId
+                )
+            )
+        }
 }

@@ -5,6 +5,7 @@ import android.content.res.AssetManager
 import android.content.res.Resources
 import android.location.Geocoder
 import androidx.work.WorkManager
+import com.despaircorp.data.currency.dao.CurrencyDao
 import com.despaircorp.data.estate.dao.EstateDao
 import com.despaircorp.data.picture.dao.PictureDao
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
@@ -46,6 +47,12 @@ class DataProvideModule {
     fun providePictureDao(application: Application): PictureDao =
         RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
             .getPictureDao()
+    
+    @Provides
+    @Singleton
+    fun provideCurrencyDao(application: Application): CurrencyDao =
+        RealEstateManagerRoomDatabase.getDatabase(application.applicationContext)
+            .getCurrencyDao()
     
     @Provides
     @Singleton

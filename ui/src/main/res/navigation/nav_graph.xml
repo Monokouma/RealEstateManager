@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/masterFragment"
+    >
+    
+    <fragment
+        android:id="@+id/masterFragment"
+        android:name="com.despaircorp.ui.main.master_fragment.MasterFragment"
+        android:label="fragment_master"
+        tools:layout="@layout/fragment_master"
+        >
+        <action
+            android:id="@+id/action_masterFragment_to_detailFragment"
+            app:destination="@id/detailFragment"
+            >
+        
+        </action>
+    </fragment>
+    
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.despaircorp.ui.main.details_fragment.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_details"
+        >
+        
+        <!-- The arguments here are defined within the action pointing to this fragment -->
+        <argument
+            android:name="estateId"
+            android:defaultValue="1"
+            app:argType="integer"
+            />
+    </fragment>
+
+</navigation>
