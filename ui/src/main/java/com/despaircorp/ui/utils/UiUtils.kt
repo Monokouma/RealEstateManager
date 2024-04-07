@@ -1,8 +1,9 @@
 package com.despaircorp.ui.utils
 
-import android.graphics.Bitmap
-import android.media.MediaMetadataRetriever.BitmapParams
+import android.content.Context
+import android.content.res.Configuration
 import com.despaircorp.shared.R
+
 
 object ProfilePictureRandomizator {
     
@@ -21,3 +22,15 @@ object ProfilePictureRandomizator {
         }
     }
 }
+
+fun isNightMode(context: Context): Boolean {
+    val nightModeFlags = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+    return when (nightModeFlags) {
+        Configuration.UI_MODE_NIGHT_YES -> true
+        Configuration.UI_MODE_NIGHT_NO -> false
+        Configuration.UI_MODE_NIGHT_UNDEFINED -> false
+        else -> false
+    }
+}
+
+

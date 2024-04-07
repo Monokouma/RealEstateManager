@@ -1,27 +1,22 @@
 package com.despaircorp.ui.main
 
-import android.app.Application
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
-import com.despaircorp.domain.estate.model.EstateWithPictureEntity
-import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
+import com.despaircorp.domain.currency.ChangeActualCurrencyUseCase
+import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
 import com.despaircorp.shared.R
-import com.despaircorp.ui.main.activity.CurrencyEnum
-import com.despaircorp.ui.utils.ConnectionUtils
+import com.despaircorp.ui.utils.Event
 import com.despaircorp.ui.utils.ProfilePictureRandomizator
-import com.despaircorp.ui.utils.getEuroFromDollar
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.despaircorp.ui.main.Error as StateError
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -29,124 +24,58 @@ class MainViewModel @Inject constructor(
     private val disconnectAgentUseCase: DisconnectAgentUseCase,
     private val profilePictureRandomizator: ProfilePictureRandomizator,
     private val insertCreatedAgentUseCase: InsertCreatedAgentUseCase,
-    private val getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase,
-    private val application: Application,
-    private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
-    private val connectionUtils: ConnectionUtils
+    private val changeActualCurrencyUseCase: ChangeActualCurrencyUseCase
 ) : ViewModel() {
     
-    val uiState: MutableStateFlow<MainState> = MutableStateFlow(MainState.Loading)
     private var agentName: String? = null
     
     val actualCurrencyMutableStateFlow: MutableStateFlow<CurrencyEnum> =
         MutableStateFlow(CurrencyEnum.US_DOLLAR)
     
-    init {
+    private val viewActionMutableLiveData = MutableLiveData<Event<MainViewAction>>()
+    val viewAction: LiveData<Event<MainViewAction>> = viewActionMutableLiveData
+    
+    val viewState = liveData<MainViewState> {
+        val currentLoggedInAgent = getLoggedRealEstateAgentEntityUseCase.invoke()
+        
+        emit(
+            MainViewState(
+                currentLoggedInAgent = currentLoggedInAgent
+            )
+        )
+    }
+    
+    fun onDisconnect() {
         viewModelScope.launch {
-            val currentLoggedInAgent = getLoggedRealEstateAgentEntityUseCase.invoke()
-            
-            combine(
-                getEstateWithPictureEntityAsFlowUseCase.invoke(),
-                actualCurrencyMutableStateFlow,
-                connectionUtils.asFlow()
-            ) { estateWithPictureEntities, actualCurrency, isConnectedToInternet ->
-                
-                
-                uiState.value = MainState.MainStateView(
-                    currentLoggedInAgent,
-                    StateError(0, false),
-                    OnCreateAgentSuccess(false, 0),
-                    estateWithPictureEntities.map {
-                        
-                        val address = if (isConnectedToInternet) {
-                            getAddressFromLatLngUseCase.invoke(it.estateEntity.location)
-                        } else {
-                            mapOf("address" to "", "city" to "")
-                        }
-                        
-                        if (actualCurrency == CurrencyEnum.EURO) {
-                            EstateWithPictureEntity(
-                                it.estateEntity.copy(
-                                    price = StringBuilder().append(
-                                        getEuroFromDollar(it.estateEntity.price)
-                                    ).append(application.getString(actualCurrency.symbolResource))
-                                        .toString(),
-                                    address = address["address"].toString(),
-                                    city = address["city"].toString()
-                                ),
-                                it.pictures
-                            )
-                            
-                        } else {
-                            EstateWithPictureEntity(
-                                it.estateEntity.copy(
-                                    price = StringBuilder()
-                                        .append(application.getString(actualCurrency.symbolResource))
-                                        .append(it.estateEntity.price)
-                                        .toString(),
-                                    address = address["address"].toString(),
-                                    city = address["city"].toString()
-                                ),
-                                it.pictures
-                            )
-                        }
-                    }
-                )
-                
-            }.collect()
+            viewActionMutableLiveData.value =
+                if (disconnectAgentUseCase.invoke(getLoggedRealEstateAgentEntityUseCase.invoke().id)) {
+                    Event(MainViewAction.SuccessDisconnection)
+                } else {
+                    Event(MainViewAction.Error(R.string.error))
+                }
         }
     }
     
-    
-    fun onDisconnect(id: Int) {
-        viewModelScope.launch {
-            uiState.value = if (disconnectAgentUseCase.invoke(id)) {
-                MainState.Disconnected
-            } else {
-                MainState.MainStateView(
-                    getLoggedRealEstateAgentEntityUseCase.invoke(),
-                    StateError(R.string.error, true),
-                    OnCreateAgentSuccess(false, 0),
-                    emptyList()
-                )
-            }
-        }
-    }
-    
-    fun onRealEstateAgentNameTextChange(agentNameInput: String) {
+    fun onAgentNameTextChanged(agentNameInput: String) {
         agentName = agentNameInput
     }
     
+    
     fun onCreateAgentClick() {
         viewModelScope.launch {
-            uiState.value = if (agentName.isNullOrEmpty()) {
-                //Throw error
-                MainState.MainStateView(
-                    getLoggedRealEstateAgentEntityUseCase.invoke(),
-                    StateError(R.string.empty_text, true),
-                    OnCreateAgentSuccess(false, 0),
-                    emptyList()
-                )
+            viewActionMutableLiveData.value = if (agentName.isNullOrEmpty()) {
+                //Error empty
+                Event(MainViewAction.Error(R.string.empty_text))
             } else {
                 if (insertCreatedAgentUseCase.invoke(
                         agentName ?: return@launch,
                         profilePictureRandomizator.provideRandomProfilePicture()
                     )
                 ) {
-                    MainState.MainStateView(
-                        getLoggedRealEstateAgentEntityUseCase.invoke(),
-                        StateError(0, false),
-                        OnCreateAgentSuccess(true, R.string.agent_created),
-                        emptyList()
-                    )
+                    Event(MainViewAction.AgentCreationSuccess(R.string.agent_created))
                     
                 } else {
-                    MainState.MainStateView(
-                        getLoggedRealEstateAgentEntityUseCase.invoke(),
-                        StateError(R.string.error, true),
-                        OnCreateAgentSuccess(false, 0),
-                        emptyList()
-                    )
+                    Event(MainViewAction.Error(R.string.error))
                     
                 }
             }
@@ -154,11 +83,8 @@ class MainViewModel @Inject constructor(
     }
     
     fun onChangeCurrencyClicked() {
-        actualCurrencyMutableStateFlow.value =
-            if (actualCurrencyMutableStateFlow.value == CurrencyEnum.US_DOLLAR) {
-                CurrencyEnum.EURO
-            } else {
-                CurrencyEnum.US_DOLLAR
-            }
+        viewModelScope.launch {
+            changeActualCurrencyUseCase.invoke()
+        }
     }
 }

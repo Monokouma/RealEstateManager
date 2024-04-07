@@ -5,6 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.despaircorp.data.currency.dao.CurrencyDao
+import com.despaircorp.data.currency.dto.CurrencyDto
 import com.despaircorp.data.estate.dao.EstateDao
 import com.despaircorp.data.estate.dto.EstateDto
 import com.despaircorp.data.picture.dao.PictureDao
@@ -17,7 +19,8 @@ import com.despaircorp.data.utils.TypeConvertinator
     entities = [
         RealEstateAgentDto::class,
         EstateDto::class,
-        PictureDto::class
+        PictureDto::class,
+        CurrencyDto::class
     ],
     version = 1,
     exportSchema = false
@@ -28,6 +31,8 @@ public abstract class RealEstateManagerRoomDatabase : RoomDatabase() {
     abstract fun getEstateDao(): EstateDao
     
     abstract fun getPictureDao(): PictureDao
+    
+    abstract fun getCurrencyDao(): CurrencyDao
     
     companion object {
         // Singleton prevents multiple instances of database opening at the

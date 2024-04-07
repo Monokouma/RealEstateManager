@@ -18,4 +18,5 @@ class UiProvideModule {
     @Singleton
     fun provideConnectionUtil(application: Application): ConnectionUtils =
         ConnectionUtils(application)
+    
 }

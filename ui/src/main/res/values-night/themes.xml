@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <style name="Base.Theme.RealEstateManager" parent="Theme.Material3.Dark.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColorDark</item>
+        <item name="colorSecondary">@color/secondaryColorDark</item>
+        <item name="colorAccent">@color/accentColorDark</item>
+        <item name="colorTertiary">@color/textColorDark</item>
+        <item name="colorOnBackground">@color/backgroundColorDark</item>
+    </style>
+    
+    <style name="Theme.Go4LaunchEncore" parent="Base.Theme.RealEstateManager" />
+    
+    <style name="ThemeOverlay.MaterialAlertDialog.Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Rounded</item>
+    </style>
+    
+    <style name="MaterialAlertDialog.Rounded" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearance.MaterialAlertDialog.Rounded</item>
+    </style>
+    
+    <style name="ShapeAppearance.MaterialAlertDialog.Rounded" parent="">
+        <item name="cornerSize">12dp</item>
+    </style>
+</resources>

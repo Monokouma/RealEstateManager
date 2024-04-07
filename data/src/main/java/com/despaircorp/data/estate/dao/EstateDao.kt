@@ -20,4 +20,7 @@ interface EstateDao {
     @Transaction
     @Query("SELECT * FROM estate_table")
     fun getEstateWithPictureAsFlow(): Flow<List<EstateWithPictureDto>>
+    
+    @Query("SELECT * FROM estate_table WHERE id=:estateId")
+    suspend fun getEstateWithPictureDtoById(estateId: Int): EstateWithPictureDto
 }

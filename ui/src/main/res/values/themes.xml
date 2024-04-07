@@ -1,7 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
     
+    <style name="Base.Theme.RealEstateManager" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primaryColorLight</item>
+        <item name="colorSecondary">@color/secondaryColorLight</item>
+        <item name="colorAccent">@color/accentColorLight</item>
+        <item name="colorTertiary">@color/textColorLight</item>
+        <item name="colorOnBackground">@color/backgroundColorLight</item>
     
-    <style name="Theme.RealEstateManagerKotlin" parent="android:Theme.Material.Light.NoActionBar" />
+    </style>
+    
+    <style name="Theme.Go4LaunchEncore" parent="Base.Theme.RealEstateManager" />
+    
+    <style name="ThemeOverlay.MaterialAlertDialog.Rounded" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="alertDialogStyle">@style/MaterialAlertDialog.Rounded</item>
+    </style>
+    
+    <style name="MaterialAlertDialog.Rounded" parent="MaterialAlertDialog.MaterialComponents">
+        <item name="shapeAppearance">@style/ShapeAppearance.MaterialAlertDialog.Rounded</item>
+    </style>
+    
+    <style name="ShapeAppearance.MaterialAlertDialog.Rounded" parent="">
+        <item name="cornerSize">12dp</item>
+    </style>
 
 </resources>

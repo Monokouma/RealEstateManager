@@ -3,6 +3,7 @@ package com.despaircorp.data.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
+import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
@@ -46,5 +47,15 @@ object TypeConvertinator {
         return value?.let {
             return LocalDate.parse(it, formatter)
         }
+    }
+    
+    @TypeConverter
+    fun toCurrencyEnum(value: String): CurrencyEnum? {
+        return CurrencyEnum.entries.find { it.name == value }
+    }
+    
+    @TypeConverter
+    fun fromCurrencyEnum(currencyEnum: CurrencyEnum?): String {
+        return currencyEnum?.name ?: ""
     }
 }

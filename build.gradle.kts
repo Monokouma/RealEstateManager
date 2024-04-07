@@ -16,10 +16,11 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.48.1" apply false
     id("org.jetbrains.kotlinx.kover") version "0.7.5" apply false
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin") version "2.0.1" apply false
-    
+    id("androidx.navigation.safeargs") version "2.5.0" apply false
 }
 
 subprojects {
+    
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
             freeCompilerArgs += listOf(
