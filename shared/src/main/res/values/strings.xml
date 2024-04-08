@@ -45,4 +45,5 @@
     <string name="not_connected_to_internet">Not connected to internet</string>
     <string name="create">Create</string>
     <string name="surface">Surface</string>
+    <string name="map_not_available">The map is not available</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.despaircorp.data.utils
 
 import android.app.Application
+import android.content.Context
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.location.Geocoder
+import android.net.ConnectivityManager
 import androidx.work.WorkManager
 import com.despaircorp.data.currency.dao.CurrencyDao
 import com.despaircorp.data.estate.dao.EstateDao
@@ -74,5 +76,11 @@ class DataProvideModule {
     @Singleton
     fun provideGeocoder(application: Application): Geocoder {
         return Geocoder(application)
+    }
+    
+    @Provides
+    @Singleton
+    fun provideConnectivityManager(application: Application): ConnectivityManager {
+        return application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
 }

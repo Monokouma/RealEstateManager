@@ -13,7 +13,6 @@ import com.despaircorp.domain.estate.model.EstateWithPictureEntity
 import com.despaircorp.domain.picture.model.EstatePicture
 import com.despaircorp.domain.real_estate_agent.model.CreatedAgentEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
-import com.google.android.gms.maps.model.LatLng
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
@@ -91,15 +90,15 @@ object EntitiesMaperinator {
                         roomNumber = it.estateDto.roomNumber,
                         bathroomNumber = it.estateDto.bathroomNumber,
                         numberOfBedrooms = it.estateDto.numberOfBedrooms,
-                        location = LatLng(it.estateDto.latitude, it.estateDto.longitude),
+                        location = it.estateDto.location,
                         estateType = it.estateDto.estateType,
                         price = it.estateDto.price,
                         pointOfInterest = it.estateDto.pointOfInterest,
                         sellingDate = it.estateDto.sellingDate,
                         entryDate = it.estateDto.entryDate,
                         status = it.estateDto.status,
-                        address = "",
-                        city = ""
+                        city = it.estateDto.city,
+                        address = it.estateDto.address,
                     ),
                     pictures = it.pictureList.map { pictureDto ->
                         EstatePicture(
@@ -120,14 +119,15 @@ object EntitiesMaperinator {
                 roomNumber = estateEntity.roomNumber,
                 bathroomNumber = estateEntity.bathroomNumber,
                 numberOfBedrooms = estateEntity.numberOfBedrooms,
-                latitude = estateEntity.location.latitude,
-                longitude = estateEntity.location.longitude,
+                location = estateEntity.location,
                 estateType = estateEntity.estateType,
                 price = estateEntity.price,
                 pointOfInterest = estateEntity.pointOfInterest,
                 sellingDate = estateEntity.sellingDate,
                 entryDate = estateEntity.entryDate,
                 status = estateEntity.status,
+                city = estateEntity.city,
+                address = estateEntity.address,
             )
         }
     
@@ -149,18 +149,15 @@ object EntitiesMaperinator {
                 roomNumber = estateWithPictureDto.estateDto.roomNumber,
                 bathroomNumber = estateWithPictureDto.estateDto.bathroomNumber,
                 numberOfBedrooms = estateWithPictureDto.estateDto.numberOfBedrooms,
-                location = LatLng(
-                    estateWithPictureDto.estateDto.latitude,
-                    estateWithPictureDto.estateDto.longitude
-                ),
+                location = estateWithPictureDto.estateDto.location,
                 estateType = estateWithPictureDto.estateDto.estateType,
                 price = estateWithPictureDto.estateDto.price,
                 pointOfInterest = estateWithPictureDto.estateDto.pointOfInterest,
                 sellingDate = estateWithPictureDto.estateDto.sellingDate,
                 entryDate = estateWithPictureDto.estateDto.entryDate,
                 status = estateWithPictureDto.estateDto.status,
-                address = "",
-                city = "",
+                address = estateWithPictureDto.estateDto.address,
+                city = estateWithPictureDto.estateDto.city,
             ),
             pictures = estateWithPictureDto.pictureList.map {
                 EstatePicture(

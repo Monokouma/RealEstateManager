@@ -12,4 +12,6 @@ data class DetailsViewState(
     val roomNumber: Int,
     val bedroomNumber: Int,
     val bathroomNumber: Int,
+    val willShowMap: Boolean,
+    val willShowUnavailableMapMessage: Boolean,
 )

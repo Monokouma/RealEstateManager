@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.currency.ChangeActualCurrencyUseCase
-import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
@@ -14,7 +13,6 @@ import com.despaircorp.shared.R
 import com.despaircorp.ui.utils.Event
 import com.despaircorp.ui.utils.ProfilePictureRandomizator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,9 +26,6 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     
     private var agentName: String? = null
-    
-    val actualCurrencyMutableStateFlow: MutableStateFlow<CurrencyEnum> =
-        MutableStateFlow(CurrencyEnum.US_DOLLAR)
     
     private val viewActionMutableLiveData = MutableLiveData<Event<MainViewAction>>()
     val viewAction: LiveData<Event<MainViewAction>> = viewActionMutableLiveData

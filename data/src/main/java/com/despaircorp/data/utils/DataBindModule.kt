@@ -1,10 +1,12 @@
 package com.despaircorp.data.utils
 
+import com.despaircorp.data.connectivity.ConnectivityDataRepository
 import com.despaircorp.data.currency.CurrencyDataRepository
 import com.despaircorp.data.estate.EstateDataRepository
 import com.despaircorp.data.geocoder.GeocoderDataRepository
 import com.despaircorp.data.picture.PictureDataRepository
 import com.despaircorp.data.real_estate_agent.RealEstateAgentDataRepository
+import com.despaircorp.domain.connectivity.ConnectivityDomainRepository
 import com.despaircorp.domain.currency.CurrencyDomainRepository
 import com.despaircorp.domain.estate.EstateDomainRepository
 import com.despaircorp.domain.geocoder.GeocoderDomainRepository
@@ -38,4 +40,8 @@ abstract class DataBindModule {
     @Binds
     @Singleton
     abstract fun bindCurrencyRepository(impl: CurrencyDataRepository): CurrencyDomainRepository
+    
+    @Binds
+    @Singleton
+    abstract fun bindConnectivityRepository(impl: ConnectivityDataRepository): ConnectivityDomainRepository
 }

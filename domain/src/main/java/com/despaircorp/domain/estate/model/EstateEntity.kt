@@ -11,7 +11,7 @@ data class EstateEntity(
     val roomNumber: Int,
     val bathroomNumber: Int,
     val numberOfBedrooms: Int,
-    val location: LatLng,
+    val location: LatLng?,
     val estateType: String,
     val price: String,
     val pointOfInterest: List<String>,

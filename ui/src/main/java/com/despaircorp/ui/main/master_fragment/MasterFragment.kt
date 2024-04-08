@@ -1,6 +1,7 @@
 package com.despaircorp.ui.main.master_fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -37,7 +38,9 @@ class MasterFragment : Fragment(R.layout.fragment_master), EstateListener {
         
         viewModel.viewState.observe(viewLifecycleOwner) {
             adapter.submitList(it.estateViewStateItems)
-            
+            it.estateViewStateItems.forEach {
+                Log.i("Monokouma", it.toString())
+            }
         }
         
     }
