@@ -8,5 +8,6 @@ data class EstateViewStateItems(
     val city: String,
     val type: String,
     val price: String,
-    val isSelected: Boolean
-)
+    val isSelected: Boolean,
+    
+    )

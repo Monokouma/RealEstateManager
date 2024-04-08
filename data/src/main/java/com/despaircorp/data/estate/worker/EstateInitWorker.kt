@@ -41,8 +41,8 @@ class EstateInitWorker @AssistedInject constructor(
                         sellingDate = null,
                         entryDate = LocalDate.of(2024, 1, 12),
                         status = EstateStatus.FOR_SALE,
-                        address = "",
-                        city = ""
+                        address = "Tokyo Kyobashi, 1-chōme-3 Kyōbashi, Chuo City, Tokyo 104-0031, Japan",
+                        city = "Chuo City"
                     ),
                     EstateEntity(
                         id = 2,
@@ -58,8 +58,8 @@ class EstateInitWorker @AssistedInject constructor(
                         sellingDate = null,
                         entryDate = LocalDate.of(1980, 6, 21),
                         status = EstateStatus.FOR_SALE,
-                        address = "",
-                        city = ""
+                        address = "1109 Westchester Pl, Los Angeles, CA 90019, USA",
+                        city = "Los Angeles"
                     ),
                     EstateEntity(
                         id = 3,
@@ -79,8 +79,8 @@ class EstateInitWorker @AssistedInject constructor(
                         sellingDate = null,
                         entryDate = LocalDate.of(2017, 11, 25),
                         status = EstateStatus.FOR_SALE,
-                        address = "",
-                        city = ""
+                        address = "18 Rue Maspéro, 75116 Paris, France",
+                        city = "Paris"
                     ),
                     EstateEntity(
                         id = 4,
@@ -100,8 +100,8 @@ class EstateInitWorker @AssistedInject constructor(
                         sellingDate = null,
                         entryDate = LocalDate.of(2022, 10, 11),
                         status = EstateStatus.FOR_SALE,
-                        address = "",
-                        city = ""
+                        address = "133 Allen St, New York, NY 10002, USA",
+                        city = "New York"
                     ),
                     EstateEntity(
                         id = 5,
@@ -120,8 +120,8 @@ class EstateInitWorker @AssistedInject constructor(
                         sellingDate = null,
                         entryDate = LocalDate.of(2022, 1, 11),
                         status = EstateStatus.FOR_SALE,
-                        address = "",
-                        city = ""
+                        address = "6 Chem. de Monéron, 07300 Saint-Jean-de-Muzols, France",
+                        city = "Saint-Jean-De-Muzols"
                     ),
                 )
             )

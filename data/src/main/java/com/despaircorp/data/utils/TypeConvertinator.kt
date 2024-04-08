@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import com.despaircorp.domain.currency.model.CurrencyEnum
+import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.ByteArrayOutputStream
@@ -57,5 +58,22 @@ object TypeConvertinator {
     @TypeConverter
     fun fromCurrencyEnum(currencyEnum: CurrencyEnum?): String {
         return currencyEnum?.name ?: ""
+    }
+    
+    @TypeConverter
+    fun fromLatLng(latLng: LatLng?): String? {
+        return latLng?.let { "${it.latitude},${it.longitude}" }
+    }
+    
+    @TypeConverter
+    fun toLatLng(data: String?): LatLng? {
+        return data?.let {
+            val pieces = it.split(",")
+            if (pieces.size == 2) {
+                LatLng(pieces[0].toDouble(), pieces[1].toDouble())
+            } else {
+                null
+            }
+        }
     }
 }

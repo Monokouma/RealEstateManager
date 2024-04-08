@@ -6,6 +6,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
+import android.provider.Settings
 import android.util.Log
 import androidx.lifecycle.LiveData
 import kotlinx.coroutines.CoroutineScope
@@ -24,8 +25,20 @@ class ConnectionUtils(context: Context) : LiveData<Boolean>() {
         context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
     private val validNetworks: MutableSet<Network> = HashSet()
     
+    private val thisContext = context
+    
+    private fun isAirplaneModeOn(context: Context): Boolean {
+        return Settings.System.getInt(
+            context.contentResolver,
+            Settings.Global.AIRPLANE_MODE_ON,
+            0
+        ) != 0
+    }
+    
     private fun checkValidNetworks() {
-        postValue(validNetworks.size > 0)
+        val isConnected = validNetworks.size > 0 && !isAirplaneModeOn(thisContext)
+        Log.i("Monokouma", isConnected.toString())
+        postValue(isConnected)
     }
     
     override fun onActive() {

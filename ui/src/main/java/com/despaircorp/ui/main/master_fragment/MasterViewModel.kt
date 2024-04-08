@@ -2,16 +2,16 @@ package com.despaircorp.ui.main.master_fragment
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.liveData
+import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
 import com.despaircorp.domain.currency.GetActualCurrencyUseCase
 import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
 import com.despaircorp.ui.R
 import com.despaircorp.ui.main.master_fragment.estate.EstateViewStateItems
-import com.despaircorp.ui.utils.ConnectionUtils
 import com.despaircorp.ui.utils.getEuroFromDollar
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -21,10 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class MasterViewModel @Inject constructor(
     private val getEstateWithPictureEntityAsFlowUseCase: GetEstateWithPictureEntityAsFlowUseCase,
-    private val connectionUtils: ConnectionUtils,
     private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
     private val application: Application,
-    private val getActualCurrencyUseCase: GetActualCurrencyUseCase
+    private val getActualCurrencyUseCase: GetActualCurrencyUseCase,
+    private val isUserConnectedToInternetUseCase: IsUserConnectedToInternetUseCase
 ) : ViewModel() {
     
     private val selectedItem = MutableStateFlow(1)
@@ -32,10 +32,10 @@ class MasterViewModel @Inject constructor(
     val viewState = liveData<MasterViewState> {
         combine(
             getEstateWithPictureEntityAsFlowUseCase.invoke(),
-            connectionUtils.asFlow(),
             selectedItem,
-            getActualCurrencyUseCase.invoke()
-        ) { estateEntities, isConnectedToInternet, selectedItem, actualCurrency ->
+            getActualCurrencyUseCase.invoke(),
+            isUserConnectedToInternetUseCase.invoke()
+        ) { estateEntities, selectedItem, actualCurrency, isConnectedToInternet ->
             
             emit(
                 MasterViewState(
@@ -44,10 +44,12 @@ class MasterViewModel @Inject constructor(
                             id = it.estateEntity.id,
                             picture = it.pictures.first().bitmapImage,
                             city = if (isConnectedToInternet) {
-                                getAddressFromLatLngUseCase.invoke(it.estateEntity.location)["city"]
-                                    ?: ""
+                                getAddressFromLatLngUseCase.invoke(
+                                    it.estateEntity.location ?: LatLng(0.0, 0.0)
+                                )["city"]
+                                    ?: it.estateEntity.city
                             } else {
-                                ""
+                                it.estateEntity.city
                             },
                             type = it.estateEntity.estateType,
                             price = if (actualCurrency.currencyEnum == CurrencyEnum.EURO) {
