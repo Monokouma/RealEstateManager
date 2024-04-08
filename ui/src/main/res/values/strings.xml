@@ -8,4 +8,5 @@
     <string name="bathroom_number">Number of bathrooms</string>
     <string name="bedroom_number">Number of bedrooms</string>
     <string name="location">Location</string>
+    <string name="create_new_property">Create New Property</string>
 </resources>

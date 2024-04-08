@@ -46,4 +46,5 @@
     <string name="create">Create</string>
     <string name="surface">Surface</string>
     <string name="map_not_available">The map is not available</string>
+    <string name="add_picture">Add picture</string>
 </resources>

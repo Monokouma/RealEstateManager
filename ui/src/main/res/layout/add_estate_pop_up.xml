@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="?colorOnBackground"
+    app:strokeColor="?colorTertiary"
+    app:strokeWidth="1dp"
+    >
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        
+        <TextView
+            android:id="@+id/add_estate_pop_up_TextView_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/create_new_property"
+            android:textAlignment="center"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_estate_pop_up_ConstraintLayout_root_surface_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_TextView_title"
+            >
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_surface"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_estate_pop_up_TextInputLayout_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                app:suffixText="m2"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_surface"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/surface"
+                    android:inputType="number"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/add_estate_pop_up_TextInputLayout_surface"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/decription"
+                    android:inputType="textLongMessage"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+        
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_estate_pop_up_ConstraintLayout_room_root"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_root_surface_description"
+            >
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_room"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_estate_pop_up_TextInputLayout_bedroom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_room"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/room_number"
+                    android:inputType="number"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_bedroom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_estate_pop_up_TextInputLayout_bathroom"
+                app:layout_constraintStart_toEndOf="@id/add_estate_pop_up_TextInputLayout_room"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_bedroom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/bathroom_number"
+                    android:inputType="number"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_bathroom"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/add_estate_pop_up_TextInputLayout_bedroom"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_bathroom"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/bedroom_number"
+                    android:inputType="number"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_estate_pop_up_ConstraintLayout_location_root"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_room_root"
+            >
+            
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/location"
+                    android:inputType="text"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/add_estate_pop_up_ConstraintLayout_selected_picture_root"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_location_root"
+            >
+            
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/add_estate_pop_up_Button_add_picture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:backgroundTint="?colorSecondary"
+                android:text="@string/add_picture"
+                android:textColor="?colorTertiary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+            
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_Button_add_picture"
+                tools:listitem="@layout/picture_items"
+                />
+        
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/add_estate_pop_up_Button_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="?colorSecondary"
+            android:text="@string/create"
+            android:textColor="?colorTertiary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_selected_picture_root"
+            />
+    
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
