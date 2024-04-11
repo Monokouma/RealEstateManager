@@ -50,7 +50,7 @@ class EstateAdapter(
                             R.color.backgroundColorDark
                         )
                     )
-                    binding.root.setCardBackgroundColor(
+                    binding.estateItemsViewCardRoot.setCardBackgroundColor(
                         ColorStateList.valueOf(
                             binding.root.context.getColor(
                                 R.color.accentColorDark
@@ -64,7 +64,7 @@ class EstateAdapter(
                             R.color.backgroundColorLight
                         )
                     )
-                    binding.root.setCardBackgroundColor(
+                    binding.estateItemsViewCardRoot.setCardBackgroundColor(
                         binding.root.context.getColor(
                             R.color.accentColorLight
                         )
@@ -78,7 +78,7 @@ class EstateAdapter(
                             R.color.accentColorDark
                         )
                     )
-                    binding.root.setCardBackgroundColor(
+                    binding.estateItemsViewCardRoot.setCardBackgroundColor(
                         binding.root.context.getColor(
                             R.color.backgroundColorDark
                         )
@@ -89,7 +89,7 @@ class EstateAdapter(
                             R.color.accentColorLight
                         )
                     )
-                    binding.root.setCardBackgroundColor(
+                    binding.estateItemsViewCardRoot.setCardBackgroundColor(
                         binding.root.context.getColor(
                             R.color.backgroundColorLight
                         )

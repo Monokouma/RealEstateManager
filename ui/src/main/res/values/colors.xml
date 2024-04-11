@@ -9,10 +9,14 @@
     <color name="accentColorLight">#BF82AB</color>
     <color name="textColorLight">#0C0E17</color>
     <color name="backgroundColorLight">#F8F9FC</color>
+    <color name="unselectButtonLight">#BDBDBD</color>
     <!-- Dark Mode Color -->
     <color name="primaryColorDark">#5367A2</color>
     <color name="secondaryColorDark">#582F5B</color>
     <color name="accentColorDark">#7D4068</color>
     <color name="textColorDark">#E8EAF3</color>
     <color name="backgroundColorDark">#0B0128</color>
+    <color name="unselectButtonDark">#757575</color>
+
+
 </resources>

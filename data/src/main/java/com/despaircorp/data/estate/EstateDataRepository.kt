@@ -52,4 +52,14 @@ class EstateDataRepository @Inject constructor(
                 )
             )
         }
+    
+    override suspend fun insertNewEstate(estateEntity: EstateEntity) =
+        withContext(coroutineDispatcherProvider.io) {
+            estateDao.insert(entitiesMaperinator.mapEstateEntityToDto(estateEntity))
+        }
+    
+    override suspend fun getEstateEntity(): List<EstateEntity> =
+        withContext(coroutineDispatcherProvider.io) {
+            entitiesMaperinator.mapEstateDtoToEstateEntity(estateDao.getEstateDto())
+        }
 }

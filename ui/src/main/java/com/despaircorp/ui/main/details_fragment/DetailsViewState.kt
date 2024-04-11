@@ -1,5 +1,6 @@
 package com.despaircorp.ui.main.details_fragment
 
+import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
 import com.google.android.gms.maps.model.LatLng
 
 data class DetailsViewState(

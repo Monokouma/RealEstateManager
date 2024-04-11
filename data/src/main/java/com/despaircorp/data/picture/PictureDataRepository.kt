@@ -1,5 +1,8 @@
 package com.despaircorp.data.picture
 
+import android.app.Application
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -8,8 +11,12 @@ import com.despaircorp.data.picture.worker.PictureInitWorker
 import com.despaircorp.data.utils.CoroutineDispatcherProvider
 import com.despaircorp.data.utils.EntitiesMaperinator
 import com.despaircorp.domain.picture.PictureDomainRepository
-import com.despaircorp.domain.picture.model.EstatePicture
+import com.despaircorp.domain.picture.model.EstatePictureEntity
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import javax.inject.Inject
 
 class PictureDataRepository @Inject constructor(
@@ -17,6 +24,7 @@ class PictureDataRepository @Inject constructor(
     private val pictureDao: PictureDao,
     private val workManager: WorkManager,
     private val entitiesMaperinator: EntitiesMaperinator,
+    private val application: Application
 ) : PictureDomainRepository {
     override fun enqueueInitPictureWorker() {
         val pictureInitWorkRequest: OneTimeWorkRequest =
@@ -30,8 +38,29 @@ class PictureDataRepository @Inject constructor(
         pictureDao.exist()
     }
     
-    override suspend fun populatePictureTable(listOf: List<EstatePicture>): Unit =
+    override suspend fun populatePictureTable(listOf: List<EstatePictureEntity>): Unit =
         withContext(coroutineDispatcherProvider.io) {
-            pictureDao.insert(entitiesMaperinator.mapPictureEntitiesToDto(listOf))
+            
+            pictureDao.insertAsList(entitiesMaperinator.mapPictureEntitiesToDto(listOf))
+        }
+    
+    override suspend fun insertPictures(pictureEntity: EstatePictureEntity) =
+        withContext(coroutineDispatcherProvider.io) {
+            pictureDao.insert(entitiesMaperinator.mapPictureEntityToDto(pictureEntity))
+        }
+    
+    override suspend fun saveImageToInternalStorage(bitmap: Bitmap, fileName: String): String =
+        withContext(coroutineDispatcherProvider.io) {
+            val file = File(application.filesDir, fileName)
+            try {
+                FileOutputStream(file).use { out ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+                    file.absolutePath
+                }
+            } catch (e: IOException) {
+                Log.i("Monokouma", e.stackTraceToString())
+                ensureActive()
+                ""
+            }
         }
 }

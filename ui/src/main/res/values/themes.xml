@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/accentColorLight</item>
         <item name="colorTertiary">@color/textColorLight</item>
         <item name="colorOnBackground">@color/backgroundColorLight</item>
-    
+        <item name="colorButtonNormal">@color/unselectButtonLight</item>
     </style>
     
     <style name="Theme.Go4LaunchEncore" parent="Base.Theme.RealEstateManager" />
@@ -23,6 +23,12 @@
     
     <style name="ShapeAppearance.MaterialAlertDialog.Rounded" parent="">
         <item name="cornerSize">12dp</item>
+    </style>
+    
+    <style name="SpinnerItemStyle" parent="Widget.AppCompat.Spinner.Underlined">
+        <item name="android:textColor">?colorTertiary</item> <!-- Adjust text color as needed -->
+        <item name="android:textSize">16sp</item> <!-- Adjust text size as needed -->
+        <!-- Add other text styling as necessary -->
     </style>
 
 </resources>

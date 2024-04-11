@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorOnBackground"
-    tools:context=".main.MainActivity"
+    tools:context=".main.main_activity.MainActivity"
     >
     
     <androidx.drawerlayout.widget.DrawerLayout
@@ -51,18 +51,18 @@
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 >
                 
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/activity_main_FragmentContainer_view"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
+                <FrameLayout
+                    android:id="@+id/activity_main_FragmentLayout_master"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    app:defaultNavHost="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:navGraph="@navigation/nav_graph"
+                    app:layout_constraintVertical_weight="1"
+                    
                     />
+            
             
             </androidx.constraintlayout.widget.ConstraintLayout>
         

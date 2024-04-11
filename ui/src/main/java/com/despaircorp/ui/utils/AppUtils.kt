@@ -14,7 +14,7 @@ fun getEuroFromDollar(dollars: String): String {
     
     return DecimalFormat("#,###,###")
         .format((dollarsInt * rate))
-        .replace(",", ".")
+        .replace(",", "")
 }
 
 fun uriToBitmap(context: Context, uri: Uri): Bitmap? {

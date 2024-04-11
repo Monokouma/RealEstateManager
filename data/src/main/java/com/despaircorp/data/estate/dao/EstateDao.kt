@@ -23,4 +23,10 @@ interface EstateDao {
     
     @Query("SELECT * FROM estate_table WHERE id=:estateId")
     suspend fun getEstateWithPictureDtoById(estateId: Int): EstateWithPictureDto
+    
+    @Query("SELECT * FROM estate_table")
+    suspend fun getEstateDto(): List<EstateDto>
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(estateDtoList: EstateDto)
 }

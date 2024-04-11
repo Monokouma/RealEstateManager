@@ -16,6 +16,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import java.text.NumberFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +44,7 @@ class MasterViewModel @Inject constructor(
                     estateEntities.map {
                         EstateViewStateItems(
                             id = it.estateEntity.id,
-                            picture = it.pictures.first().bitmapImage,
+                            picture = it.pictures.first().imagePath,
                             city = if (isConnectedToInternet) {
                                 getAddressFromLatLngUseCase.invoke(
                                     it.estateEntity.location ?: LatLng(0.0, 0.0)
@@ -54,14 +56,23 @@ class MasterViewModel @Inject constructor(
                             type = it.estateEntity.estateType,
                             price = if (actualCurrency.currencyEnum == CurrencyEnum.EURO) {
                                 StringBuilder().append(
-                                    getEuroFromDollar(it.estateEntity.price)
+                                    formatToCorrectNumber(
+                                        CurrencyEnum.EURO,
+                                        getEuroFromDollar(it.estateEntity.price)
+                                    )
+                                
                                 )
                                     .append(application.getString(actualCurrency.currencyEnum.symbolResource))
                                     .toString()
                             } else {
                                 StringBuilder()
                                     .append(application.getString(actualCurrency.currencyEnum.symbolResource))
-                                    .append(it.estateEntity.price)
+                                    .append(
+                                        formatToCorrectNumber(
+                                            CurrencyEnum.US_DOLLAR,
+                                            it.estateEntity.price
+                                        )
+                                    )
                                     .toString()
                             },
                             isSelected = if (application.resources.getBoolean(R.bool.isLandscape)) {
@@ -74,6 +85,12 @@ class MasterViewModel @Inject constructor(
                 )
             )
         }.collect()
+    }
+    
+    private fun formatToCorrectNumber(forCurrencyEnum: CurrencyEnum, price: String): String {
+        val format =
+            NumberFormat.getNumberInstance(if (forCurrencyEnum == CurrencyEnum.US_DOLLAR) Locale.US else Locale.FRANCE)
+        return format.format(price.toInt())
     }
     
     fun onEstateClicked(estateId: Int) {

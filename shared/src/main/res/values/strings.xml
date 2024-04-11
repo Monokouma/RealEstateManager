@@ -46,4 +46,30 @@
     <string name="create">Create</string>
     <string name="surface">Surface</string>
     <string name="map_not_available">The map is not available</string>
+    <string name="add_picture">Add picture</string>
+    <string name="price">Price</string>
+    <string name="manor">Manor</string>
+    <string name="loft">Loft</string>
+    <string name="for_sale">For Sale</string>
+    <string name="sold">Sold</string>
+    <string name="select_date">Select date</string>
+    <string name="select_the_agent_responsible_for_this_sale">Select the agent responsible for this sale</string>
+    <string name="take_picture">Take picture</string>
+    <string name="address">Address</string>
+    <string name="unable_sold_date">You can\'t add a sold date to a not sold estate !</string>
+    
+    <string name="surface_empty">Surface cannot be empty</string>
+    <string name="description_empty">Description cannot be empty</string>
+    <string name="room_number_empty">Room number cannot be empty</string>
+    <string name="bedroom_number_empty">Bedroom number cannot be empty</string>
+    <string name="bathroom_number_empty">Bathroom number cannot be empty</string>
+    <string name="address_empty">Address cannot be empty</string>
+    <string name="city_empty">City cannot be empty</string>
+    <string name="price_empty">Price cannot be empty</string>
+    <string name="type_empty">Estate type cannot be empty</string>
+    <string name="point_of_interest_empty">Choose at least one point of interest</string>
+    <string name="entry_date_empty">Entry date cannot be empty</string>
+    <string name="sold_date_empty">Sold date cannot be empty</string>
+    <string name="pictures_empty">Choose at least one picture</string>
+    <string name="creation_success">Estate created</string>
 </resources>

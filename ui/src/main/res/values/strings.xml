@@ -8,4 +8,11 @@
     <string name="bathroom_number">Number of bathrooms</string>
     <string name="bedroom_number">Number of bedrooms</string>
     <string name="location">Location</string>
+    <string name="create_new_property">Create New Property</string>
+    <string name="point_of_interest">Point of interest</string>
+    <string name="status">Status</string>
+    <string name="entry_date">Entry Date</string>
+    <string name="sold_date">Sold Date (Don\'t mind if not sold yet)</string>
+    <string name="click_to_pick_a_date">Click to pick a date</string>
+    <string name="city">City</string>
 </resources>

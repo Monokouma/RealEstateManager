@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.main.main_activity
 
 import android.content.Context
 import android.content.Intent
@@ -10,10 +10,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
-import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.ActivityMainBinding
@@ -21,16 +17,21 @@ import com.despaircorp.ui.databinding.AddAgentPopUpBinding
 import com.despaircorp.ui.databinding.AddingChoicePopUpBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.login.LoginActivity
+import com.despaircorp.ui.main.details_fragment.DetailFragment
+import com.despaircorp.ui.main.estate_addition.CreateEstateActivity
+import com.despaircorp.ui.main.master_fragment.MasterFragment
 import com.despaircorp.ui.utils.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
+
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
+class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener {
     private val binding by viewBinding { ActivityMainBinding.inflate(it) }
     private val viewModel: MainViewModel by viewModels()
+    private var twoPane: Boolean = false
+    private var currentSelectedItemId: Int = 1
     
-    private lateinit var navController: NavController
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,17 +39,40 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         setContentView(binding.root)
         setSupportActionBar(binding.activityMainToolbarRoot)
         
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(binding.activityMainFragmentContainerView.id)
-                    as NavHostFragment
-        navController = navHostFragment.findNavController()
-        
-        navController.addOnDestinationChangedListener(this)
+        twoPane = binding.activityMainFragmentLayoutDetails != null
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_FragmentLayout_master, MasterFragment())
+                .commit()
+            
+            if (twoPane) {
+                val detailsFragment = DetailFragment.newInstance(currentSelectedItemId)
+                
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.activity_main_FragmentLayout_details, detailsFragment)
+                    .commit()
+            }
+        } else {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_FragmentLayout_master, MasterFragment())
+                .commit()
+            if (twoPane) {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                }
+                val detailsFragment =
+                    DetailFragment.newInstance(savedInstanceState.getInt("selectedItemId", 1))
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.activity_main_FragmentLayout_details, detailsFragment)
+                    .commit()
+            }
+        }
         
         
         val headerBinding = HeaderNavigationDrawerBinding.bind(
             binding.activityMainNavigationViewProfile.getHeaderView(0)
         )
+        
         
         binding.activityMainToolbarRoot.setNavigationOnClickListener {
             binding.activityMainDrawerLayout.open()
@@ -99,6 +123,20 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         
     }
     
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        
+        outState.putInt("selectedItemId", currentSelectedItemId)
+    }
+    
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
+    }
+    
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val itemId = item.itemId
         when (itemId) {
@@ -116,12 +154,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
                 dialog.show()
                 
                 popUpBinding.addingChoicePopUpCardViewEstate.setOnClickListener {
-                    onAddEstateClicked()
+                    
+                    startActivity(CreateEstateActivity.navigate(this))
+                    
                     dialog.cancel()
                 }
                 
                 popUpBinding.addingChoicePopUpCardViewAgent.setOnClickListener {
                     onAddAgentClicked()
+                    
+                    
                     dialog.cancel()
                 }
                 
@@ -166,9 +208,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         }
     }
     
-    private fun onAddEstateClicked() {
-    
-    }
     
     companion object {
         
@@ -178,12 +217,21 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         )
     }
     
-    override fun onDestinationChanged(
-        controller: NavController,
-        destination: NavDestination,
-        arguments: Bundle?
-    ) {
-    
-    
+    override fun onItemSelected(itemId: Int) {
+        currentSelectedItemId = itemId
+        if (twoPane) {
+            val detailsFragment = DetailFragment.newInstance(itemId)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_FragmentLayout_details, detailsFragment)
+                .commit()
+        } else {
+            val detailsFragment = DetailFragment.newInstance(itemId)
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.activity_main_FragmentLayout_master, detailsFragment)
+                .addToBackStack("detail")
+                .commit()
+        }
     }
+    
+    
 }

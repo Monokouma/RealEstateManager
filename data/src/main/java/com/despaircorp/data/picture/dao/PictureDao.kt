@@ -12,5 +12,8 @@ interface PictureDao {
     suspend fun exist(): Boolean
     
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(entities: List<PictureDto>)
+    suspend fun insertAsList(entities: List<PictureDto>)
+    
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(entity: PictureDto)
 }

@@ -1,10 +1,12 @@
 package com.despaircorp.ui.main.details_fragment
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityById
 import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
+import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,19 +28,21 @@ class DetailsViewModel @Inject constructor(
             val estateWithPictureEntity = getEstateWithPictureEntityById.invoke(estateId)
             isUserConnectedToInternetUseCase.invoke().collect { isConnected ->
                 
-                val address = if (isConnected) {
-                    getAddressFromLatLngUseCase.invoke(
-                        estateWithPictureEntity.estateEntity.location ?: LatLng(0.0, 0.0)
-                    )["address"] ?: estateWithPictureEntity.estateEntity.address
-                } else {
-                    estateWithPictureEntity.estateEntity.address
-                }
-                
+                val address =
+                    if (isConnected && estateWithPictureEntity.estateEntity.location != null) {
+                        getAddressFromLatLngUseCase.invoke(
+                            estateWithPictureEntity.estateEntity.location ?: LatLng(0.0, 0.0)
+                        )["address"] ?: estateWithPictureEntity.estateEntity.address
+                    } else {
+                        estateWithPictureEntity.estateEntity.address
+                    }
+                Log.i("Monokouma", estateWithPictureEntity.estateEntity.location.toString())
                 emit(
                     DetailsViewState(
                         pictureViewStateItems = estateWithPictureEntity.pictures.map {
+                            
                             PictureViewStateItems(
-                                it.bitmapImage,
+                                it.imagePath,
                                 it.description.name,
                                 it.id
                             )
@@ -51,8 +55,16 @@ class DetailsViewModel @Inject constructor(
                         roomNumber = estateWithPictureEntity.estateEntity.roomNumber,
                         bedroomNumber = estateWithPictureEntity.estateEntity.numberOfBedrooms,
                         bathroomNumber = estateWithPictureEntity.estateEntity.bathroomNumber,
-                        willShowMap = isConnected,
-                        willShowUnavailableMapMessage = !isConnected
+                        willShowMap = if (isConnected) {
+                            estateWithPictureEntity.estateEntity.location != null
+                        } else {
+                            false
+                        },
+                        willShowUnavailableMapMessage = if (!isConnected) {
+                            true
+                        } else {
+                            estateWithPictureEntity.estateEntity.location == null
+                        }
                     )
                 )
             }

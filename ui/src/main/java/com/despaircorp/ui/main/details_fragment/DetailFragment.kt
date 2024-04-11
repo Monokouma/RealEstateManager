@@ -5,8 +5,6 @@ import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.FragmentDetailsBinding
 import com.despaircorp.ui.utils.viewBinding
@@ -22,18 +20,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
     private val binding by viewBinding { FragmentDetailsBinding.bind(it) }
     private val viewModel: DetailsViewModel by viewModels()
-    private lateinit var navController: NavController
     private lateinit var mapView: MapView
     
     
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(
-            requireActivity(),
-            R.id.activity_main_FragmentContainer_view
-        )
-        if (activity?.resources?.getBoolean(R.bool.isLandscape) == true) {
-            navController.navigateUp()
+        if (arguments != null) {
+            val itemId = requireArguments().getInt(ARG_ITEM_ID)
+            viewModel.onReceiveEstateId(itemId)
         }
         
         mapView = binding.fragmentDetailsMapMap
@@ -49,10 +43,7 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
     
     override fun onResume() {
         super.onResume()
-        // see bools.xml resource file
-        // used to easily find device's orientation
         mapView.onResume()
-        
         
     }
     
@@ -82,14 +73,10 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
     }
     
     override fun onMapReady(p0: GoogleMap) {
-        val itemId = arguments?.let {
-            DetailFragmentArgs.fromBundle(it).estateId
-        }
-        
         p0.mapType = GoogleMap.MAP_TYPE_NORMAL
         p0.isBuildingsEnabled = false
         p0.uiSettings.isMapToolbarEnabled = true
-        viewModel.onReceiveEstateId(itemId ?: 1)
+        
         val pictureAdapter = EstatePictureAdapter()
         binding.fragmentDetailsRecyclerViewPicture.adapter = pictureAdapter
         
@@ -118,4 +105,17 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
             p0.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
     }
+    
+    companion object {
+        private const val ARG_ITEM_ID = "ARG_ITEM_ID"
+        
+        fun newInstance(itemId: Int): DetailFragment {
+            val fragment = DetailFragment()
+            val args = Bundle()
+            args.putInt(ARG_ITEM_ID, itemId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+    
 }

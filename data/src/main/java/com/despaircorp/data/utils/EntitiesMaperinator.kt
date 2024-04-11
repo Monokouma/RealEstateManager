@@ -10,7 +10,7 @@ import com.despaircorp.domain.currency.model.CurrencyEntity
 import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
-import com.despaircorp.domain.picture.model.EstatePicture
+import com.despaircorp.domain.picture.model.EstatePictureEntity
 import com.despaircorp.domain.real_estate_agent.model.CreatedAgentEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import kotlinx.coroutines.flow.Flow
@@ -99,11 +99,12 @@ object EntitiesMaperinator {
                         status = it.estateDto.status,
                         city = it.estateDto.city,
                         address = it.estateDto.address,
+                        agentInChargeId = it.estateDto.agentInChargeId
                     ),
                     pictures = it.pictureList.map { pictureDto ->
-                        EstatePicture(
+                        EstatePictureEntity(
                             pictureDto.id,
-                            pictureDto.image,
+                            pictureDto.imagePath,
                             pictureDto.description
                         )
                     }
@@ -128,13 +129,14 @@ object EntitiesMaperinator {
                 status = estateEntity.status,
                 city = estateEntity.city,
                 address = estateEntity.address,
+                agentInChargeId = estateEntity.agentInChargeId
             )
         }
     
-    fun mapPictureEntitiesToDto(pictureEntities: List<EstatePicture>): List<PictureDto> =
+    fun mapPictureEntitiesToDto(pictureEntities: List<EstatePictureEntity>): List<PictureDto> =
         pictureEntities.map { pictureEntity ->
             PictureDto(
-                image = pictureEntity.bitmapImage,
+                imagePath = pictureEntity.imagePath,
                 description = pictureEntity.description,
                 estateId = pictureEntity.id
             )
@@ -158,11 +160,12 @@ object EntitiesMaperinator {
                 status = estateWithPictureDto.estateDto.status,
                 address = estateWithPictureDto.estateDto.address,
                 city = estateWithPictureDto.estateDto.city,
+                agentInChargeId = estateWithPictureDto.estateDto.agentInChargeId
             ),
             pictures = estateWithPictureDto.pictureList.map {
-                EstatePicture(
+                EstatePictureEntity(
                     id = it.id,
-                    bitmapImage = it.image,
+                    imagePath = it.imagePath,
                     description = it.description
                 )
             }
@@ -183,5 +186,52 @@ object EntitiesMaperinator {
     fun mapCurrencyEntityToCurrencyDto(currencyEntity: CurrencyEntity): CurrencyDto = CurrencyDto(
         1,
         currencyEntity.currencyEnum
+    )
+    
+    fun mapEstateDtoToEstateEntity(estateDtoList: List<EstateDto>): List<EstateEntity> =
+        estateDtoList.map { estateDto ->
+            EstateEntity(
+                id = estateDto.id,
+                description = estateDto.description,
+                surface = estateDto.surface,
+                roomNumber = estateDto.roomNumber,
+                bathroomNumber = estateDto.bathroomNumber,
+                numberOfBedrooms = estateDto.numberOfBedrooms,
+                location = estateDto.location,
+                estateType = estateDto.estateType,
+                price = estateDto.price,
+                pointOfInterest = estateDto.pointOfInterest,
+                sellingDate = estateDto.sellingDate,
+                entryDate = estateDto.entryDate,
+                status = estateDto.status,
+                address = estateDto.address,
+                city = estateDto.city,
+                estateDto.agentInChargeId
+            )
+        }
+    
+    fun mapEstateEntityToDto(estateEntity: EstateEntity): EstateDto = EstateDto(
+        id = estateEntity.id,
+        description = estateEntity.description,
+        surface = estateEntity.surface,
+        roomNumber = estateEntity.roomNumber,
+        bathroomNumber = estateEntity.bathroomNumber,
+        numberOfBedrooms = estateEntity.numberOfBedrooms,
+        location = estateEntity.location,
+        estateType = estateEntity.estateType,
+        price = estateEntity.price,
+        pointOfInterest = estateEntity.pointOfInterest,
+        sellingDate = estateEntity.sellingDate,
+        entryDate = estateEntity.entryDate,
+        status = estateEntity.status,
+        city = estateEntity.city,
+        address = estateEntity.address,
+        estateEntity.agentInChargeId
+    )
+    
+    fun mapPictureEntityToDto(pictureEntity: EstatePictureEntity) = PictureDto(
+        imagePath = pictureEntity.imagePath,
+        description = pictureEntity.description,
+        estateId = pictureEntity.id
     )
 }
