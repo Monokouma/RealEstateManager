@@ -1,34 +1,29 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.main.main_activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
-import com.despaircorp.domain.picture.model.EstatePictureType
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.ActivityMainBinding
 import com.despaircorp.ui.databinding.AddAgentPopUpBinding
-import com.despaircorp.ui.databinding.AddEstatePopUpBinding
 import com.despaircorp.ui.databinding.AddingChoicePopUpBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.login.LoginActivity
 import com.despaircorp.ui.main.details_fragment.DetailFragment
+import com.despaircorp.ui.main.estate_addition.CreateEstateActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
-import com.despaircorp.ui.utils.uriToBitmap
 import com.despaircorp.ui.utils.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener {
@@ -37,14 +32,6 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
     private var twoPane: Boolean = false
     private var currentSelectedItemId: Int = 1
     
-    private val pickImageResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.data?.let { uri ->
-                    showImageTypeDialog(uri)
-                }
-            }
-        }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,16 +123,10 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
         
     }
     
-    override fun onResume() {
-        super.onResume()
-        
-    }
-    
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         
         outState.putInt("selectedItemId", currentSelectedItemId)
-        
     }
     
     override fun onBackPressed() {
@@ -173,12 +154,16 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 dialog.show()
                 
                 popUpBinding.addingChoicePopUpCardViewEstate.setOnClickListener {
-                    onAddEstateClicked()
+                    
+                    startActivity(CreateEstateActivity.navigate(this))
+                    
                     dialog.cancel()
                 }
                 
                 popUpBinding.addingChoicePopUpCardViewAgent.setOnClickListener {
                     onAddAgentClicked()
+                    
+                    
                     dialog.cancel()
                 }
                 
@@ -223,37 +208,6 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
         }
     }
     
-    private fun onAddEstateClicked() {
-        val popUpBinding by viewBinding { AddEstatePopUpBinding.inflate(it) }
-        
-        val dialog =
-            MaterialAlertDialogBuilder(this, R.style.ThemeOverlay_MaterialAlertDialog_Rounded)
-                .setView(popUpBinding.root)
-                .create()
-        
-        dialog.show()
-        
-        popUpBinding.addEstatePopUpButtonAddPicture.setOnClickListener {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            pickImageResultLauncher.launch(intent)
-        }
-    }
-    
-    private fun showImageTypeDialog(imageUri: Uri) {
-        val imageTypes = EstatePictureType.entries.toTypedArray()
-        val items = imageTypes.map { it.name.capitalize(Locale.getDefault()) }.toTypedArray()
-        
-        MaterialAlertDialogBuilder(this)
-            .setTitle("Select Image Type")
-            .setItems(items) { _, which ->
-                val selectedType = imageTypes[which]
-                uriToBitmap(this, imageUri)
-                
-            }
-            .show()
-    }
-    
     
     companion object {
         
@@ -278,5 +232,6 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 .commit()
         }
     }
+    
     
 }

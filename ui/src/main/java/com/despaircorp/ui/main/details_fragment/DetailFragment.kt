@@ -1,7 +1,6 @@
 package com.despaircorp.ui.main.details_fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -28,7 +27,6 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {
             val itemId = requireArguments().getInt(ARG_ITEM_ID)
-            Log.i("MonokoumaLALALA", itemId.toString())
             viewModel.onReceiveEstateId(itemId)
         }
         

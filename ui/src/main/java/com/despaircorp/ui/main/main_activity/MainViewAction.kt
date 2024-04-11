@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.main.main_activity
 
 sealed class MainViewAction {
     data class Error(val message: Int) : MainViewAction()

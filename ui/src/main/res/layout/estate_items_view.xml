@@ -1,92 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.google.android.material.card.MaterialCardView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
-    app:strokeWidth="0dp"
-    tools:backgroundTint="?colorOnBackground"
     >
     
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/estate_items_view_Card_root"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="0dp"
+        tools:backgroundTint="?colorOnBackground"
         >
         
-        <ImageView
-            android:id="@+id/estate_items_view_ImageView_estate_picture"
-            android:layout_width="140dp"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1f"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@tools:sample/avatars"
-            />
-        
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/estate_items_view_ImageView_estate_picture"
-            app:layout_constraintTop_toTopOf="parent"
             >
             
-            <TextView
-                android:id="@+id/estate_items_view_TextView_estate_type"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:textAlignment="viewStart"
-                android:textColor="?colorTertiary"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+            <ImageView
+                android:id="@+id/estate_items_view_ImageView_estate_picture"
+                android:layout_width="140dp"
+                android:layout_height="0dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1f"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="House"
+                tools:src="@tools:sample/avatars"
                 />
             
-            <TextView
-                android:id="@+id/estate_items_view_TextView_estate_city"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:textAlignment="viewStart"
-                android:textColor="?colorTertiary"
-                android:textSize="20sp"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/estate_items_view_TextView_estate_type"
-                tools:text="London"
-                />
+                app:layout_constraintStart_toEndOf="@id/estate_items_view_ImageView_estate_picture"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+                
+                <TextView
+                    android:id="@+id/estate_items_view_TextView_estate_type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="?colorTertiary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="House"
+                    />
+                
+                <TextView
+                    android:id="@+id/estate_items_view_TextView_estate_city"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="?colorTertiary"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/estate_items_view_TextView_estate_type"
+                    tools:text="London"
+                    />
+                
+                <TextView
+                    android:id="@+id/estate_items_view_TextView_estate_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:textAlignment="viewStart"
+                    android:textColor="?colorAccent"
+                    android:textSize="28sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/estate_items_view_TextView_estate_city"
+                    tools:text="$12,345,876"
+                    />
             
-            <TextView
-                android:id="@+id/estate_items_view_TextView_estate_price"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:textAlignment="viewStart"
-                android:textColor="?colorAccent"
-                android:textSize="28sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/estate_items_view_TextView_estate_city"
-                tools:text="$12,345,876"
-                />
+            </androidx.constraintlayout.widget.ConstraintLayout>
         
         </androidx.constraintlayout.widget.ConstraintLayout>
     
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>

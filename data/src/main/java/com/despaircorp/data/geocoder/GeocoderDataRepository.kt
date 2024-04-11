@@ -17,4 +17,9 @@ class GeocoderDataRepository @Inject constructor(
             geocoder.getFromLocation(location.latitude, location.longitude, 1) ?: emptyList()
         }
     
+    override suspend fun resolveLatLngFromAddress(address: String): List<Address> =
+        withContext(coroutineDispatcherProvider.io) {
+            geocoder.getFromLocationName(address, 1) ?: emptyList()
+        }
+    
 }

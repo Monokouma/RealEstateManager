@@ -2,15 +2,19 @@ package com.despaircorp.data.picture.worker
 
 import android.content.Context
 import android.content.res.AssetManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.despaircorp.domain.picture.PictureDomainRepository
-import com.despaircorp.domain.picture.model.EstatePicture
+import com.despaircorp.domain.picture.model.EstatePictureEntity
 import com.despaircorp.domain.picture.model.EstatePictureType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 @HiltWorker
@@ -20,150 +24,92 @@ class PictureInitWorker @AssistedInject constructor(
     private val pictureDomainRepository: PictureDomainRepository,
     private val assetManager: AssetManager
 ) : CoroutineWorker(context, workerParams) {
+    
+    private fun saveBitmapToInternalStorage(bitmap: Bitmap, filename: String): String {
+        val file = File(applicationContext.filesDir, filename)
+        try {
+            FileOutputStream(file).use { out ->
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return file.absolutePath
+    }
+    
+    private fun getBitmapFromAssets(assetName: String): Bitmap =
+        applicationContext.assets.open(assetName).use { inputStream ->
+            BitmapFactory.decodeStream(inputStream)
+        }
+    
+    private fun getEstatePictureEntity(filename: String, id: Int) =
+        getBitmapFromAssets(filename).let { bitmap ->
+            val savedImagePath = saveBitmapToInternalStorage(bitmap, filename)
+            val type = when {
+                filename.contains("facade") -> EstatePictureType.FACADE
+                filename.contains("lounge") -> EstatePictureType.LOUNGE
+                filename.contains("kitchen") -> EstatePictureType.KITCHEN
+                filename.contains("bedroom") -> EstatePictureType.BEDROOM
+                filename.contains("bathroom") -> EstatePictureType.BATHROOM
+                else -> throw IllegalArgumentException("Unknown picture type for file: $filename")
+            }
+            
+            EstatePictureEntity(
+                id,
+                savedImagePath,
+                type
+            )
+        }
+    
     override suspend fun doWork(): Result {
+        
         if (!pictureDomainRepository.exist()) {
             pictureDomainRepository.populatePictureTable(
                 listOf(
-                    
                     //1
-                    EstatePicture(
-                        1,
-                        BitmapFactory.decodeStream(assetManager.open("first_facade.bmp")),
-                        EstatePictureType.FACADE,
-                    ),
-                    EstatePicture(
-                        1,
-                        BitmapFactory.decodeStream(assetManager.open("first_lounge.bmp")),
-                        EstatePictureType.LOUNGE,
-                    ),
-                    EstatePicture(
-                        1,
-                        BitmapFactory.decodeStream(assetManager.open("first_kitchen.bmp")),
-                        EstatePictureType.KITCHEN,
-                    ),
-                    EstatePicture(
-                        1,
-                        BitmapFactory.decodeStream(assetManager.open("first_bedroom.bmp")),
-                        EstatePictureType.BEDROOM,
-                    ),
-                    EstatePicture(
-                        1,
-                        BitmapFactory.decodeStream(assetManager.open("first_bathroom.bmp")),
-                        EstatePictureType.BATHROOM,
-                    ),//2
+                    getEstatePictureEntity("first_facade.bmp", 1),
+                    getEstatePictureEntity("first_lounge.bmp", 1),
+                    getEstatePictureEntity("first_kitchen.bmp", 1),
+                    getEstatePictureEntity("first_bedroom.bmp", 1),
+                    getEstatePictureEntity("first_bathroom.bmp", 1),
                     
+                    //2
+                    getEstatePictureEntity("second_facade.bmp", 2),
+                    getEstatePictureEntity("second_lounge.bmp", 2),
+                    getEstatePictureEntity("second_kitchen.bmp", 2),
+                    getEstatePictureEntity("second_bedroom.bmp", 2),
+                    getEstatePictureEntity("second_bathroom.bmp", 2),
                     
-                    EstatePicture(
-                        2,
-                        BitmapFactory.decodeStream(assetManager.open("second_facade.bmp")),
-                        EstatePictureType.FACADE,
-                    ),
-                    EstatePicture(
-                        2,
-                        BitmapFactory.decodeStream(assetManager.open("second_lounge.bmp")),
-                        EstatePictureType.LOUNGE,
-                    ),
-                    EstatePicture(
-                        2,
-                        BitmapFactory.decodeStream(assetManager.open("second_kitchen.bmp")),
-                        EstatePictureType.KITCHEN,
-                    ),
-                    EstatePicture(
-                        2,
-                        BitmapFactory.decodeStream(assetManager.open("second_bedroom.bmp")),
-                        EstatePictureType.BEDROOM,
-                    ),
-                    EstatePicture(
-                        2,
-                        BitmapFactory.decodeStream(assetManager.open("second_bathroom.bmp")),
-                        EstatePictureType.BATHROOM,
-                    ),//3
+                    //3
+                    getEstatePictureEntity("third_facade.bmp", 3),
+                    getEstatePictureEntity("third_lounge.bmp", 3),
+                    getEstatePictureEntity("third_kitchen.bmp", 3),
+                    getEstatePictureEntity("third_bedroom.bmp", 3),
+                    getEstatePictureEntity("third_bathroom.bmp", 3),
                     
+                    //4
+                    getEstatePictureEntity("fourth_facade.bmp", 4),
+                    getEstatePictureEntity("fourth_lounge.bmp", 4),
+                    getEstatePictureEntity("fourth_kitchen.bmp", 4),
+                    getEstatePictureEntity("fourth_bedroom.bmp", 4),
+                    getEstatePictureEntity("fourth_bathroom.bmp", 4),
                     
-                    EstatePicture(
-                        3,
-                        BitmapFactory.decodeStream(assetManager.open("third_facade.bmp")),
-                        EstatePictureType.FACADE,
-                    ),
-                    EstatePicture(
-                        3,
-                        BitmapFactory.decodeStream(assetManager.open("third_lounge.bmp")),
-                        EstatePictureType.LOUNGE,
-                    ),
-                    EstatePicture(
-                        3,
-                        BitmapFactory.decodeStream(assetManager.open("third_kitchen.bmp")),
-                        EstatePictureType.KITCHEN,
-                    ),
-                    EstatePicture(
-                        3,
-                        BitmapFactory.decodeStream(assetManager.open("third_bedroom.bmp")),
-                        EstatePictureType.BEDROOM,
-                    ),
-                    EstatePicture(
-                        3,
-                        BitmapFactory.decodeStream(assetManager.open("third_bathroom.bmp")),
-                        EstatePictureType.BATHROOM,
-                    ),//4
+                    //5
+                    getEstatePictureEntity("fifth_facade.bmp", 5),
+                    getEstatePictureEntity("fifth_lounge.bmp", 5),
+                    getEstatePictureEntity("fifth_kitchen.bmp", 5),
+                    getEstatePictureEntity("fifth_bedroom.bmp", 5),
+                    getEstatePictureEntity("fifth_bathroom.bmp", 5),
                     
-                    
-                    EstatePicture(
-                        4,
-                        BitmapFactory.decodeStream(assetManager.open("fourth_facade.bmp")),
-                        EstatePictureType.FACADE,
-                    ),
-                    EstatePicture(
-                        4,
-                        BitmapFactory.decodeStream(assetManager.open("fourth_lounge.bmp")),
-                        EstatePictureType.LOUNGE,
-                    ),
-                    EstatePicture(
-                        4,
-                        BitmapFactory.decodeStream(assetManager.open("fourth_kitchen.bmp")),
-                        EstatePictureType.KITCHEN,
-                    ),
-                    
-                    EstatePicture(
-                        4,
-                        BitmapFactory.decodeStream(assetManager.open("fourth_bedroom.bmp")),
-                        EstatePictureType.BEDROOM,
-                    ),
-                    EstatePicture(
-                        4,
-                        BitmapFactory.decodeStream(assetManager.open("fourth_bathroom.bmp")),
-                        EstatePictureType.BATHROOM,
-                    ),//5
-                    
-                    EstatePicture(
-                        5,
-                        BitmapFactory.decodeStream(assetManager.open("fifth_facade.bmp")),
-                        EstatePictureType.FACADE,
-                    ),
-                    EstatePicture(
-                        5,
-                        BitmapFactory.decodeStream(assetManager.open("fifth_lounge.bmp")),
-                        EstatePictureType.LOUNGE,
-                    ),
-                    EstatePicture(
-                        5,
-                        BitmapFactory.decodeStream(assetManager.open("fifth_kitchen.bmp")),
-                        EstatePictureType.KITCHEN,
-                    ),
-                    
-                    EstatePicture(
-                        5,
-                        BitmapFactory.decodeStream(assetManager.open("fifth_bedroom.bmp")),
-                        EstatePictureType.BEDROOM,
-                    ),
-                    EstatePicture(
-                        5,
-                        BitmapFactory.decodeStream(assetManager.open("fifth_bathroom.bmp")),
-                        EstatePictureType.BATHROOM,
-                    ),
-                )
+                    )
             )
+            
+            
         }
+        
+        
         return Result.success()
     }
+    
     
 }

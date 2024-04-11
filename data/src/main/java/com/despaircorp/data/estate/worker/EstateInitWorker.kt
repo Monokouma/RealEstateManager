@@ -33,7 +33,7 @@ class EstateInitWorker @AssistedInject constructor(
                         
                         location = LatLng(35.678186, 139.771044),
                         estateType = applicationContext.getString(R.string.house),
-                        price = "600.000",
+                        price = "600000",
                         pointOfInterest = listOf(
                             applicationContext.getString(R.string.schools),
                             applicationContext.getString(R.string.shops)
@@ -42,7 +42,8 @@ class EstateInitWorker @AssistedInject constructor(
                         entryDate = LocalDate.of(2024, 1, 12),
                         status = EstateStatus.FOR_SALE,
                         address = "Tokyo Kyobashi, 1-chōme-3 Kyōbashi, Chuo City, Tokyo 104-0031, Japan",
-                        city = "Chuo City"
+                        city = "Chuo City",
+                        1
                     ),
                     EstateEntity(
                         id = 2,
@@ -53,13 +54,14 @@ class EstateInitWorker @AssistedInject constructor(
                         numberOfBedrooms = 4,
                         location = LatLng(34.050151, -118.317665),
                         estateType = applicationContext.getString(R.string.house),
-                        price = "500.000",
+                        price = "500000",
                         pointOfInterest = listOf(applicationContext.getString(R.string.parks)),
                         sellingDate = null,
                         entryDate = LocalDate.of(1980, 6, 21),
                         status = EstateStatus.FOR_SALE,
                         address = "1109 Westchester Pl, Los Angeles, CA 90019, USA",
-                        city = "Los Angeles"
+                        city = "Los Angeles",
+                        2
                     ),
                     EstateEntity(
                         id = 3,
@@ -70,7 +72,7 @@ class EstateInitWorker @AssistedInject constructor(
                         numberOfBedrooms = 2,
                         location = LatLng(48.859520, 2.271824),
                         estateType = applicationContext.getString(R.string.apartment),
-                        price = "1.000.000",
+                        price = "1000000",
                         pointOfInterest = listOf(
                             applicationContext.getString(R.string.schools),
                             applicationContext.getString(R.string.parks),
@@ -80,7 +82,8 @@ class EstateInitWorker @AssistedInject constructor(
                         entryDate = LocalDate.of(2017, 11, 25),
                         status = EstateStatus.FOR_SALE,
                         address = "18 Rue Maspéro, 75116 Paris, France",
-                        city = "Paris"
+                        city = "Paris",
+                        3
                     ),
                     EstateEntity(
                         id = 4,
@@ -91,7 +94,7 @@ class EstateInitWorker @AssistedInject constructor(
                         numberOfBedrooms = 4,
                         location = LatLng(40.720122, -73.989974),
                         estateType = applicationContext.getString(R.string.apartment),
-                        price = "750.000",
+                        price = "750000",
                         pointOfInterest = listOf(
                             applicationContext.getString(R.string.schools),
                             applicationContext.getString(R.string.parks),
@@ -101,7 +104,8 @@ class EstateInitWorker @AssistedInject constructor(
                         entryDate = LocalDate.of(2022, 10, 11),
                         status = EstateStatus.FOR_SALE,
                         address = "133 Allen St, New York, NY 10002, USA",
-                        city = "New York"
+                        city = "New York",
+                        1
                     ),
                     EstateEntity(
                         id = 5,
@@ -112,7 +116,7 @@ class EstateInitWorker @AssistedInject constructor(
                         numberOfBedrooms = 4,
                         location = LatLng(45.080624, 4.775859),
                         estateType = applicationContext.getString(R.string.house),
-                        price = "1.750.000",
+                        price = "1750000",
                         pointOfInterest = listOf(
                             applicationContext.getString(R.string.schools),
                             applicationContext.getString(R.string.parks),
@@ -121,7 +125,8 @@ class EstateInitWorker @AssistedInject constructor(
                         entryDate = LocalDate.of(2022, 1, 11),
                         status = EstateStatus.FOR_SALE,
                         address = "6 Chem. de Monéron, 07300 Saint-Jean-de-Muzols, France",
-                        city = "Saint-Jean-De-Muzols"
+                        city = "Saint-Jean-De-Muzols",
+                        1
                     ),
                 )
             )

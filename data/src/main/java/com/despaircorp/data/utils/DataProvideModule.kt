@@ -16,6 +16,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -83,4 +84,8 @@ class DataProvideModule {
     fun provideConnectivityManager(application: Application): ConnectivityManager {
         return application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     }
+    
+    @Singleton
+    @Provides
+    fun provideClock(): Clock = Clock.systemDefaultZone()
 }

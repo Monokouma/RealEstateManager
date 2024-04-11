@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main
+package com.despaircorp.ui.main.main_activity
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,6 +26,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
     
     private var agentName: String? = null
+    
     
     private val viewActionMutableLiveData = MutableLiveData<Event<MainViewAction>>()
     val viewAction: LiveData<Event<MainViewAction>> = viewActionMutableLiveData
@@ -82,4 +83,6 @@ class MainViewModel @Inject constructor(
             changeActualCurrencyUseCase.invoke()
         }
     }
+    
+    
 }

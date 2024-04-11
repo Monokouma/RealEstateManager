@@ -13,7 +13,7 @@ import com.despaircorp.data.real_estate_agent.dto.RealEstateAgentDto
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
-import com.despaircorp.domain.picture.model.EstatePicture
+import com.despaircorp.domain.picture.model.EstatePictureEntity
 import com.despaircorp.domain.picture.model.EstatePictureType
 import com.despaircorp.domain.real_estate_agent.model.CreatedAgentEntity
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
@@ -142,8 +142,8 @@ object EntityProvidinator {
         imageResource = DEFAULT_IMAGE_RESOURCE
     )
     
-    fun provideEstatePicture(): List<EstatePicture> = List(3) {
-        EstatePicture(
+    fun provideEstatePicture(): List<EstatePictureEntity> = List(3) {
+        EstatePictureEntity(
             it,
             createSimpleBitmap(),
             EstatePictureType.KITCHEN

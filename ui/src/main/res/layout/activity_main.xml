@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?colorOnBackground"
-    tools:context=".main.MainActivity"
+    tools:context=".main.main_activity.MainActivity"
     >
     
     <androidx.drawerlayout.widget.DrawerLayout

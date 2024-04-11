@@ -1,62 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    
+    android:layout_margin="8dp"
+    android:checkable="true"
+    app:cardBackgroundColor="?colorOnBackground"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="12dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
     >
     
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="?colorOnBackground"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         >
         
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/agent_drop_down_item_ShapeableImage_user_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="4dp"
+            android:theme="@style/ShapeAppearance.M3.Sys.Shape.Corner.Full"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/darius"
+            />
+        
+        <TextView
+            android:id="@+id/agent_drop_down_item_TextView_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            >
-            
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/agent_drop_down_item_ShapeableImage_user_image"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="4dp"
-                android:theme="@style/ShapeAppearance.M3.Sys.Shape.Corner.Full"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/darius"
-                />
-            
-            <TextView
-                android:id="@+id/agent_drop_down_item_TextView_username"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:textAlignment="viewStart"
-                android:textColor="?colorTertiary"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@id/agent_drop_down_item_ShapeableImage_user_image"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/agent_drop_down_item_ShapeableImage_user_image"
-                app:layout_constraintTop_toTopOf="@id/agent_drop_down_item_ShapeableImage_user_image"
-                tools:text="Monokouma"
-                />
-        
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_margin="16dp"
+            android:textAlignment="viewStart"
+            android:textColor="?colorTertiary"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/agent_drop_down_item_ShapeableImage_user_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/agent_drop_down_item_ShapeableImage_user_image"
+            app:layout_constraintTop_toTopOf="@id/agent_drop_down_item_ShapeableImage_user_image"
+            tools:text="Monokouma"
+            />
     
-    </com.google.android.material.card.MaterialCardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
 
 

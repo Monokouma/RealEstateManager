@@ -1,9 +1,7 @@
 package com.despaircorp.domain.picture.model
 
-import android.graphics.Bitmap
-
-data class EstatePicture(
+data class EstatePictureEntity(
     val id: Int,
-    val bitmapImage: Bitmap,
+    val imagePath: String,
     val description: EstatePictureType,
 )

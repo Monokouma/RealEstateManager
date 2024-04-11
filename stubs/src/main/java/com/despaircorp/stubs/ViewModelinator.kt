@@ -11,7 +11,7 @@ import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.domain.splash_screen.CountDownSplashScreenUseCase
 import com.despaircorp.ui.login.LoginViewModel
-import com.despaircorp.ui.main.MainViewModel
+import com.despaircorp.ui.main.main_activity.MainViewModel
 import com.despaircorp.ui.utils.ConnectionUtils
 import com.despaircorp.ui.utils.ProfilePictureRandomizator
 

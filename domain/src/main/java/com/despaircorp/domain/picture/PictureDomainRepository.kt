@@ -1,9 +1,13 @@
 package com.despaircorp.domain.picture
 
-import com.despaircorp.domain.picture.model.EstatePicture
+import android.graphics.Bitmap
+import com.despaircorp.domain.picture.model.EstatePictureEntity
 
 interface PictureDomainRepository {
     fun enqueueInitPictureWorker()
     suspend fun exist(): Boolean
-    suspend fun populatePictureTable(listOf: List<EstatePicture>)
+    suspend fun populatePictureTable(listOf: List<EstatePictureEntity>)
+    suspend fun insertPictures(pictureEntity: EstatePictureEntity)
+    suspend fun saveImageToInternalStorage(bitmap: Bitmap, fileName: String): String
+    
 }

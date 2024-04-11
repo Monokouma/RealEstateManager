@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.databinding.PictureItemsBinding
+import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
 
 
 class EstatePictureAdapter(

@@ -25,5 +25,6 @@ data class EstateDto(
     val entryDate: LocalDate,
     val status: EstateStatus,
     val city: String,
-    val address: String
+    val address: String,
+    val agentInChargeId: Int
 )
