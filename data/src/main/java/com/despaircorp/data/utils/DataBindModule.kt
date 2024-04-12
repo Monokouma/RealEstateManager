@@ -4,12 +4,14 @@ import com.despaircorp.data.connectivity.ConnectivityDataRepository
 import com.despaircorp.data.currency.CurrencyDataRepository
 import com.despaircorp.data.estate.EstateDataRepository
 import com.despaircorp.data.geocoder.GeocoderDataRepository
+import com.despaircorp.data.location.LocationDataRepository
 import com.despaircorp.data.picture.PictureDataRepository
 import com.despaircorp.data.real_estate_agent.RealEstateAgentDataRepository
 import com.despaircorp.domain.connectivity.ConnectivityDomainRepository
 import com.despaircorp.domain.currency.CurrencyDomainRepository
 import com.despaircorp.domain.estate.EstateDomainRepository
 import com.despaircorp.domain.geocoder.GeocoderDomainRepository
+import com.despaircorp.domain.location.LocationDomainRepository
 import com.despaircorp.domain.picture.PictureDomainRepository
 import com.despaircorp.domain.real_estate_agent.RealEstateAgentDomainRepository
 import dagger.Binds
@@ -44,4 +46,8 @@ abstract class DataBindModule {
     @Binds
     @Singleton
     abstract fun bindConnectivityRepository(impl: ConnectivityDataRepository): ConnectivityDomainRepository
+    
+    @Binds
+    @Singleton
+    abstract fun bindLocationRepository(impl: LocationDataRepository): LocationDomainRepository
 }

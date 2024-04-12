@@ -72,4 +72,7 @@
     <string name="sold_date_empty">Sold date cannot be empty</string>
     <string name="pictures_empty">Choose at least one picture</string>
     <string name="creation_success">Estate created</string>
+    <string name="map_view">See map</string>
+    <string name="permission_map_error">We need location permission</string>
+    <string name="required_internet">Internet is required to see map</string>
 </resources>

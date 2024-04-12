@@ -9,6 +9,12 @@
         />
     
     <item
+        android:id="@+id/drawer_menu_map_view"
+        android:title="@string/map_view"
+        android:icon="@drawable/baseline_map_24"
+        />
+    
+    <item
         android:id="@+id/drawer_menu_logout"
         android:title="@string/logout"
         android:icon="@drawable/baseline_logout_24"

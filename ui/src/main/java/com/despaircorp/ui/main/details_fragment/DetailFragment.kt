@@ -74,7 +74,6 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
     
     override fun onMapReady(p0: GoogleMap) {
         p0.mapType = GoogleMap.MAP_TYPE_NORMAL
-        p0.isBuildingsEnabled = false
         p0.uiSettings.isMapToolbarEnabled = true
         
         val pictureAdapter = EstatePictureAdapter()
