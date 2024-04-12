@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorOnBackground"
+    tools:context=".main.loan_simulator.LoanSimulatorActivity"
+    >
+    
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/activity_loan_simulator_AppBarLayout_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorOnBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/activity_loan_simulator_Toolbar_root"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navigationIcon="@drawable/baseline_keyboard_arrow_left_24"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+    
+    <TextView
+        android:id="@+id/activity_loan_simulator_TextView_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/loan_simulator"
+        android:textAlignment="center"
+        android:textColor="?colorTertiary"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_AppBarLayout_root"
+        />
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activity_loan_simulator_ConstraintLayout_input_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_title"
+        >
+        
+        
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/activity_loan_simulator_TextInputLayout_total_loan_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/activity_loan_simulator_TextInputLayout_down_payment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholderTextColor="?colorTertiary"
+            app:suffixText="@string/us_dollar_symbol"
+            >
+            
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/activity_loan_simulator_TextInputEditText_total_loan_amount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/total_laon_amount"
+                android:inputType="number"
+                android:textColor="?colorTertiary"
+                android:textColorHint="?colorTertiary"
+                android:textSize="16sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+        
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/activity_loan_simulator_TextInputLayout_down_payment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/activity_loan_simulator_TextInputLayout_total_loan_amount"
+            app:layout_constraintTop_toTopOf="parent"
+            app:placeholderTextColor="?colorTertiary"
+            app:suffixText="@string/us_dollar_symbol"
+            >
+            
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/activity_loan_simulator_TextInputEditText_down_payment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/down_payment"
+                android:inputType="number"
+                android:textColor="?colorTertiary"
+                android:textColorHint="?colorTertiary"
+                android:textSize="16sp"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activity_loan_simulator_ConstraintLayout_slider_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_ConstraintLayout_input_root"
+        >
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_loan_term"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:text="@string/loan_term"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/activity_loan_simulator_Slider_loan_term"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:stepSize="1.0"
+            android:valueFrom="5.0"
+            android:valueTo="30.0"
+            app:labelBehavior="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_loan_term"
+            />
+    
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/activity_loan_simulator_ConstraintLayout_result_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_ConstraintLayout_slider_root"
+        >
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_total_loan_price_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Total loan amount: $200,000"
+            />
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_loan_term_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_total_loan_price_value"
+            tools:text="Loan term: 16 years"
+            />
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_monthly_payment_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_loan_term_value"
+            tools:text="Monthly payments: $350"
+            />
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_interest_rate_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_monthly_payment_value"
+            tools:text="Fixed interest rate: 5%"
+            />
+        
+        <TextView
+            android:id="@+id/activity_loan_simulator_TextView_total_repayment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textAlignment="textStart"
+            android:textColor="?colorTertiary"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_loan_simulator_TextView_interest_rate_value"
+            tools:text="Total repayments: $208,000"
+            />
+    
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

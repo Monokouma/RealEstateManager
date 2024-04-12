@@ -23,6 +23,7 @@ import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.login.LoginActivity
 import com.despaircorp.ui.main.details_fragment.DetailFragment
 import com.despaircorp.ui.main.estate_addition.CreateEstateActivity
+import com.despaircorp.ui.main.loan_simulator.LoanSimulatorActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
 import com.despaircorp.ui.map.MapActivity
 import com.despaircorp.ui.utils.viewBinding
@@ -117,6 +118,11 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                     
                 }
                 
+                R.id.drawer_menu_loan_simulator -> {
+                    startActivity(LoanSimulatorActivity.navigate(this))
+                    binding.activityMainDrawerLayout.close()
+                }
+                
                 R.id.drawer_menu_logout -> {
                     viewModel.onDisconnect()
                 }
@@ -164,8 +170,6 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                     // Both permissions were granted
-                } else {
-                
                 }
                 return
             }
@@ -195,14 +199,11 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 ),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
-        } else {
-        
         }
     }
     
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        
         outState.putInt("selectedItemId", currentSelectedItemId)
     }
     

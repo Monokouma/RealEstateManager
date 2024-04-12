@@ -15,6 +15,12 @@
         />
     
     <item
+        android:id="@+id/drawer_menu_loan_simulator"
+        android:title="@string/loan_simulator"
+        android:icon="@drawable/baseline_attach_money_24"
+        />
+    
+    <item
         android:id="@+id/drawer_menu_logout"
         android:title="@string/logout"
         android:icon="@drawable/baseline_logout_24"

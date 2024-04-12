@@ -133,8 +133,6 @@ class CreateEstateViewModel @Inject constructor(
                     sellingDate = combinedFlow.third
                 )
             )
-            
-            
         }.collect()
     }
     

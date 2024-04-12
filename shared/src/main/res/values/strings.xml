@@ -75,4 +75,13 @@
     <string name="map_view">See map</string>
     <string name="permission_map_error">We need location permission</string>
     <string name="required_internet">Internet is required to see map</string>
+    <string name="loan_simulator">Loan simulator</string>
+    <string name="down_payment">Down payment</string>
+    <string name="total_laon_amount">Total loan amount</string>
+    <string name="loan_term">Loan term :</string>
+    <string name="loan_total_amount">Loan total amount :</string>
+    <string name="years">years</string>
+    <string name="monthly_payment">Monthly payment :</string>
+    <string name="fixed_interest_rate">Fixed interest rate :</string>
+    <string name="total_repayment">Total repayments :</string>
 </resources>

@@ -37,8 +37,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
-        
         setSupportActionBar(binding.activityMapToolbarMain)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
         
         binding.activityMapToolbarMain.setNavigationOnClickListener {
             if (supportFragmentManager.backStackEntryCount > 0) {
