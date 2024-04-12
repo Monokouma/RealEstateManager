@@ -13,6 +13,10 @@
         android:usesCleartextTraffic="true"
         >
         <activity
+            android:name=".main.loan_simulator.LoanSimulatorActivity"
+            android:exported="false"
+            />
+        <activity
             android:name=".map.MapActivity"
             android:exported="false"
             />
