@@ -24,7 +24,7 @@ class PictureDataRepository @Inject constructor(
     private val pictureDao: PictureDao,
     private val workManager: WorkManager,
     private val entitiesMaperinator: EntitiesMaperinator,
-    private val application: Application
+    private val application: Application,
 ) : PictureDomainRepository {
     override fun enqueueInitPictureWorker() {
         val pictureInitWorkRequest: OneTimeWorkRequest =
@@ -63,4 +63,5 @@ class PictureDataRepository @Inject constructor(
                 ""
             }
         }
+    
 }

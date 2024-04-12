@@ -1,7 +1,9 @@
 package com.despaircorp.ui.main.main_activity
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,6 +11,8 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
@@ -20,6 +24,7 @@ import com.despaircorp.ui.login.LoginActivity
 import com.despaircorp.ui.main.details_fragment.DetailFragment
 import com.despaircorp.ui.main.estate_addition.CreateEstateActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
+import com.despaircorp.ui.map.MapActivity
 import com.despaircorp.ui.utils.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +42,9 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
+        
+        requestLocationPermission()
+        
         setSupportActionBar(binding.activityMainToolbarRoot)
         
         twoPane = binding.activityMainFragmentLayoutDetails != null
@@ -86,6 +94,29 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                     binding.activityMainDrawerLayout.close()
                 }
                 
+                R.id.drawer_menu_map_view -> {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED ||
+                        ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        startActivity(MapActivity.navigate(this))
+                        binding.activityMainDrawerLayout.close()
+                    } else {
+                        Toast.makeText(
+                            this,
+                            getString(com.despaircorp.shared.R.string.permission_map_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        binding.activityMainDrawerLayout.close()
+                    }
+                    
+                }
+                
                 R.id.drawer_menu_logout -> {
                     viewModel.onDisconnect()
                 }
@@ -121,6 +152,52 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
             headerBinding.navigationDrawerTextViewUserName.text = it.currentLoggedInAgent.name
         }
         
+    }
+    
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            LOCATION_PERMISSION_REQUEST_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
+                    // Both permissions were granted
+                } else {
+                
+                }
+                return
+            }
+            
+            else -> {
+                // Ignore other requests
+            }
+        }
+    }
+    
+    private fun requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                LOCATION_PERMISSION_REQUEST_CODE
+            )
+        } else {
+        
+        }
     }
     
     override fun onSaveInstanceState(outState: Bundle) {
@@ -210,6 +287,7 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
     
     
     companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
         
         fun navigate(context: Context) = Intent(
             context,

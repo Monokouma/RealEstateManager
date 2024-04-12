@@ -12,6 +12,8 @@ import com.despaircorp.data.estate.dao.EstateDao
 import com.despaircorp.data.picture.dao.PictureDao
 import com.despaircorp.data.real_estate_agent.dao.RealEstateAgentDao
 import com.despaircorp.data.room_database.RealEstateManagerRoomDatabase
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -88,4 +90,11 @@ class DataProvideModule {
     @Singleton
     @Provides
     fun provideClock(): Clock = Clock.systemDefaultZone()
+    
+    @Provides
+    @Singleton
+    fun provideFusedLocationProviderClient(application: Application): FusedLocationProviderClient {
+        return LocationServices.getFusedLocationProviderClient(application)
+    }
+    
 }

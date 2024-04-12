@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorOnBackground"
+    tools:context=".map.MapActivity"
+    >
+    
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/activity_map_AppBar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?colorOnBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+        
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/activity_map_Toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navigationIcon="@drawable/baseline_keyboard_arrow_left_24"
+            />
+    
+    </com.google.android.material.appbar.AppBarLayout>
+    
+    <FrameLayout
+        android:id="@+id/activity_map_FragmentLayout_details"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_map_AppBar_main"
+        />
+    
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/activity_map_MapView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_map_AppBar_main"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
