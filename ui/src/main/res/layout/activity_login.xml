@@ -12,7 +12,7 @@
     
     <ImageView
         android:id="@+id/activity_login_ImageView_logo"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:src="@drawable/house"
         app:chainUseRtl="true"
@@ -40,7 +40,7 @@
     
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/activity_login_Dropdown_agent"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -618,7 +618,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/activity_create_estate_TextView_agent_title"
-                tools:listitem="@layout/agent_drop_down_item"
+                tools:listitem="@layout/agent_addition_item"
                 />
         
         </androidx.constraintlayout.widget.ConstraintLayout>
