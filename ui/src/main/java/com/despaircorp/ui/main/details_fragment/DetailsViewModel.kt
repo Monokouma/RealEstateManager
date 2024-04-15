@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
-import com.despaircorp.domain.estate.GetEstateWithPictureEntityById
+import com.despaircorp.domain.estate.GetEstateWithPictureEntityByIdUseCase
 import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
 import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
 import com.google.android.gms.maps.model.LatLng
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val getEstateWithPictureEntityById: GetEstateWithPictureEntityById,
+    private val getEstateWithPictureEntityById: GetEstateWithPictureEntityByIdUseCase,
     private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
     private val isUserConnectedToInternetUseCase: IsUserConnectedToInternetUseCase
 ) : ViewModel() {

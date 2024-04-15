@@ -6,6 +6,7 @@ import com.despaircorp.domain.estate.model.EstateCreationStatus
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
+import com.despaircorp.domain.estate.model.ToSanitizeEstateEntity
 import com.despaircorp.domain.geocoder.GetLatLngFromAddressUseCase
 import com.despaircorp.domain.picture.InsertPictureForEstateCreationUseCase
 import com.despaircorp.domain.picture.model.EstatePictureEntity
@@ -40,25 +41,27 @@ class CreateEstateUseCase @Inject constructor(
         estatePictures: List<EstatePictureEntity>, //Required
         estateInChargeAgentId: Int //Required
     ): Result<Boolean> {
-        var estateId = findHighestId(estateDomainRepository.getEstateEntity())
+        var estateId = findHighestId(estateDomainRepository.getEstateEntities())
         estateId += 1
         
         
         val sanitizedForm = sanitizeCreatedEstateUseCase.invoke(
-            estateSurface = estateSurface,
-            estateDescription = estateDescription,
-            estateRoomNumber = estateRoomNumber,
-            estateBedroomNumber = estateBedroomNumber,
-            estateBathRoomNumber = estateBathRoomNumber,
-            estateAddress = estateAddress,
-            estateCity = estateCity,
-            estatePrice = estatePrice,
-            estateType = estateType,
-            estatePointOfInterests = estatePointOfInterests,
-            isEstateSold = isEstateSold,
-            estateEntryDate = estateEntryDate,
-            estateSoldDate = estateSoldDate,
-            estatePictures = estatePictures,
+            ToSanitizeEstateEntity(
+                estateSurface = estateSurface,
+                estateDescription = estateDescription,
+                estateRoomNumber = estateRoomNumber,
+                estateBedroomNumber = estateBedroomNumber,
+                estateBathRoomNumber = estateBathRoomNumber,
+                estateAddress = estateAddress,
+                estateCity = estateCity,
+                estatePrice = estatePrice,
+                estateType = estateType,
+                estatePointOfInterests = estatePointOfInterests,
+                isEstateSold = isEstateSold,
+                estateEntryDate = estateEntryDate,
+                estateSoldDate = estateSoldDate,
+                estatePictures = estatePictures,
+            )
         )
         
         return if (sanitizedForm == EstateCreationStatus.SUCCESS) {
@@ -73,7 +76,7 @@ class CreateEstateUseCase @Inject constructor(
                     roomNumber = estateRoomNumber.toInt(),
                     bathroomNumber = estateBathRoomNumber.toInt(),
                     numberOfBedrooms = estateBedroomNumber.toInt(),
-                    location = getLocationOrNull("$estateAddress $estateCity"),
+                    location = getEstateLocationOrNull("$estateAddress $estateCity"),
                     estateType = estateType,
                     price = estatePrice,
                     pointOfInterest = getSelectedPointOfInterest(estatePointOfInterests),
@@ -98,7 +101,7 @@ class CreateEstateUseCase @Inject constructor(
         }
     }
     
-    private suspend fun getLocationOrNull(addressWithCity: String): LatLng? =
+    private suspend fun getEstateLocationOrNull(addressWithCity: String): LatLng? =
         if (isUserConnectedToInternetUseCase.invoke().first()) {
             getLatLngFromAddressUseCase.invoke(addressWithCity)
         } else {
