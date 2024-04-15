@@ -22,7 +22,7 @@ import com.despaircorp.ui.databinding.AddingChoicePopUpBinding
 import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.login.LoginActivity
 import com.despaircorp.ui.main.details_fragment.DetailFragment
-import com.despaircorp.ui.main.estate_addition.CreateEstateActivity
+import com.despaircorp.ui.main.estate_form.EstateFormActivity
 import com.despaircorp.ui.main.loan_simulator.LoanSimulatorActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
 import com.despaircorp.ui.map.MapActivity
@@ -233,7 +233,13 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 
                 popUpBinding.addingChoicePopUpCardViewEstate.setOnClickListener {
                     
-                    startActivity(CreateEstateActivity.navigate(this))
+                    startActivity(
+                        EstateFormActivity.navigate(
+                            context = this,
+                            isEditMode = false,
+                            toEditEstateId = currentSelectedItemId
+                        )
+                    )
                     
                     dialog.cancel()
                 }
@@ -248,7 +254,13 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
             }
             
             R.id.top_menu_edit -> {
-            
+                startActivity(
+                    EstateFormActivity.navigate(
+                        this,
+                        true,
+                        currentSelectedItemId
+                    )
+                )
             }
             
             R.id.top_menu_search -> {

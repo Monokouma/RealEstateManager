@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.estate_addition.point_of_interest
+package com.despaircorp.ui.main.estate_form.point_of_interest
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

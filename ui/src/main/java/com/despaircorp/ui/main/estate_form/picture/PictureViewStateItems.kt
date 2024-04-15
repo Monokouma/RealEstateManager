@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.estate_addition.picture
+package com.despaircorp.ui.main.estate_form.picture
 
 data class PictureViewStateItems(
     val bitmap: String,

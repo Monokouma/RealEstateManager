@@ -1,11 +1,11 @@
-package com.despaircorp.ui.main.estate_addition
+package com.despaircorp.ui.main.estate_form
 
-import com.despaircorp.ui.main.estate_addition.agent.CreateEstateAgentViewStateItems
-import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
-import com.despaircorp.ui.main.estate_addition.point_of_interest.PointOfInterestViewStateItems
+import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentViewStateItems
+import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestViewStateItems
 
-data class CreateEstateViewState(
-    val agentViewStateItems: List<CreateEstateAgentViewStateItems>,
+data class EstateFormViewState(
+    val agentViewStateItems: List<EstateFormAgentViewStateItems>,
     val pictureViewStateItems: List<PictureViewStateItems>,
     val pointOfInterestViewStateItems: List<PointOfInterestViewStateItems>,
     val surface: String,

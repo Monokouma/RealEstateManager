@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.estate_addition.picture
+package com.despaircorp.ui.main.estate_form.picture
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide
 import com.despaircorp.ui.databinding.PictureItemsBinding
 
 
-class CreateEstatePictureAdapter(
+class EstateFormPictureAdapter(
 
-) : ListAdapter<PictureViewStateItems, CreateEstatePictureAdapter.EstateViewHolder>(
+) : ListAdapter<PictureViewStateItems, EstateFormPictureAdapter.EstateViewHolder>(
     EstatePictureDiffUtil
 ) {
     
