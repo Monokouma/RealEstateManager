@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.details_fragment
+package com.despaircorp.ui.main.details_fragment.picture
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

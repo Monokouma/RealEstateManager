@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="EstateDetailsSquareInfoView">
+        <attr name="customTitle" format="string" />
+        <attr name="customText" format="string" />
+        <attr name="customIcon" format="reference" />
+    </declare-styleable>
+</resources>

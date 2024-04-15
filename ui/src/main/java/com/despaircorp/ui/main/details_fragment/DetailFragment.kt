@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.FragmentDetailsBinding
+import com.despaircorp.ui.main.details_fragment.picture.EstatePictureAdapter
 import com.despaircorp.ui.utils.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -80,11 +81,15 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
         
         viewModel.viewState.observe(viewLifecycleOwner) {
             binding.fragmentDetailsTextViewDescription.text = it.description
-            binding.fragmentDetailsTextViewSurface.text = it.surface
-            binding.fragmentDetailsTextViewRoom.text = "${it.roomNumber}"
-            binding.fragmentDetailsTextViewBathrooms.text = "${it.bathroomNumber}"
-            binding.fragmentDetailsTextViewBedrooms.text = "${it.bedroomNumber}"
-            binding.fragmentDetailsTextViewLocation.text = it.address
+            
+            binding.fragmentDetailsConstraintLayoutSurfaceRoot.textTextView.text = it.surface
+            binding.fragmentDetailsConstraintLayoutRoomRoot.textTextView.text = "${it.roomNumber}"
+            binding.fragmentDetailsConstraintLayoutBathroomsRoot.textTextView.text =
+                "${it.bathroomNumber}"
+            binding.fragmentDetailsConstraintLayoutBedroomsRoot.textTextView.text =
+                "${it.bedroomNumber}"
+            binding.fragmentDetailsConstraintLayoutLocationRoot.textTextView.text = it.address
+            
             binding.fragmentDetailsMapMap.isVisible = it.willShowMap
             binding.fragmentDetailsTextViewNotAvailableMap.isVisible =
                 it.willShowUnavailableMapMessage
