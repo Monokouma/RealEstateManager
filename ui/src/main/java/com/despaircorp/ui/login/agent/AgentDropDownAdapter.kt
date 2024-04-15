@@ -35,7 +35,7 @@ class AgentDropDownAdapter(
                 .into(binding.agentDropDownItemShapeableImageUserImage)
             binding.agentDropDownItemTextViewUsername.text = agentDropDownViewStateItems.name
             
-            binding.root.setOnClickListener {
+            binding.agentDropDownItemCardviewRoot.setOnClickListener {
                 agentDropDownListener.onAgentClick(agentDropDownViewStateItems.id)
             }
         }

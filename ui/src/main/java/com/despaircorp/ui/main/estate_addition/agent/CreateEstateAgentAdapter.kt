@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
-import com.despaircorp.ui.databinding.AgentDropDownItemBinding
+import com.despaircorp.ui.databinding.AgentAdditionItemBinding
 import com.despaircorp.ui.utils.isNightMode
 
 class CreateEstateAgentAdapter(
@@ -19,14 +19,14 @@ class CreateEstateAgentAdapter(
 ) {
     
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = AgentDropDownViewHolder(
-        AgentDropDownItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        AgentAdditionItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
     )
     
     override fun onBindViewHolder(holder: AgentDropDownViewHolder, position: Int) {
         holder.bind(getItem(position), agentDropDownListener)
     }
     
-    class AgentDropDownViewHolder(private val binding: AgentDropDownItemBinding) :
+    class AgentDropDownViewHolder(private val binding: AgentAdditionItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         
         fun bind(
@@ -40,7 +40,7 @@ class CreateEstateAgentAdapter(
             
             if (agentDropDownViewStateItems.isSelected) {
                 if (isNightMode(binding.root.context)) {
-                    binding.root.setCardBackgroundColor(
+                    binding.agentDropDownItemCardviewRoot.setCardBackgroundColor(
                         ColorStateList.valueOf(
                             binding.root.context.getColor(
                                 R.color.primaryColorDark
@@ -48,7 +48,7 @@ class CreateEstateAgentAdapter(
                         )
                     )
                 } else {
-                    binding.root.setCardBackgroundColor(
+                    binding.agentDropDownItemCardviewRoot.setCardBackgroundColor(
                         ColorStateList.valueOf(
                             binding.root.context.getColor(
                                 R.color.primaryColorLight
@@ -59,7 +59,7 @@ class CreateEstateAgentAdapter(
                 
             } else {
                 if (isNightMode(binding.root.context)) {
-                    binding.root.setCardBackgroundColor(
+                    binding.agentDropDownItemCardviewRoot.setCardBackgroundColor(
                         ColorStateList.valueOf(
                             binding.root.context.getColor(
                                 R.color.backgroundColorDark
@@ -67,7 +67,7 @@ class CreateEstateAgentAdapter(
                         )
                     )
                 } else {
-                    binding.root.setCardBackgroundColor(
+                    binding.agentDropDownItemCardviewRoot.setCardBackgroundColor(
                         ColorStateList.valueOf(
                             binding.root.context.getColor(
                                 R.color.backgroundColorLight
@@ -78,7 +78,7 @@ class CreateEstateAgentAdapter(
                 
             }
             
-            binding.root.setOnClickListener {
+            binding.agentDropDownItemCardviewRoot.setOnClickListener {
                 
                 
                 agentDropDownListener.onAgentClick(agentDropDownViewStateItems.id)
