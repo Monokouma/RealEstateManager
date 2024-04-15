@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.estate_addition.agent
+package com.despaircorp.ui.main.estate_form.agent
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
@@ -11,10 +11,10 @@ import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.AgentAdditionItemBinding
 import com.despaircorp.ui.utils.isNightMode
 
-class CreateEstateAgentAdapter(
-    private val agentDropDownListener: CreateEstateAgentListener
+class EstateFormAgentAdapter(
+    private val agentDropDownListener: EstateFormAgentListener
 
-) : ListAdapter<CreateEstateAgentViewStateItems, CreateEstateAgentAdapter.AgentDropDownViewHolder>(
+) : ListAdapter<EstateFormAgentViewStateItems, EstateFormAgentAdapter.AgentDropDownViewHolder>(
     AgentDropDownDiffUtil
 ) {
     
@@ -30,8 +30,8 @@ class CreateEstateAgentAdapter(
         RecyclerView.ViewHolder(binding.root) {
         
         fun bind(
-            agentDropDownViewStateItems: CreateEstateAgentViewStateItems,
-            agentDropDownListener: CreateEstateAgentListener,
+            agentDropDownViewStateItems: EstateFormAgentViewStateItems,
+            agentDropDownListener: EstateFormAgentListener,
         ) {
             Glide.with(binding.agentDropDownItemShapeableImageUserImage)
                 .load(agentDropDownViewStateItems.image)
@@ -86,16 +86,16 @@ class CreateEstateAgentAdapter(
         }
     }
     
-    object AgentDropDownDiffUtil : DiffUtil.ItemCallback<CreateEstateAgentViewStateItems>() {
+    object AgentDropDownDiffUtil : DiffUtil.ItemCallback<EstateFormAgentViewStateItems>() {
         override fun areItemsTheSame(
-            oldItem: CreateEstateAgentViewStateItems,
-            newItem: CreateEstateAgentViewStateItems
+            oldItem: EstateFormAgentViewStateItems,
+            newItem: EstateFormAgentViewStateItems
         ): Boolean =
             oldItem.id == newItem.id
         
         override fun areContentsTheSame(
-            oldItem: CreateEstateAgentViewStateItems,
-            newItem: CreateEstateAgentViewStateItems
+            oldItem: EstateFormAgentViewStateItems,
+            newItem: EstateFormAgentViewStateItems
         ) = oldItem == newItem
     }
 }

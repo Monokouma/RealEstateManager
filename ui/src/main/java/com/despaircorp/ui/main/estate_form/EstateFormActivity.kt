@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.estate_addition
+package com.despaircorp.ui.main.estate_form
 
 import android.app.Activity
 import android.content.Context
@@ -19,11 +19,11 @@ import androidx.core.widget.addTextChangedListener
 import com.despaircorp.domain.picture.model.EstatePictureType
 import com.despaircorp.shared.R
 import com.despaircorp.ui.databinding.ActivityCreateEstateBinding
-import com.despaircorp.ui.main.estate_addition.agent.CreateEstateAgentAdapter
-import com.despaircorp.ui.main.estate_addition.agent.CreateEstateAgentListener
-import com.despaircorp.ui.main.estate_addition.picture.CreateEstatePictureAdapter
-import com.despaircorp.ui.main.estate_addition.point_of_interest.PointOfInterestAdapter
-import com.despaircorp.ui.main.estate_addition.point_of_interest.PointOfInterestListener
+import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentAdapter
+import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentListener
+import com.despaircorp.ui.main.estate_form.picture.EstateFormPictureAdapter
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestAdapter
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestListener
 import com.despaircorp.ui.utils.isNightMode
 import com.despaircorp.ui.utils.viewBinding
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -36,9 +36,9 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @AndroidEntryPoint
-class CreateEstateActivity : AppCompatActivity(), PointOfInterestListener,
-    CreateEstateAgentListener {
-    private val viewModel: CreateEstateViewModel by viewModels()
+class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
+    EstateFormAgentListener {
+    private val viewModel: EstateFormViewModel by viewModels()
     private val binding by viewBinding { ActivityCreateEstateBinding.inflate(it) }
     private var currentPhotoUri: Uri? = null
     private val pickImageResultLauncher =
@@ -66,10 +66,10 @@ class CreateEstateActivity : AppCompatActivity(), PointOfInterestListener,
         val pointOfInterestAdapter = PointOfInterestAdapter(this)
         binding.addEstatePopUpRecyclerCiewInterestPoint.adapter = pointOfInterestAdapter
         
-        val agentAdapter = CreateEstateAgentAdapter(this)
+        val agentAdapter = EstateFormAgentAdapter(this)
         binding.activityCreateEstateRecyclerViewAgent.adapter = agentAdapter
         
-        val createEstatePictureAdapter = CreateEstatePictureAdapter()
+        val createEstatePictureAdapter = EstateFormPictureAdapter()
         binding.activityCreateEstateRecyclerViewPicture.adapter = createEstatePictureAdapter
         
         initSpinnerDropDownSelectionChanged()
@@ -94,13 +94,13 @@ class CreateEstateActivity : AppCompatActivity(), PointOfInterestListener,
         
         viewModel.viewAction.observe(this) {
             when (val action = it.getContentIfNotHandled()) {
-                is CreateEstateAction.OnError -> Toast.makeText(
+                is EstateFormAction.OnError -> Toast.makeText(
                     this,
                     action.message,
                     Toast.LENGTH_SHORT
                 ).show()
                 
-                CreateEstateAction.Success -> {
+                EstateFormAction.Success -> {
                     Toast.makeText(
                         this,
                         getString(R.string.creation_success),
@@ -365,11 +365,20 @@ class CreateEstateActivity : AppCompatActivity(), PointOfInterestListener,
     
     companion object {
         private const val KEY_CURRENT_PHOTO_URI = "KEY_CURRENT_PHOTO_URI"
+        private const val ARG_IS_EDIT_MODE = "ARG_IS_EDIT_MODE"
+        private const val ARG_TO_EDIT_ESTATE_ID = "ARG_TO_EDIT_ESTATE_ID"
         
-        fun navigate(context: Context) = Intent(
+        fun navigate(
+            context: Context,
+            isEditMode: Boolean,
+            toEditEstateId: Int
+        ) = Intent(
             context,
-            CreateEstateActivity::class.java
-        )
+            EstateFormActivity::class.java
+        ).apply {
+            putExtra(ARG_IS_EDIT_MODE, isEditMode)
+            putExtra(ARG_TO_EDIT_ESTATE_ID, toEditEstateId)
+        }
     }
     
     override fun onAddPointOfInterestClicked(id: Int) {

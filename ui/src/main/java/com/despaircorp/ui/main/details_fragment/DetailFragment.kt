@@ -22,7 +22,6 @@ class DetailFragment : Fragment(R.layout.fragment_details), OnMapReadyCallback {
     private val viewModel: DetailsViewModel by viewModels()
     private lateinit var mapView: MapView
     
-    
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (arguments != null) {

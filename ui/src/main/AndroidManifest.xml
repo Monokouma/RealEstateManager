@@ -21,7 +21,7 @@
             android:exported="false"
             />
         <activity
-            android:name=".main.estate_addition.CreateEstateActivity"
+            android:name=".main.estate_form.EstateFormActivity"
             android:exported="false"
             />
         <activity

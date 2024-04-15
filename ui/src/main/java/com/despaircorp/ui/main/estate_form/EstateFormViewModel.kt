@@ -1,9 +1,11 @@
-package com.despaircorp.ui.main.estate_addition
+package com.despaircorp.ui.main.estate_form
 
 import android.app.Application
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
@@ -15,9 +17,9 @@ import com.despaircorp.domain.picture.model.EstatePictureEntity
 import com.despaircorp.domain.picture.model.EstatePictureType
 import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCase
 import com.despaircorp.ui.R
-import com.despaircorp.ui.main.estate_addition.agent.CreateEstateAgentViewStateItems
-import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
-import com.despaircorp.ui.main.estate_addition.point_of_interest.PointOfInterestViewStateItems
+import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentViewStateItems
+import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestViewStateItems
 import com.despaircorp.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,15 +30,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CreateEstateViewModel @Inject constructor(
+class EstateFormViewModel @Inject constructor(
     private val getRealEstateAgentEntitiesUseCase: GetRealEstateAgentEntitiesUseCase,
     private val application: Application,
     private val createEstateUseCase: CreateEstateUseCase,
-    private val saveBitmapPictureToInternalStorageUseCase: SaveBitmapPictureToInternalStorageUseCase
+    private val saveBitmapPictureToInternalStorageUseCase: SaveBitmapPictureToInternalStorageUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     
-    private val viewActionMutableLiveData = MutableLiveData<Event<CreateEstateAction>>()
-    val viewAction: LiveData<Event<CreateEstateAction>> = viewActionMutableLiveData
+    private val viewActionMutableLiveData = MutableLiveData<Event<EstateFormAction>>()
+    val viewAction: LiveData<Event<EstateFormAction>> = viewActionMutableLiveData
     
     private val pointOfInterestListMutableStateFlow =
         MutableStateFlow<List<PointOfInterestEntity>>(emptyList())
@@ -87,7 +90,7 @@ class CreateEstateViewModel @Inject constructor(
         }
     }
     
-    val viewState = liveData<CreateEstateViewState> {
+    val viewState = liveData<EstateFormViewState> {
         combine(
             getRealEstateAgentEntitiesUseCase.invoke(),
             chosenPictureMutableStateFlow,
@@ -95,11 +98,12 @@ class CreateEstateViewModel @Inject constructor(
             pointOfInterestListMutableStateFlow,
             combineFlowOfIsSoldEntryDateAndSoldDate,
         ) { realEstateAgentEntities, chosenPictureEntities, selectedAgent, pointOfInterestList, combinedFlow ->
-            
+            Log.i("Monokouma", savedStateHandle.get<Boolean>(ARG_IS_EDIT_MODE).toString())
+            Log.i("Monokouma", savedStateHandle.get<Int>(ARG_TO_EDIT_ESTATE_ID).toString())
             emit(
-                CreateEstateViewState(
+                EstateFormViewState(
                     agentViewStateItems = realEstateAgentEntities.map {
-                        CreateEstateAgentViewStateItems(
+                        EstateFormAgentViewStateItems(
                             id = it.id,
                             image = it.imageResource,
                             name = it.name,
@@ -269,10 +273,16 @@ class CreateEstateViewModel @Inject constructor(
             }
             
             viewActionMutableLiveData.value = if (result is Boolean) {
-                Event(CreateEstateAction.Success)
+                Event(EstateFormAction.Success)
             } else {
-                Event(CreateEstateAction.OnError(message = result.toString()))
+                Event(EstateFormAction.OnError(message = result.toString()))
             }
         }
+    }
+    
+    companion object {
+        private const val ARG_IS_EDIT_MODE = "ARG_IS_EDIT_MODE"
+        private const val ARG_TO_EDIT_ESTATE_ID = "ARG_TO_EDIT_ESTATE_ID"
+        
     }
 }

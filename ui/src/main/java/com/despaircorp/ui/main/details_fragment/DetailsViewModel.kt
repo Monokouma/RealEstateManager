@@ -6,7 +6,7 @@ import androidx.lifecycle.liveData
 import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityByIdUseCase
 import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
-import com.despaircorp.ui.main.estate_addition.picture.PictureViewStateItems
+import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,8 +16,9 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val getEstateWithPictureEntityById: GetEstateWithPictureEntityByIdUseCase,
     private val getAddressFromLatLngUseCase: GetAddressFromLatLngUseCase,
-    private val isUserConnectedToInternetUseCase: IsUserConnectedToInternetUseCase
-) : ViewModel() {
+    private val isUserConnectedToInternetUseCase: IsUserConnectedToInternetUseCase,
+    
+    ) : ViewModel() {
     
     private val itemIdMutableStateFlow = MutableStateFlow(1)
     
