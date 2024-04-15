@@ -104,52 +104,18 @@
             app:layout_constraintTop_toBottomOf="@id/fragment_details_ConstraintLayout_description_root"
             >
             
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <com.despaircorp.ui.main.details_fragment.custom.EstateDetailsSquareInfoView
                 android:id="@+id/fragment_details_ConstraintLayout_location_root"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_margin="16dp"
+                app:customIcon="@drawable/maps_and_flags"
+                app:customTitle="@string/location"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/fragment_details_ConstraintLayout_not_location_root"
                 app:layout_constraintTop_toTopOf="parent"
-                >
-                
-                <ImageView
-                    android:id="@+id/fragment_details_ImageView_location_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/maps_and_flags"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                
-                <TextView
-                    android:id="@+id/fragment_details_TextView_location_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="4dp"
-                    android:layout_marginVertical="4dp"
-                    android:text="@string/location"
-                    android:textColor="?colorTertiary"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_location_icon"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
-                
-                <TextView
-                    android:id="@+id/fragment_details_TextView_location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:textColor="?colorTertiary"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_location_icon"
-                    app:layout_constraintTop_toBottomOf="@id/fragment_details_ImageView_location_icon"
-                    tools:text="740 Park Avenue APT7/7A New York NY 10021 United States"
-                    />
-            
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                tools:customText="740 Park Avenue APT7/7A New York NY 10021 United States"
+                />
             
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fragment_details_ConstraintLayout_not_location_root"
@@ -161,205 +127,51 @@
                 app:layout_constraintTop_toTopOf="parent"
                 >
                 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.despaircorp.ui.main.details_fragment.custom.EstateDetailsSquareInfoView
                     android:id="@+id/fragment_details_ConstraintLayout_surface_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    app:customIcon="@drawable/area"
+                    app:customTitle="@string/surface"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    >
-                    
-                    <ImageView
-                        android:id="@+id/fragment_details_ImageView_size_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/area"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_surface_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:text="@string/surface"
-                        android:textColor="?colorTertiary"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_size_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_surface"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:textColor="?colorTertiary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.04"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_size_icon"
-                        app:layout_constraintTop_toBottomOf="@id/fragment_details_TextView_surface_title"
-                        tools:text="200m2"
-                        />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:customText="200m2"
+                    />
                 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.despaircorp.ui.main.details_fragment.custom.EstateDetailsSquareInfoView
                     android:id="@+id/fragment_details_ConstraintLayout_room_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    app:customIcon="@drawable/home"
+                    app:customTitle="@string/room_number"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fragment_details_ConstraintLayout_surface_root"
-                    >
-                    
-                    <ImageView
-                        android:id="@+id/fragment_details_ImageView_house_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/home"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_room_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:text="@string/room_number"
-                        android:textColor="?colorTertiary"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_house_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_room"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:textColor="?colorTertiary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.04"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_house_icon"
-                        app:layout_constraintTop_toBottomOf="@id/fragment_details_TextView_room_title"
-                        tools:text="8"
-                        />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:customText="2"
+                    />
                 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.despaircorp.ui.main.details_fragment.custom.EstateDetailsSquareInfoView
                     android:id="@+id/fragment_details_ConstraintLayout_bathrooms_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    app:customIcon="@drawable/bathtub"
+                    app:customTitle="@string/bathroom_number"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fragment_details_ConstraintLayout_room_root"
-                    >
-                    
-                    <ImageView
-                        android:id="@+id/fragment_details_ImageView_bathrooms_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/bathtub"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_bathrooms_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:text="@string/bathroom_number"
-                        android:textColor="?colorTertiary"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_bathrooms_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_bathrooms"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:textColor="?colorTertiary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.04"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_bathrooms_icon"
-                        app:layout_constraintTop_toBottomOf="@id/fragment_details_TextView_bathrooms_title"
-                        tools:text="2"
-                        />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:customText="2"
+                    />
                 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <com.despaircorp.ui.main.details_fragment.custom.EstateDetailsSquareInfoView
                     android:id="@+id/fragment_details_ConstraintLayout_bedrooms_root"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    app:customIcon="@drawable/bedroom"
+                    app:customTitle="@string/bedroom_number"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/fragment_details_ConstraintLayout_bathrooms_root"
-                    >
-                    
-                    <ImageView
-                        android:id="@+id/fragment_details_ImageView_bedrooms_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/bedroom"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_bedrooms_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:text="@string/bedroom_number"
-                        android:textColor="?colorTertiary"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_bedrooms_icon"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
-                    
-                    <TextView
-                        android:id="@+id/fragment_details_TextView_bedrooms"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="4dp"
-                        android:layout_marginVertical="4dp"
-                        android:textColor="?colorTertiary"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.04"
-                        app:layout_constraintStart_toEndOf="@id/fragment_details_ImageView_bedrooms_icon"
-                        app:layout_constraintTop_toBottomOf="@id/fragment_details_TextView_bedrooms_title"
-                        tools:text="4"
-                        />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                    tools:customText="2"
+                    />
+            
+            
             </androidx.constraintlayout.widget.ConstraintLayout>
         
         </androidx.constraintlayout.widget.ConstraintLayout>

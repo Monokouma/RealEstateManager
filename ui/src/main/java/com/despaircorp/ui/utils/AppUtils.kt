@@ -10,5 +10,3 @@ fun getEuroFromDollar(dollars: String): String {
         .format((dollarsInt * rate))
         .replace(",", "")
 }
-
-
