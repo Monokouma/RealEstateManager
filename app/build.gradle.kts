@@ -104,8 +104,6 @@ koverReport {
                 "dagger.hilt.internal.aggregatedroot.codegen",
             )
             classes(
-                "com.despaircorp.ui.login.activity.*",
-                "com.despaircorp.ui.main.activity.*",
                 // Hilt
                 // Delete when this is fixed: https://github.com/Kotlin/kotlinx-kover/issues/331
                 "*_*Factory\$*",
@@ -114,17 +112,16 @@ koverReport {
                 // Room
                 "*_Impl",
                 "*_Impl\$*",
-                "com.despaircorp.data.picture.*",
-                "com.despaircorp.data.picture.dto.*",
                 "com.despaircorp.ui.BuildConfig",
-                "com.despaircorp.domain.picture.model.*",
                 // Gradle Generated
                 "com.despaircorp.data.BuildConfig",
                 // Delete when this is fixed: https://github.com/Kotlin/kotlinx-kover/issues/331
                 "*AppDatabase\$*",
-                
-                //Compose Things
-                
+                "com.despaircorp.ui.utils.*",
+                "com.despaircorp.ui.main.master_fragment.MasterFragmentDirections",
+                "com.despaircorp.ui.databinding.*",
+                "com.despaircorp.ui.main.details_fragment.DetailFragmentArgs",
+                "com.despaircorp.data.picture.worker.*",
                 "com.despaircorp.realestatemanagerkotlin.main.*",
                 // Utils
                 "com.despaircorp.ui.utils.CoroutineDispatcherProvider",
@@ -141,8 +138,9 @@ koverReport {
                 "*Activity\$*",
                 "*Adapter",
                 "*Adapter\$*",
-                
-                )
+                "*MasterFragmentDirections\$*",
+                "*DetailFragmentArgs\$*",
+            )
         }
     }
 }

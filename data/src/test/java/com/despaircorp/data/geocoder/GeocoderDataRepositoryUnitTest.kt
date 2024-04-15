@@ -8,6 +8,7 @@ import com.despaircorp.data.utils.TestCoroutineRule
 import com.despaircorp.stubs.EntityProvidinator.DEFAULT_ESTATE_ADDRESS
 import com.despaircorp.stubs.EntityProvidinator.DEFAULT_ESTATE_CITY
 import com.despaircorp.stubs.EntityProvidinator.DEFAULT_ESTATE_LOCATION
+import com.despaircorp.stubs.EntityProvidinator.provideAddressList
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.confirmVerified
@@ -37,6 +38,10 @@ class GeocoderDataRepositoryUnitTest {
                 DEFAULT_ESTATE_LOCATION.longitude,
                 1
             )
+        } returns mutableListOf(mockedAddress)
+        
+        coEvery {
+            geocoder.getFromLocationName(DEFAULT_ESTATE_ADDRESS, 1)
         } returns mutableListOf(mockedAddress)
         
         repository = GeocoderDataRepository(
@@ -78,7 +83,7 @@ class GeocoderDataRepositoryUnitTest {
         
         assertThat(
             result.first()
-        ).isEqualTo(provideAddressList()?.first())
+        ).isEqualTo(provideAddressList(geocoder)?.first())
         
         coVerify {
             geocoder.getFromLocation(
@@ -91,10 +96,43 @@ class GeocoderDataRepositoryUnitTest {
         confirmVerified(geocoder)
     }
     
-    private fun provideAddressList() = geocoder.getFromLocation(
-        DEFAULT_ESTATE_LOCATION.latitude,
-        DEFAULT_ESTATE_LOCATION.longitude,
-        1
-    )
+    @Test
+    fun `nominal case - get lat lng from address`() = testCoroutineRule.runTest {
+        val result = repository.resolveLatLngFromAddress(DEFAULT_ESTATE_ADDRESS)
+        
+        assertThat(
+            result.first()
+        ).isEqualTo(provideAddressList(geocoder)?.first())
+        
+        coVerify {
+            geocoder.getFromLocationName(DEFAULT_ESTATE_ADDRESS, 1)
+            geocoder.getFromLocation(
+                DEFAULT_ESTATE_LOCATION.latitude,
+                DEFAULT_ESTATE_LOCATION.longitude,
+                1
+            )
+        }
+        
+        confirmVerified(geocoder)
+    }
+    
+    @Test
+    fun `error case - get lat lng from address`() = testCoroutineRule.runTest {
+        coEvery {
+            geocoder.getFromLocationName(DEFAULT_ESTATE_ADDRESS, 1)
+        } returns null
+        
+        val result = repository.resolveLatLngFromAddress(DEFAULT_ESTATE_ADDRESS)
+        
+        assertThat(
+            result
+        ).isEqualTo(emptyList())
+        
+        coVerify {
+            geocoder.getFromLocationName(DEFAULT_ESTATE_ADDRESS, 1)
+        }
+        
+        confirmVerified(geocoder)
+    }
     
 }

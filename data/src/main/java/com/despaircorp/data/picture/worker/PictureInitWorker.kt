@@ -1,7 +1,6 @@
 package com.despaircorp.data.picture.worker
 
 import android.content.Context
-import android.content.res.AssetManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.hilt.work.HiltWorker
@@ -12,9 +11,6 @@ import com.despaircorp.domain.picture.model.EstatePictureEntity
 import com.despaircorp.domain.picture.model.EstatePictureType
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 
 
 @HiltWorker
@@ -22,29 +18,17 @@ class PictureInitWorker @AssistedInject constructor(
     @Assisted context: Context,
     @Assisted workerParams: WorkerParameters,
     private val pictureDomainRepository: PictureDomainRepository,
-    private val assetManager: AssetManager
 ) : CoroutineWorker(context, workerParams) {
-    
-    private fun saveBitmapToInternalStorage(bitmap: Bitmap, filename: String): String {
-        val file = File(applicationContext.filesDir, filename)
-        try {
-            FileOutputStream(file).use { out ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        return file.absolutePath
-    }
     
     private fun getBitmapFromAssets(assetName: String): Bitmap =
         applicationContext.assets.open(assetName).use { inputStream ->
             BitmapFactory.decodeStream(inputStream)
         }
     
-    private fun getEstatePictureEntity(filename: String, id: Int) =
+    private suspend fun getEstatePictureEntity(filename: String, id: Int) =
         getBitmapFromAssets(filename).let { bitmap ->
-            val savedImagePath = saveBitmapToInternalStorage(bitmap, filename)
+            val savedImagePath =
+                pictureDomainRepository.saveImageToInternalStorage(bitmap, filename)
             val type = when {
                 filename.contains("facade") -> EstatePictureType.FACADE
                 filename.contains("lounge") -> EstatePictureType.LOUNGE

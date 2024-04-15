@@ -31,14 +31,6 @@ class ConnectivityDataRepository @Inject constructor(
         
         val networkCallback = object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
-                sendNetworkTypeUpdate(network)
-            }
-            
-            override fun onLost(network: Network) {
-                trySend(NetworkType.NONE)
-            }
-            
-            private fun sendNetworkTypeUpdate(network: Network) {
                 val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
                 val networkType = when {
                     networkCapabilities?.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) == true -> NetworkType.WIFI
@@ -46,6 +38,10 @@ class ConnectivityDataRepository @Inject constructor(
                     else -> NetworkType.NONE
                 }
                 trySend(networkType)
+            }
+            
+            override fun onLost(network: Network) {
+                trySend(NetworkType.NONE)
             }
         }
         

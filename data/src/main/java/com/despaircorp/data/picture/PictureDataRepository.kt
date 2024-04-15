@@ -2,7 +2,6 @@ package com.despaircorp.data.picture
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -58,7 +57,7 @@ class PictureDataRepository @Inject constructor(
                     file.absolutePath
                 }
             } catch (e: IOException) {
-                Log.i("Monokouma", e.stackTraceToString())
+                e.printStackTrace()
                 ensureActive()
                 ""
             }

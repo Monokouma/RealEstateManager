@@ -58,7 +58,7 @@ class EstateDataRepository @Inject constructor(
             estateDao.insert(entitiesMaperinator.mapEstateEntityToDto(estateEntity))
         }
     
-    override suspend fun getEstateEntity(): List<EstateEntity> =
+    override suspend fun getEstateEntities(): List<EstateEntity> =
         withContext(coroutineDispatcherProvider.io) {
             entitiesMaperinator.mapEstateDtoToEstateEntity(estateDao.getEstateDto())
         }
