@@ -1,6 +1,5 @@
 package com.despaircorp.ui.main.details_fragment
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
@@ -37,7 +36,6 @@ class DetailsViewModel @Inject constructor(
                     } else {
                         estateWithPictureEntity.estateEntity.address
                     }
-                Log.i("Monokouma", estateWithPictureEntity.estateEntity.location.toString())
                 emit(
                     DetailsViewState(
                         pictureViewStateItems = estateWithPictureEntity.pictures.map {

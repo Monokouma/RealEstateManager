@@ -1,6 +1,5 @@
 package com.despaircorp.ui.utils
 
-import android.app.Application
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,9 +13,5 @@ class UiProvideModule {
     @Singleton
     fun provideRandomProfilePicturinator() = ProfilePictureRandomizator
     
-    @Provides
-    @Singleton
-    fun provideConnectionUtil(application: Application): ConnectionUtils =
-        ConnectionUtils(application)
     
 }
