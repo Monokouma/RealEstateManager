@@ -11,7 +11,7 @@ import com.despaircorp.ui.databinding.ActivityLoginBinding
 import com.despaircorp.ui.login.agent.AgentDropDownAdapter
 import com.despaircorp.ui.login.agent.AgentDropDownListener
 import com.despaircorp.ui.main.main_activity.MainActivity
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

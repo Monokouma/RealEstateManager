@@ -20,7 +20,7 @@ import com.despaircorp.ui.R
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentViewStateItems
 import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestViewStateItems
-import com.despaircorp.ui.utils.Event
+import com.despaircorp.ui.main.main_activity.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect

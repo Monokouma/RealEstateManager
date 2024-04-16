@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import com.despaircorp.shared.R
 import com.despaircorp.ui.databinding.ActivityMapBinding
 import com.despaircorp.ui.main.details_fragment.DetailFragment
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
