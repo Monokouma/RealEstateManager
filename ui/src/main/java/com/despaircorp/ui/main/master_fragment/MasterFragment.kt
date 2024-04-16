@@ -9,7 +9,7 @@ import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.FragmentMasterBinding
 import com.despaircorp.ui.main.master_fragment.estate.EstateAdapter
 import com.despaircorp.ui.main.master_fragment.estate.EstateListener
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 

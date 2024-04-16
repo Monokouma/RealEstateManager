@@ -15,6 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.RealEstateManager"
         tools:targetApi="31"
-        />
+        >
+        <provider
+            android:name="com.despaircorp.data.estate.content_provider.EstateContentProvider"
+            android:authorities="com.despaircorp.data.estate.content_provider"
+            android:exported="true"
+            />
+    </application>
 
 </manifest>

@@ -10,7 +10,7 @@ import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.geocoder.GetAddressFromLatLngUseCase
 import com.despaircorp.ui.R
 import com.despaircorp.ui.main.master_fragment.estate.EstateViewStateItems
-import com.despaircorp.ui.utils.getEuroFromDollar
+import com.despaircorp.ui.main.main_activity.utils.getEuroFromDollar
 import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

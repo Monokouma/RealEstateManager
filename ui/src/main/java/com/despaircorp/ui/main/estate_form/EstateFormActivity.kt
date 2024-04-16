@@ -24,8 +24,8 @@ import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentListener
 import com.despaircorp.ui.main.estate_form.picture.EstateFormPictureAdapter
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestAdapter
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestListener
-import com.despaircorp.ui.utils.isNightMode
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.isNightMode
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint

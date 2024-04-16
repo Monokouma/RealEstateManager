@@ -1,4 +1,4 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.ui.main.main_activity.utils
 
 import dagger.Module
 import dagger.Provides

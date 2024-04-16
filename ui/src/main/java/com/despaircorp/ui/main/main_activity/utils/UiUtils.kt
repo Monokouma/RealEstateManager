@@ -1,4 +1,4 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.ui.main.main_activity.utils
 
 import android.content.Context
 import android.content.res.Configuration

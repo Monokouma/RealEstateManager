@@ -10,8 +10,8 @@ import com.despaircorp.domain.real_estate_agent.DisconnectAgentUseCase
 import com.despaircorp.domain.real_estate_agent.GetLoggedRealEstateAgentEntityUseCase
 import com.despaircorp.domain.real_estate_agent.InsertCreatedAgentUseCase
 import com.despaircorp.shared.R
-import com.despaircorp.ui.utils.Event
-import com.despaircorp.ui.utils.ProfilePictureRandomizator
+import com.despaircorp.ui.main.main_activity.utils.Event
+import com.despaircorp.ui.main.main_activity.utils.ProfilePictureRandomizator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

@@ -1,9 +1,9 @@
-package com.despaircorp.ui.utils
+package com.despaircorp.ui.main.main_activity.utils
 
 open class Event<out T>(private val content: T) {
-
+    
     private var hasBeenHandled = false
-
+    
     /**
      * Returns the content and prevents its use again.
      */

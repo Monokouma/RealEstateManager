@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.PointOfInterestItemViewBinding
-import com.despaircorp.ui.utils.isNightMode
+import com.despaircorp.ui.main.main_activity.utils.isNightMode
 
 
 class PointOfInterestAdapter(

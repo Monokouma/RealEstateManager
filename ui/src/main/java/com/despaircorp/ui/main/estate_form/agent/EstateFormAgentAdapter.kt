@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.AgentAdditionItemBinding
-import com.despaircorp.ui.utils.isNightMode
+import com.despaircorp.ui.main.main_activity.utils.isNightMode
 
 class EstateFormAgentAdapter(
     private val agentDropDownListener: EstateFormAgentListener

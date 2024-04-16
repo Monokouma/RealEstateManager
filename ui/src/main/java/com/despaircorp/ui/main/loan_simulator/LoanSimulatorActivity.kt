@@ -8,7 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.despaircorp.ui.databinding.ActivityLoanSimulatorBinding
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

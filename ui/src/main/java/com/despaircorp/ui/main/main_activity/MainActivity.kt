@@ -26,7 +26,7 @@ import com.despaircorp.ui.main.estate_form.EstateFormActivity
 import com.despaircorp.ui.main.loan_simulator.LoanSimulatorActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
 import com.despaircorp.ui.map.MapActivity
-import com.despaircorp.ui.utils.viewBinding
+import com.despaircorp.ui.main.main_activity.utils.viewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 
