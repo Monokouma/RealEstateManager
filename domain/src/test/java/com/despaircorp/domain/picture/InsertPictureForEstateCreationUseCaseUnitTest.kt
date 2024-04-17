@@ -28,7 +28,7 @@ class InsertPictureForEstateCreationUseCaseUnitTest {
     
     @Test
     fun `nominal case - insert picture`() = testCoroutineRule.runTest {
-        useCase.invoke(EntityProvidinator.provideEstatePicturesEntities(), DEFAULT_ID)
+        useCase.invoke(EntityProvidinator.provideEstatePicturesEntities(), DEFAULT_ID, isEditMode)
         
         coVerify {
             pictureDomainRepository.insertPictures(EntityProvidinator.provideEstatePictureEntity())

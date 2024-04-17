@@ -41,14 +41,15 @@ class DetailsViewModel @Inject constructor(
                         pictureViewStateItems = estateWithPictureEntity.pictures.map {
                             
                             PictureViewStateItems(
-                                it.imagePath,
-                                it.description.name,
-                                it.id
+                                bitmap = it.imagePath,
+                                type = it.description.name,
+                                id = it.id,
+                                isInSelectionMode = false
                             )
                         },
                         id = estateWithPictureEntity.estateEntity.id,
                         description = estateWithPictureEntity.estateEntity.description,
-                        surface = estateWithPictureEntity.estateEntity.surface,
+                        surface = "${estateWithPictureEntity.estateEntity.surface}m2",
                         latLng = estateWithPictureEntity.estateEntity.location ?: LatLng(0.0, 0.0),
                         address = address,
                         roomNumber = estateWithPictureEntity.estateEntity.roomNumber,

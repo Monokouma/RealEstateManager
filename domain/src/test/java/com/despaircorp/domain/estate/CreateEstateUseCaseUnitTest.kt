@@ -48,7 +48,7 @@ class CreateEstateUseCaseUnitTest {
     private val insertPictureForEstateCreationUseCase: InsertPictureForEstateCreationUseCase =
         mockk()
     
-    private val useCase = CreateEstateUseCase(
+    private val useCase = EstateFormValidationUseCase(
         estateDomainRepository = estateDomainRepository,
         isUserConnectedToInternetUseCase = isUserConnectedToInternetUseCase,
         sanitizeCreatedEstateUseCase = sanitizeCreatedEstateUseCase,
@@ -100,7 +100,8 @@ class CreateEstateUseCaseUnitTest {
         coJustRun {
             insertPictureForEstateCreationUseCase.invoke(
                 emptyList(),
-                3
+                3,
+                isEditMode
             )
         }
     }
@@ -123,7 +124,9 @@ class CreateEstateUseCaseUnitTest {
             DEFAULT_ESTATE_ENTRY_DATE.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
             DEFAULT_ESTATE_SOLD_DATE.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
             emptyList(),
-            DEFAULT_ID
+            DEFAULT_ID,
+            estateToEditId,
+            isEditMode
         )
         
         assertThat(result.getOrNull()).isEqualTo(true)

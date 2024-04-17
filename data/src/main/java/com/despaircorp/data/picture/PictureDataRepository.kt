@@ -63,4 +63,14 @@ class PictureDataRepository @Inject constructor(
             }
         }
     
+    override suspend fun getPictureEntities(): List<EstatePictureEntity> =
+        withContext(coroutineDispatcherProvider.io) {
+            entitiesMaperinator.mapPictureDtoToEstatePictureEntities(pictureDao.getAsList())
+        }
+    
+    override suspend fun deleteById(id: Int, path: String) =
+        withContext(coroutineDispatcherProvider.io) {
+            pictureDao.delete(id, path)
+        }
+    
 }

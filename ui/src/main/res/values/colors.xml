@@ -17,6 +17,7 @@
     <color name="textColorDark">#E8EAF3</color>
     <color name="backgroundColorDark">#0B0128</color>
     <color name="unselectButtonDark">#757575</color>
-
+    
+    <color name="red">#880808</color>
 
 </resources>

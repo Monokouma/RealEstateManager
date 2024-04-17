@@ -9,6 +9,23 @@
     >
     
     <ImageView
+        android:id="@+id/picture_items_ImageView_delete_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:elevation="12dp"
+        android:src="@drawable/baseline_delete_24"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/picture_items_ImageView_picture"
+        app:layout_constraintEnd_toEndOf="@id/picture_items_ImageView_picture"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/picture_items_ImageView_picture"
+        app:layout_constraintTop_toTopOf="@id/picture_items_ImageView_picture"
+        app:layout_constraintVertical_bias="0.0"
+        app:tint="@color/red"
+        />
+    
+    <ImageView
         android:id="@+id/picture_items_ImageView_picture"
         android:layout_width="140dp"
         android:layout_height="140dp"

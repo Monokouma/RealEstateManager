@@ -16,4 +16,10 @@ interface PictureDao {
     
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(entity: PictureDto)
+    
+    @Query("SELECT * FROM picture_table")
+    suspend fun getAsList(): List<PictureDto>
+    
+    @Query("DELETE FROM picture_table WHERE estateId=:id AND imagePath=:path")
+    suspend fun delete(id: Int, path: String)
 }

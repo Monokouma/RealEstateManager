@@ -13,4 +13,5 @@ interface EstateDomainRepository {
     suspend fun getEstateWithPictureEntityById(estateId: Int): EstateWithPictureEntity
     suspend fun insertNewEstate(estateEntity: EstateEntity)
     suspend fun getEstateEntities(): List<EstateEntity>
+    suspend fun updateEstate(estateEntity: EstateEntity): Int
 }

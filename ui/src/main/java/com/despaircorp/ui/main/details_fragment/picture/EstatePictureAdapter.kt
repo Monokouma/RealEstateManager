@@ -11,7 +11,6 @@ import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
 
 
 class EstatePictureAdapter(
-
 ) : ListAdapter<PictureViewStateItems, EstatePictureAdapter.EstateViewHolder>(
     EstatePictureDiffUtil
 ) {
@@ -29,10 +28,13 @@ class EstatePictureAdapter(
         
         fun bind(
             pictureViewStateItems: PictureViewStateItems,
-        ) {
+            
+            ) {
             binding.pictureItemsTextViewPictureType.text = pictureViewStateItems.type
             Glide.with(binding.pictureItemsImageViewPicture).load(pictureViewStateItems.bitmap)
                 .into(binding.pictureItemsImageViewPicture)
+            
+            
         }
     }
     
