@@ -4,6 +4,7 @@ import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -17,14 +18,14 @@ data class EstateDto(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val description: String,
-    val surface: String,
+    val surface: Int,
     val roomNumber: Int,
     val bathroomNumber: Int,
     val numberOfBedrooms: Int,
     val location: LatLng?,
     val estateType: String,
     val price: String,
-    val pointOfInterest: List<String>,
+    val pointOfInterest: List<PointOfInterestEntity>,
     val sellingDate: LocalDate?,
     val entryDate: LocalDate,
     val status: EstateStatus,
@@ -39,7 +40,7 @@ data class EstateDto(
             return EstateDto(
                 id = values?.getAsInteger("id") ?: 0,
                 description = values?.getAsString("description") ?: "",
-                surface = values?.getAsString("surface") ?: "",
+                surface = values?.getAsInteger("surface") ?: 0,
                 roomNumber = values?.getAsInteger("roomNumber") ?: 0,
                 bathroomNumber = values?.getAsInteger("bathroomNumber") ?: 0,
                 numberOfBedrooms = values?.getAsInteger("numberOfBedrooms") ?: 0,

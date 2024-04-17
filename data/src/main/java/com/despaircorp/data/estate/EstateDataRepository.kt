@@ -62,4 +62,9 @@ class EstateDataRepository @Inject constructor(
         withContext(coroutineDispatcherProvider.io) {
             entitiesMaperinator.mapEstateDtoToEstateEntity(estateDao.getEstateDto())
         }
+    
+    override suspend fun updateEstate(estateEntity: EstateEntity): Int =
+        withContext(coroutineDispatcherProvider.io) {
+            estateDao.updateEstate(entitiesMaperinator.mapEstateEntityToDto(estateEntity))
+        }
 }

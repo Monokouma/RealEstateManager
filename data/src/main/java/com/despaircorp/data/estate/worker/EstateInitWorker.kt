@@ -7,6 +7,8 @@ import androidx.work.WorkerParameters
 import com.despaircorp.domain.estate.EstateDomainRepository
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.PointOfInterestEntity
+import com.despaircorp.domain.estate.model.PointOfInterestEnum
 import com.despaircorp.shared.R
 import com.google.android.gms.maps.model.LatLng
 import dagger.assisted.Assisted
@@ -26,7 +28,7 @@ class EstateInitWorker @AssistedInject constructor(
                     EstateEntity(
                         id = 1,
                         description = applicationContext.getString(R.string.first_house_desc),
-                        surface = "110m²",
+                        surface = 110,
                         roomNumber = 7,
                         bathroomNumber = 2,
                         numberOfBedrooms = 3,
@@ -35,8 +37,16 @@ class EstateInitWorker @AssistedInject constructor(
                         estateType = applicationContext.getString(R.string.house),
                         price = "600000",
                         pointOfInterest = listOf(
-                            applicationContext.getString(R.string.schools),
-                            applicationContext.getString(R.string.shops)
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SHOP,
+                                id = PointOfInterestEnum.SHOP.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SCHOOLS,
+                                id = PointOfInterestEnum.SCHOOLS.id
+                            )
                         ),
                         sellingDate = null,
                         entryDate = LocalDate.of(2024, 1, 12),
@@ -48,14 +58,21 @@ class EstateInitWorker @AssistedInject constructor(
                     EstateEntity(
                         id = 2,
                         description = applicationContext.getString(R.string.second_house_desc),
-                        surface = "220m²",
+                        surface = 220,
                         roomNumber = 10,
                         bathroomNumber = 3,
                         numberOfBedrooms = 4,
                         location = LatLng(34.050151, -118.317665),
                         estateType = applicationContext.getString(R.string.house),
                         price = "500000",
-                        pointOfInterest = listOf(applicationContext.getString(R.string.parks)),
+                        pointOfInterest = listOf(
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.PARK,
+                                id = PointOfInterestEnum.PARK.id
+                            ),
+                            
+                            ),
                         sellingDate = null,
                         entryDate = LocalDate.of(1980, 6, 21),
                         status = EstateStatus.FOR_SALE,
@@ -66,7 +83,7 @@ class EstateInitWorker @AssistedInject constructor(
                     EstateEntity(
                         id = 3,
                         description = applicationContext.getString(R.string.third_house_desc),
-                        surface = "90m²",
+                        surface = 90,
                         roomNumber = 6,
                         bathroomNumber = 1,
                         numberOfBedrooms = 2,
@@ -74,9 +91,21 @@ class EstateInitWorker @AssistedInject constructor(
                         estateType = applicationContext.getString(R.string.apartment),
                         price = "1000000",
                         pointOfInterest = listOf(
-                            applicationContext.getString(R.string.schools),
-                            applicationContext.getString(R.string.parks),
-                            applicationContext.getString(R.string.subway)
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.PARK,
+                                id = PointOfInterestEnum.PARK.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SCHOOLS,
+                                id = PointOfInterestEnum.SCHOOLS.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SUBWAY,
+                                id = PointOfInterestEnum.SUBWAY.id
+                            )
                         ),
                         sellingDate = null,
                         entryDate = LocalDate.of(2017, 11, 25),
@@ -88,7 +117,7 @@ class EstateInitWorker @AssistedInject constructor(
                     EstateEntity(
                         id = 4,
                         description = applicationContext.getString(R.string.fourth_house_desc),
-                        surface = "130m²",
+                        surface = 130,
                         roomNumber = 11,
                         bathroomNumber = 3,
                         numberOfBedrooms = 4,
@@ -96,9 +125,21 @@ class EstateInitWorker @AssistedInject constructor(
                         estateType = applicationContext.getString(R.string.apartment),
                         price = "750000",
                         pointOfInterest = listOf(
-                            applicationContext.getString(R.string.schools),
-                            applicationContext.getString(R.string.parks),
-                            applicationContext.getString(R.string.subway)
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.PARK,
+                                id = PointOfInterestEnum.PARK.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SCHOOLS,
+                                id = PointOfInterestEnum.SCHOOLS.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SUBWAY,
+                                id = PointOfInterestEnum.SUBWAY.id
+                            )
                         ),
                         sellingDate = null,
                         entryDate = LocalDate.of(2022, 10, 11),
@@ -110,7 +151,7 @@ class EstateInitWorker @AssistedInject constructor(
                     EstateEntity(
                         id = 5,
                         description = applicationContext.getString(R.string.fifth_house_desc),
-                        surface = "230m²",
+                        surface = 230,
                         roomNumber = 8,
                         bathroomNumber = 2,
                         numberOfBedrooms = 4,
@@ -118,8 +159,16 @@ class EstateInitWorker @AssistedInject constructor(
                         estateType = applicationContext.getString(R.string.house),
                         price = "1750000",
                         pointOfInterest = listOf(
-                            applicationContext.getString(R.string.schools),
-                            applicationContext.getString(R.string.parks),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.PARK,
+                                id = PointOfInterestEnum.PARK.id
+                            ),
+                            PointOfInterestEntity(
+                                isSelected = true,
+                                pointOfInterestEnum = PointOfInterestEnum.SCHOOLS,
+                                id = PointOfInterestEnum.SCHOOLS.id
+                            )
                         ),
                         sellingDate = null,
                         entryDate = LocalDate.of(2022, 1, 11),

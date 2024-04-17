@@ -19,6 +19,7 @@ import androidx.core.widget.addTextChangedListener
 import com.despaircorp.domain.picture.model.EstatePictureType
 import com.despaircorp.shared.R
 import com.despaircorp.ui.databinding.ActivityCreateEstateBinding
+import com.despaircorp.ui.main.details_fragment.picture.EstatePictureListener
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentAdapter
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentListener
 import com.despaircorp.ui.main.estate_form.picture.EstateFormPictureAdapter
@@ -37,7 +38,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
-    EstateFormAgentListener {
+    EstateFormAgentListener, EstatePictureListener {
     private val viewModel: EstateFormViewModel by viewModels()
     private val binding by viewBinding { ActivityCreateEstateBinding.inflate(it) }
     private var currentPhotoUri: Uri? = null
@@ -61,6 +62,13 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(binding.root)
+        setSupportActionBar(binding.activityCreateEstateToolbarRoot)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        
+        binding.activityCreateEstateToolbarRoot.setNavigationOnClickListener {
+            finish()
+        }
+        
         currentPhotoUri = savedInstanceState?.getParcelable(KEY_CURRENT_PHOTO_URI)
         
         val pointOfInterestAdapter = PointOfInterestAdapter(this)
@@ -69,7 +77,7 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
         val agentAdapter = EstateFormAgentAdapter(this)
         binding.activityCreateEstateRecyclerViewAgent.adapter = agentAdapter
         
-        val createEstatePictureAdapter = EstateFormPictureAdapter()
+        val createEstatePictureAdapter = EstateFormPictureAdapter(this)
         binding.activityCreateEstateRecyclerViewPicture.adapter = createEstatePictureAdapter
         
         initSpinnerDropDownSelectionChanged()
@@ -100,10 +108,10 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
                     Toast.LENGTH_SHORT
                 ).show()
                 
-                EstateFormAction.Success -> {
+                is EstateFormAction.Success -> {
                     Toast.makeText(
                         this,
-                        getString(R.string.creation_success),
+                        getString(action.message),
                         Toast.LENGTH_SHORT
                     ).show()
                     
@@ -129,7 +137,8 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
             binding.activityCreateEstateButtonSoldDate.text = it.sellingDate
             binding.activityCreateEstateButtonEntryDate.text = it.entryDate
             reactOnSoldAndForSaleButton(it.isSoldEstate)
-            
+            binding.addEstatePopUpTextViewTitle.text = getString(it.titleRes)
+            binding.addEstatePopUpButtonCreate.text = getString(it.buttonTextRes)
         }
     }
     
@@ -391,5 +400,9 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
     
     override fun onAgentClick(agentId: Int) {
         viewModel.onAgentClicked(agentId)
+    }
+    
+    override fun onDeletePicture(id: Int) {
+        viewModel.onRemoveImage(id)
     }
 }

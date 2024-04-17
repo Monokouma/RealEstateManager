@@ -2,6 +2,8 @@ package com.despaircorp.data.utils
 
 import androidx.room.TypeConverter
 import com.despaircorp.domain.currency.model.CurrencyEnum
+import com.despaircorp.domain.estate.model.PointOfInterestEntity
+import com.despaircorp.domain.estate.model.PointOfInterestEnum
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -60,5 +62,33 @@ object TypeConvertinator {
                 null
             }
         }
+    }
+    
+    @TypeConverter
+    fun fromPointOfInterestEnum(pointOfInterestEnum: PointOfInterestEnum): String {
+        return pointOfInterestEnum.name
+    }
+    
+    @TypeConverter
+    fun toPointOfInterestEnum(value: String): PointOfInterestEnum {
+        return PointOfInterestEnum.valueOf(value)
+    }
+    
+    @TypeConverter
+    fun fromPointOfInterestList(pointOfInterestList: List<PointOfInterestEntity>?): String? {
+        if (pointOfInterestList == null) {
+            return null
+        }
+        val type = object : TypeToken<List<PointOfInterestEntity>>() {}.type
+        return Gson().toJson(pointOfInterestList, type)
+    }
+    
+    @TypeConverter
+    fun toPointOfInterestList(pointOfInterestListString: String?): List<PointOfInterestEntity>? {
+        if (pointOfInterestListString == null) {
+            return null
+        }
+        val type = object : TypeToken<List<PointOfInterestEntity>>() {}.type
+        return Gson().fromJson(pointOfInterestListString, type)
     }
 }

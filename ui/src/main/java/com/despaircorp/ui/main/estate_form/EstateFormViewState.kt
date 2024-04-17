@@ -19,4 +19,6 @@ data class EstateFormViewState(
     val isSoldEstate: Boolean,
     val entryDate: String,
     val sellingDate: String,
+    val titleRes: Int,
+    val buttonTextRes: Int
 )

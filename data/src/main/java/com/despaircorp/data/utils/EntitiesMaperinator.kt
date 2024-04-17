@@ -234,4 +234,13 @@ object EntitiesMaperinator {
         description = pictureEntity.description,
         estateId = pictureEntity.id
     )
+    
+    fun mapPictureDtoToEstatePictureEntities(pictureDtoList: List<PictureDto>): List<EstatePictureEntity> =
+        pictureDtoList.map {
+            EstatePictureEntity(
+                id = it.estateId,
+                imagePath = it.imagePath,
+                description = it.description
+            )
+        }
 }
