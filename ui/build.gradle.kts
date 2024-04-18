@@ -69,6 +69,7 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.activity:activity:1.8.0")
+    implementation("androidx.sqlite:sqlite-ktx:2.4.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")

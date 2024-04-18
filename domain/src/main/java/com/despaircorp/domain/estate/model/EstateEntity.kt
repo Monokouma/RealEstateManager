@@ -12,7 +12,7 @@ data class EstateEntity(
     val bathroomNumber: Int,
     val numberOfBedrooms: Int,
     val location: LatLng?,
-    val estateType: String,
+    val estateType: EstateTypeEnum,
     val price: String,
     val pointOfInterest: List<PointOfInterestEntity>,
     val sellingDate: LocalDate?,

@@ -11,7 +11,7 @@ data class ToSanitizeEstateEntity(
     val estateAddress: String,
     val estateCity: String,
     val estatePrice: String,
-    val estateType: String,
+    val estateType: EstateTypeEnum,
     val estatePointOfInterests: List<PointOfInterestEntity>,
     val isEstateSold: Boolean,
     val estateEntryDate: String,

@@ -28,8 +28,6 @@ class SanitizeCreatedEstateUseCase @Inject constructor(
             EstateCreationStatus.EMPTY_CITY
         } else if (toSanitizeEstateEntity.estatePrice.isEmpty()) {
             EstateCreationStatus.EMPTY_PRICE
-        } else if (toSanitizeEstateEntity.estateType.isEmpty()) {
-            EstateCreationStatus.EMPTY_TYPE
         } else if (!isAtLeastOnePointOfInterestSelected(toSanitizeEstateEntity.estatePointOfInterests)) {
             EstateCreationStatus.EMPTY_POINT_OF_INTEREST
         } else if (toSanitizeEstateEntity.estateEntryDate.isEmpty() || !toSanitizeEstateEntity.estateEntryDate.contains(

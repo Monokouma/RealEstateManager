@@ -1,6 +1,6 @@
 @file:Suppress("unused")
 
-package com.despaircorp.ui.main.main_activity.utils
+package com.despaircorp.ui.utils
 
 import android.view.LayoutInflater
 import android.view.View

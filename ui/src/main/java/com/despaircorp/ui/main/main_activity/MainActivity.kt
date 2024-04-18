@@ -5,8 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -15,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
+import com.despaircorp.domain.estate.model.EstateStatus
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.ActivityMainBinding
 import com.despaircorp.ui.databinding.AddAgentPopUpBinding
@@ -23,21 +26,31 @@ import com.despaircorp.ui.databinding.HeaderNavigationDrawerBinding
 import com.despaircorp.ui.login.LoginActivity
 import com.despaircorp.ui.main.details_fragment.DetailFragment
 import com.despaircorp.ui.main.estate_form.EstateFormActivity
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeAdapter
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeListener
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestAdapter
+import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestListener
 import com.despaircorp.ui.main.loan_simulator.LoanSimulatorActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
+import com.despaircorp.ui.main.master_fragment.filter.FilterTypeEnum
 import com.despaircorp.ui.map.MapActivity
-import com.despaircorp.ui.main.main_activity.utils.viewBinding
+import com.despaircorp.ui.utils.isNightMode
+import com.despaircorp.ui.utils.viewBinding
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener {
+class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener,
+    PointOfInterestListener, EstateTypeListener {
     private val binding by viewBinding { ActivityMainBinding.inflate(it) }
     private val viewModel: MainViewModel by viewModels()
     private var twoPane: Boolean = false
     private var currentSelectedItemId: Int = 1
-    
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +58,10 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
         setContentView(binding.root)
         
         requestLocationPermission()
-        
         setSupportActionBar(binding.activityMainToolbarRoot)
         
         twoPane = binding.activityMainFragmentLayoutDetails != null
+        
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.activity_main_FragmentLayout_master, MasterFragment())
@@ -131,6 +144,13 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
             true
         }
         
+        
+        val pointOfInterestAdapter = PointOfInterestAdapter(this)
+        binding.activityMainRecyclerViewInterestPoint.adapter = pointOfInterestAdapter
+        
+        val estateTypeAdapter = EstateTypeAdapter(this)
+        binding.activityMainRecyclerViewTypeRoot.adapter = estateTypeAdapter
+        
         viewModel.viewAction.observe(this) {
             when (val action = it.getContentIfNotHandled()) {
                 is MainViewAction.AgentCreationSuccess -> {
@@ -156,6 +176,9 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 .into(headerBinding.navigationDrawerImageViewUserImage)
             
             headerBinding.navigationDrawerTextViewUserName.text = it.currentLoggedInAgent.name
+            changeVisibilityWithAnimation(it.isFilterMenuVisible)
+            pointOfInterestAdapter.submitList(it.pointOfInterestViewStateItems)
+            estateTypeAdapter.submitList(it.estateTypeViewStateItems)
         }
         
     }
@@ -264,12 +287,175 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
             }
             
             R.id.top_menu_search -> {
-            
+                viewModel.onSearchMenuClicked()
+                
+                val myListFragment =
+                    supportFragmentManager.findFragmentById(R.id.activity_main_FragmentLayout_master) as? MasterFragment
+                onFilterSoldAndForSaleButtonClick(myListFragment)
+                onFilterRoomNumberChanged(myListFragment)
+                onSurfaceMinTextChanged(myListFragment)
+                onSurfaceMaxTextChanged(myListFragment)
+                onPriceMinTextChanged(myListFragment)
+                onPriceMaxTextChanged(myListFragment)
+                onEntryDateClicked(myListFragment)
+                
+                binding.activityMainButtonApplyFilter.setOnClickListener {
+                    myListFragment?.onEstateTypeForFilteringChanged(viewModel.estateTypeListMutableStateFlow.value)
+                    myListFragment?.onPointOfInterestForFilteringChanged(viewModel.pointOfInterestListMutableStateFlow.value)
+                    myListFragment?.onApplyFilter()
+                }
+                
+                binding.activityMainButtonResetFilter.setOnClickListener {
+                    viewModel.resetList()
+                    myListFragment?.onResetFilter()
+                    binding.activityMainTextInputEditTextRoom.setText("")
+                    binding.activityMainButtonEntryDate.text =
+                        getString(com.despaircorp.shared.R.string.entry_date)
+                    binding.activityMainTextInputEditTextPriceMin.setText("")
+                    binding.activityMainTextInputEditTextPriceMax.setText("")
+                    binding.activityMainTextInputEditTextSurfaceMin.setText("")
+                    binding.activityMainTextInputEditTextSurfaceMax.setText("")
+                    if (isNightMode(this)) {
+                        binding.activityMainButtonForSale.setBackgroundColor(
+                            getColor(R.color.unselectButtonDark)
+                        )
+                        
+                        binding.activityMainButtonSold.setBackgroundColor(
+                            getColor(R.color.unselectButtonDark)
+                        )
+                    } else {
+                        binding.activityMainButtonForSale.setBackgroundColor(
+                            getColor(R.color.unselectButtonLight)
+                        )
+                        
+                        binding.activityMainButtonSold.setBackgroundColor(
+                            getColor(R.color.unselectButtonLight)
+                        )
+                    }
+                }
             }
             
             android.R.id.home -> onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+    
+    private fun onEntryDateClicked(myListFragment: MasterFragment?) {
+        binding.activityMainButtonEntryDate.setOnClickListener {
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText(getString(com.despaircorp.shared.R.string.select_date))
+                    .build()
+            
+            datePicker.addOnPositiveButtonClickListener {
+                val localDate =
+                    Instant.ofEpochMilli(it).atZone(ZoneId.systemDefault()).toLocalDate().format(
+                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                    )
+                
+                binding.activityMainButtonEntryDate.text = localDate
+                myListFragment?.onFilterChangedListener(localDate, FilterTypeEnum.ENTRY_DATE)
+                
+            }
+            
+            datePicker.show(supportFragmentManager, "entry_date");
+        }
+    }
+    
+    private fun onPriceMinTextChanged(myListFragment: MasterFragment?) {
+        binding.activityMainTextInputEditTextPriceMin.addTextChangedListener {
+            myListFragment?.onFilterChangedListener(
+                it.toString(),
+                FilterTypeEnum.PRICE_MIN
+            )
+        }
+    }
+    
+    private fun onPriceMaxTextChanged(myListFragment: MasterFragment?) {
+        binding.activityMainTextInputEditTextPriceMax.addTextChangedListener {
+            myListFragment?.onFilterChangedListener(
+                it.toString(),
+                FilterTypeEnum.PRICE_MAX
+            )
+        }
+    }
+    
+    private fun onSurfaceMinTextChanged(myListFragment: MasterFragment?) {
+        binding.activityMainTextInputEditTextSurfaceMax.addTextChangedListener {
+            myListFragment?.onFilterChangedListener(
+                it.toString(),
+                FilterTypeEnum.SURFACE_MAX
+            )
+        }
+    }
+    
+    private fun onSurfaceMaxTextChanged(myListFragment: MasterFragment?) {
+        binding.activityMainTextInputEditTextSurfaceMin.addTextChangedListener {
+            myListFragment?.onFilterChangedListener(
+                it.toString(),
+                FilterTypeEnum.SURFACE_MIN
+            )
+        }
+    }
+    
+    private fun onFilterRoomNumberChanged(myListFragment: MasterFragment?) {
+        binding.activityMainTextInputEditTextRoom.addTextChangedListener {
+            myListFragment?.onFilterChangedListener(
+                it.toString(),
+                FilterTypeEnum.ROOM_NUMBER
+            )
+        }
+    }
+    
+    private fun onFilterSoldAndForSaleButtonClick(myListFragment: MasterFragment?) {
+        binding.activityMainButtonForSale.setOnClickListener {
+            myListFragment?.onFilterChangedListener(
+                EstateStatus.FOR_SALE.name,
+                FilterTypeEnum.FOR_SALE
+            )
+            
+            if (isNightMode(this)) {
+                binding.activityMainButtonForSale.setBackgroundColor(
+                    getColor(R.color.primaryColorDark)
+                )
+                
+                binding.activityMainButtonSold.setBackgroundColor(
+                    getColor(R.color.unselectButtonDark)
+                )
+            } else {
+                binding.activityMainButtonForSale.setBackgroundColor(
+                    getColor(R.color.primaryColorLight)
+                )
+                
+                binding.activityMainButtonSold.setBackgroundColor(
+                    getColor(R.color.unselectButtonLight)
+                )
+            }
+        }
+        
+        binding.activityMainButtonSold.setOnClickListener {
+            myListFragment?.onFilterChangedListener(
+                EstateStatus.SOLD.name,
+                FilterTypeEnum.SOLD
+            )
+            if (isNightMode(this)) {
+                binding.activityMainButtonSold.setBackgroundColor(
+                    getColor(R.color.primaryColorDark)
+                )
+                
+                binding.activityMainButtonForSale.setBackgroundColor(
+                    getColor(R.color.unselectButtonDark)
+                )
+            } else {
+                binding.activityMainButtonSold.setBackgroundColor(
+                    getColor(R.color.primaryColorLight)
+                )
+                
+                binding.activityMainButtonForSale.setBackgroundColor(
+                    getColor(R.color.unselectButtonLight)
+                )
+            }
+        }
     }
     
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -323,6 +509,36 @@ class MainActivity : AppCompatActivity(), MasterFragment.OnItemSelectedListener 
                 .commit()
         }
     }
+    
+    private fun changeVisibilityWithAnimation(isFilterMenuVisible: Boolean) {
+        TransitionManager.endTransitions(binding.root)
+        
+        TransitionManager.beginDelayedTransition(binding.root)
+        if (isFilterMenuVisible) {
+            binding.activityMainConstraintLayoutRootFilter.visibility = View.VISIBLE
+        } else {
+            binding.activityMainConstraintLayoutRootFilter.visibility = View.GONE
+        }
+    }
+    
+    
+    override fun onAddPointOfInterestClicked(id: Int) {
+        viewModel.onAddPointOfInterest(id)
+    }
+    
+    override fun onRemovePointOfInterestClicked(id: Int) {
+        viewModel.onRemovePointOfInterest(id)
+    }
+    
+    override fun onAddEstateTypeClicked(id: Int) {
+        viewModel.onAddEstateType(id)
+    }
+    
+    override fun onRemoveEstateTypeClicked(id: Int) {
+        viewModel.onRemoveEstateType(id)
+    }
+    
+    override fun onTypeClicked(id: Int) {}
     
     
 }

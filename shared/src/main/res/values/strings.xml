@@ -97,7 +97,7 @@
     <string name="point_of_interest">Point of interest</string>
     <string name="status">Status</string>
     <string name="entry_date">Entry Date</string>
-    <string name="sold_date">Sold Date (Don\'t mind if not sold yet)</string>
+    <string name="sold_date">Sold Date</string>
     <string name="click_to_pick_a_date">Click to pick a date</string>
     <string name="city">City</string>
     <!-- Strings used for fragments for navigation -->
@@ -143,4 +143,11 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="modify_button">Modify</string>
+    <string name="surface_min">Surface min</string>
+    <string name="surface_max">Surface max</string>
+    <string name="price_max">Price max</string>
+    <string name="price_min">Price min</string>
+    <string name="estate_type">Estate Type</string>
+    <string name="reset_filter">Reset filter</string>
+    <string name="apply_filter">Apply filter</string>
 </resources>

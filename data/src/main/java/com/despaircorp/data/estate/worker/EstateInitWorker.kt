@@ -7,6 +7,7 @@ import androidx.work.WorkerParameters
 import com.despaircorp.domain.estate.EstateDomainRepository
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEnum
 import com.despaircorp.shared.R
@@ -34,7 +35,7 @@ class EstateInitWorker @AssistedInject constructor(
                         numberOfBedrooms = 3,
                         
                         location = LatLng(35.678186, 139.771044),
-                        estateType = applicationContext.getString(R.string.house),
+                        estateType = EstateTypeEnum.HOUSE,
                         price = "600000",
                         pointOfInterest = listOf(
                             PointOfInterestEntity(
@@ -63,7 +64,7 @@ class EstateInitWorker @AssistedInject constructor(
                         bathroomNumber = 3,
                         numberOfBedrooms = 4,
                         location = LatLng(34.050151, -118.317665),
-                        estateType = applicationContext.getString(R.string.house),
+                        estateType = EstateTypeEnum.HOUSE,
                         price = "500000",
                         pointOfInterest = listOf(
                             PointOfInterestEntity(
@@ -88,7 +89,7 @@ class EstateInitWorker @AssistedInject constructor(
                         bathroomNumber = 1,
                         numberOfBedrooms = 2,
                         location = LatLng(48.859520, 2.271824),
-                        estateType = applicationContext.getString(R.string.apartment),
+                        estateType = EstateTypeEnum.APARTMENT,
                         price = "1000000",
                         pointOfInterest = listOf(
                             PointOfInterestEntity(
@@ -122,7 +123,7 @@ class EstateInitWorker @AssistedInject constructor(
                         bathroomNumber = 3,
                         numberOfBedrooms = 4,
                         location = LatLng(40.720122, -73.989974),
-                        estateType = applicationContext.getString(R.string.apartment),
+                        estateType = EstateTypeEnum.LOFT,
                         price = "750000",
                         pointOfInterest = listOf(
                             PointOfInterestEntity(
@@ -156,7 +157,7 @@ class EstateInitWorker @AssistedInject constructor(
                         bathroomNumber = 2,
                         numberOfBedrooms = 4,
                         location = LatLng(45.080624, 4.775859),
-                        estateType = applicationContext.getString(R.string.house),
+                        estateType = EstateTypeEnum.MANOR,
                         price = "1750000",
                         pointOfInterest = listOf(
                             PointOfInterestEntity(

@@ -8,7 +8,7 @@ import androidx.fragment.app.viewModels
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.FragmentDetailsBinding
 import com.despaircorp.ui.main.details_fragment.picture.EstatePictureAdapter
-import com.despaircorp.ui.main.main_activity.utils.viewBinding
+import com.despaircorp.ui.utils.viewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView

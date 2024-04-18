@@ -2,13 +2,17 @@ package com.despaircorp.data.utils
 
 import androidx.room.TypeConverter
 import com.despaircorp.domain.currency.model.CurrencyEnum
+import com.despaircorp.domain.estate.model.EstateTypeEntity
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEnum
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.reflect.Type
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+
 
 object TypeConvertinator {
     @TypeConverter
@@ -90,5 +94,29 @@ object TypeConvertinator {
         }
         val type = object : TypeToken<List<PointOfInterestEntity>>() {}.type
         return Gson().fromJson(pointOfInterestListString, type)
+    }
+    
+    @TypeConverter
+    fun fromEstateTypeEnum(estateTypeEnum: EstateTypeEnum?): String? {
+        return estateTypeEnum?.name
+    }
+    
+    @TypeConverter
+    fun toEstateTypeEnum(estateTypeEnumName: String?): EstateTypeEnum? {
+        return if (estateTypeEnumName == null) null else EstateTypeEnum.valueOf(estateTypeEnumName)
+    }
+    
+    @TypeConverter
+    fun fromEstateTypeEntity(estateTypeEntity: EstateTypeEntity?): String {
+        return Gson().toJson(estateTypeEntity)
+    }
+    
+    @TypeConverter
+    fun toEstateTypeEntity(estateTypeEntityJson: String?): EstateTypeEntity? {
+        if (estateTypeEntityJson == null) {
+            return null
+        }
+        val type: Type = object : TypeToken<EstateTypeEntity?>() {}.type
+        return Gson().fromJson(estateTypeEntityJson, type)
     }
 }

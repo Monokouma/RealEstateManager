@@ -5,8 +5,10 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.despaircorp.data.estate.dto.EstateDto
 import com.despaircorp.data.estate.dto.EstateWithPictureDto
 import kotlinx.coroutines.flow.Flow
@@ -19,13 +21,15 @@ interface EstateDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAsList(estateDtoList: List<EstateDto>)
     
+    
     @Transaction
-    @Query("SELECT * FROM estate_table")
-    fun getEstateWithPictureAsFlow(): Flow<List<EstateWithPictureDto>>
+    @RawQuery(observedEntities = [EstateWithPictureDto::class])
+    fun getEstateWithPictureAsFlow(query: SupportSQLiteQuery): Flow<List<EstateWithPictureDto>>
     
     @Query("SELECT * FROM estate_table")
     fun getItemsWithCursor(): Cursor
     
+    @Transaction
     @Query("SELECT * FROM estate_table WHERE id=:estateId")
     suspend fun getEstateWithPictureDtoById(estateId: Int): EstateWithPictureDto
     

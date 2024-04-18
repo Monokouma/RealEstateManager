@@ -4,6 +4,7 @@ import android.content.ContentValues
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
@@ -23,7 +24,7 @@ data class EstateDto(
     val bathroomNumber: Int,
     val numberOfBedrooms: Int,
     val location: LatLng?,
-    val estateType: String,
+    val estateType: EstateTypeEnum,
     val price: String,
     val pointOfInterest: List<PointOfInterestEntity>,
     val sellingDate: LocalDate?,
@@ -46,7 +47,9 @@ data class EstateDto(
                 numberOfBedrooms = values?.getAsInteger("numberOfBedrooms") ?: 0,
                 location = values?.getAsString("location")
                     ?.let { Gson().fromJson(it, LatLng::class.java) },
-                estateType = values?.getAsString("estateType") ?: "",
+                estateType = EstateTypeEnum.valueOf(
+                    values?.getAsString("estateType") ?: EstateTypeEnum.APARTMENT.name
+                ),
                 price = values?.getAsString("price") ?: "",
                 pointOfInterest = values?.getAsString("pointOfInterest")
                     ?.let { Gson().fromJson(it, object : TypeToken<List<String>>() {}.type) }

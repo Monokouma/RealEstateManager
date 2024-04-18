@@ -11,6 +11,8 @@ import androidx.lifecycle.viewModelScope
 import com.despaircorp.domain.estate.EstateFormValidationUseCase
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityByIdUseCase
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.EstateTypeEntity
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEnum
@@ -21,9 +23,10 @@ import com.despaircorp.domain.real_estate_agent.GetRealEstateAgentEntitiesUseCas
 import com.despaircorp.domain.real_estate_agent.model.RealEstateAgentEntity
 import com.despaircorp.shared.R
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentViewStateItems
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeViewStateItems
 import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestViewStateItems
-import com.despaircorp.ui.main.main_activity.utils.Event
+import com.despaircorp.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -35,27 +38,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EstateFormViewModel @Inject constructor(
-    private val getRealEstateAgentEntitiesUseCase: GetRealEstateAgentEntitiesUseCase,
     private val application: Application,
+    private val savedStateHandle: SavedStateHandle,
+    private val getRealEstateAgentEntitiesUseCase: GetRealEstateAgentEntitiesUseCase,
     private val estateFormValidationUseCase: EstateFormValidationUseCase,
     private val saveBitmapPictureToInternalStorageUseCase: SaveBitmapPictureToInternalStorageUseCase,
-    private val savedStateHandle: SavedStateHandle,
     private val getEstateWithPictureEntityById: GetEstateWithPictureEntityByIdUseCase,
 ) : ViewModel() {
-    
     private val viewActionMutableLiveData = MutableLiveData<Event<EstateFormAction>>()
     val viewAction: LiveData<Event<EstateFormAction>> = viewActionMutableLiveData
     
-    private val pointOfInterestListMutableStateFlow =
-        MutableStateFlow<List<PointOfInterestEntity>>(emptyList())
-    private val chosenPictureMutableStateFlow =
-        MutableStateFlow<List<EstatePictureEntity>>(emptyList())
-    
-    private val selectedAgentMutableStateFlow = MutableStateFlow(1)
-    private val isEstateSoldMutableStateFlow = MutableStateFlow(false)
-    private val selectedEntryDateMutableStateFlow = MutableStateFlow("")
-    private val selectedSoldDateMutableStateFlow = MutableStateFlow("")
-    private var type: String = ""
     private var surface: String = ""
     private var description: String = ""
     private var roomNumber: String = ""
@@ -67,16 +59,50 @@ class EstateFormViewModel @Inject constructor(
     private var entryDate: String = ""
     private var sellingDate: String = ""
     
-    private var agentSelectionDeadLock = true
-    private var isSoldDeadLock = true
+    private val pointOfInterestListMutableStateFlow =
+        MutableStateFlow<List<PointOfInterestEntity>>(emptyList())
+    private val chosenPictureMutableStateFlow =
+        MutableStateFlow<List<EstatePictureEntity>>(emptyList())
+    private val estateTypeListMutableStateFlow =
+        MutableStateFlow<List<EstateTypeEntity>>(emptyList())
+    
+    private val selectedEstateTypeIdMutableStateFlow = MutableStateFlow(0)
+    
+    private val selectedAgentMutableStateFlow = MutableStateFlow(1)
+    private val isEstateSoldMutableStateFlow = MutableStateFlow(false)
+    private val selectedEntryDateMutableStateFlow = MutableStateFlow("")
+    private val selectedSoldDateMutableStateFlow = MutableStateFlow("")
     
     private val combineFlowOfIsSoldEntryDateAndSoldDate = combine(
         isEstateSoldMutableStateFlow,
         selectedEntryDateMutableStateFlow,
         selectedSoldDateMutableStateFlow
-    ) { isSold, entryDate, soldDate ->
-        Triple(isSold, entryDate, soldDate)
+    ) { isSold,
+        entryDate,
+        soldDate ->
+        Triple(
+            first = isSold,
+            second = entryDate,
+            third = soldDate
+        )
     }
+    
+    private val combineFlowOfPointOfInterestListChosenPictureEstateType = combine(
+        pointOfInterestListMutableStateFlow,
+        chosenPictureMutableStateFlow,
+        estateTypeListMutableStateFlow
+    ) { pointOfInterestList,
+        chosenPictureList,
+        estateTypeList ->
+        Triple(
+            first = pointOfInterestList,
+            second = chosenPictureList,
+            third = estateTypeList
+        )
+    }
+    
+    private var agentSelectionDeadLock = true
+    private var isSoldDeadLock = true
     
     init {
         viewModelScope.launch {
@@ -84,128 +110,53 @@ class EstateFormViewModel @Inject constructor(
             val isEditMode = savedStateHandle.get<Boolean>(ARG_IS_EDIT_MODE) ?: false
             val estateWithPictureEntity = getEstateWithPictureEntityById.invoke(estateToEditId)
             
-            
             if (isEditMode) {
-                if (isSoldDeadLock) {
-                    isSoldDeadLock = false
-                    isEstateSoldMutableStateFlow.value =
-                        estateWithPictureEntity.estateEntity.status != EstateStatus.FOR_SALE
-                }
-                
-                
-                
-                selectedEntryDateMutableStateFlow.value =
-                    estateWithPictureEntity.estateEntity.entryDate.format(
-                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                    )
-                selectedSoldDateMutableStateFlow.value =
-                    estateWithPictureEntity.estateEntity.sellingDate?.format(
-                        DateTimeFormatter.ofPattern("dd/MM/yyyy")
-                    ) ?: application.getString(R.string.click_to_pick_a_date)
-                
-                val list = mutableListOf<PointOfInterestEntity>()
-                PointOfInterestEnum.entries.forEach { pointOfInterestEnum ->
-                    list.add(
-                        PointOfInterestEntity(
-                            isSelected = false,
-                            pointOfInterestEnum = pointOfInterestEnum,
-                            id = pointOfInterestEnum.id
-                        )
-                    )
-                }
-                val associatedMap =
-                    estateWithPictureEntity.estateEntity.pointOfInterest.associateBy { it.id }
-                val newList = mutableListOf<PointOfInterestEntity>()
-                
-                newList.clear()
-                
-                list.forEach {
-                    if (associatedMap[it.id] != null) {
-                        val listFromUser = associatedMap[it.id]
-                        newList.add(
-                            PointOfInterestEntity(
-                                isSelected = true,
-                                pointOfInterestEnum = listFromUser?.pointOfInterestEnum
-                                    ?: PointOfInterestEnum.PARK,
-                                id = listFromUser?.id ?: 0
-                            )
-                        )
-                    } else {
-                        newList.add(
-                            PointOfInterestEntity(
-                                isSelected = false,
-                                pointOfInterestEnum = it.pointOfInterestEnum,
-                                id = it.id
-                            )
-                        )
-                    }
-                }
-                
-                pointOfInterestListMutableStateFlow.update {
-                    it + newList
-                }
-                
-                chosenPictureMutableStateFlow.update {
-                    it + estateWithPictureEntity.pictures
-                }
-                
-                if (agentSelectionDeadLock) {
-                    agentSelectionDeadLock = false
-                    selectedAgentMutableStateFlow.value =
-                        getEstateWithPictureEntityById.invoke(estateToEditId).estateEntity.agentInChargeId
-                }
+                initOnEditMode(estateToEditId, estateWithPictureEntity)
             } else {
-                selectedEntryDateMutableStateFlow.value =
-                    application.getString(R.string.click_to_pick_a_date)
-                
-                selectedSoldDateMutableStateFlow.value =
-                    application.getString(R.string.click_to_pick_a_date)
-                
-                val list = mutableListOf<PointOfInterestEntity>()
-                PointOfInterestEnum.entries.forEach {
-                    list.add(
-                        PointOfInterestEntity(
-                            isSelected = false,
-                            pointOfInterestEnum = it,
-                            id = it.id
-                        )
-                    )
-                }
-                pointOfInterestListMutableStateFlow.update {
-                    it + list
-                }
+                initOnCreationMode()
             }
         }
     }
     
-    val viewState = liveData<EstateFormViewState> {
+    val viewState = liveData {
         combine(
             getRealEstateAgentEntitiesUseCase.invoke(),
-            chosenPictureMutableStateFlow,
             selectedAgentMutableStateFlow,
-            pointOfInterestListMutableStateFlow,
             combineFlowOfIsSoldEntryDateAndSoldDate,
-        ) { realEstateAgentEntities, chosenPictureEntities, selectedAgent, pointOfInterestList, combinedFlow ->
+            combineFlowOfPointOfInterestListChosenPictureEstateType,
+            selectedEstateTypeIdMutableStateFlow
+        ) { realEstateAgentEntities,
+            selectedAgent,
+            combineFlowOfIsSoldEntryDateAndSoldDate,
+            combineFlowOfPointOfInterestListChosenPictureEstateType,
+            estateTypeId ->
+            
             val estateToEditId = savedStateHandle.get<Int>(ARG_TO_EDIT_ESTATE_ID) ?: 1
             val isEditMode = savedStateHandle.get<Boolean>(ARG_IS_EDIT_MODE) ?: false
             
             emit(
                 if (isEditMode) {
                     provideViewStateForEditionMode(
-                        realEstateAgentEntities,
-                        chosenPictureEntities,
-                        selectedAgent,
-                        pointOfInterestList,
-                        combinedFlow,
-                        getEstateWithPictureEntityById.invoke(estateToEditId)
+                        realEstateAgentEntities = realEstateAgentEntities,
+                        chosenPictureEntities = combineFlowOfPointOfInterestListChosenPictureEstateType.second,
+                        realId = selectedAgent,
+                        pointOfInterestList = combineFlowOfPointOfInterestListChosenPictureEstateType.first,
+                        combinedFlow = combineFlowOfIsSoldEntryDateAndSoldDate,
+                        toEditEstatePictureEntity = getEstateWithPictureEntityById.invoke(
+                            estateToEditId
+                        ),
+                        estateTypeEntities = combineFlowOfPointOfInterestListChosenPictureEstateType.third,
+                        estateTypeId = estateTypeId
                     )
                 } else {
                     provideViewStateForCreationMode(
-                        realEstateAgentEntities,
-                        chosenPictureEntities,
-                        selectedAgent,
-                        pointOfInterestList,
-                        combinedFlow
+                        realEstateAgentEntities = realEstateAgentEntities,
+                        chosenPictureEntities = combineFlowOfPointOfInterestListChosenPictureEstateType.second,
+                        selectedAgent = selectedAgent,
+                        pointOfInterestList = combineFlowOfPointOfInterestListChosenPictureEstateType.first,
+                        combinedFlow = combineFlowOfIsSoldEntryDateAndSoldDate,
+                        estateTypeEntities = combineFlowOfPointOfInterestListChosenPictureEstateType.third,
+                        estateTypeId = estateTypeId
                     )
                 }
             )
@@ -218,105 +169,285 @@ class EstateFormViewModel @Inject constructor(
         realId: Int,
         pointOfInterestList: List<PointOfInterestEntity>,
         combinedFlow: Triple<Boolean, String, String>,
-        toEditEstatePictureEntity: EstateWithPictureEntity
-    ): EstateFormViewState = EstateFormViewState(
-        agentViewStateItems = realEstateAgentEntities.map {
-            EstateFormAgentViewStateItems(
-                id = it.id,
-                image = it.imageResource,
-                name = it.name,
-                it.id == realId
-            )
-        },
-        pictureViewStateItems = chosenPictureEntities.map {
-            PictureViewStateItems(
-                bitmap = it.imagePath,
-                type = it.description.name,
-                id = it.id,
-                true
-            )
-        },
-        pointOfInterestViewStateItems = pointOfInterestList.map {
-            PointOfInterestViewStateItems(
-                it.pointOfInterestEnum,
-                it.id,
-                it.isSelected
-            )
-        },
-        surface = surface.ifEmpty {
-            "${toEditEstatePictureEntity.estateEntity.surface}"
-        },
-        description = description.ifEmpty { toEditEstatePictureEntity.estateEntity.description },
-        roomNumber = roomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.roomNumber}" },
-        bathRoomNumber = bathroomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.bathroomNumber}" },
-        bedRoomNumber = bedroomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.numberOfBedrooms}" },
-        address = address.ifEmpty { toEditEstatePictureEntity.estateEntity.address },
-        city = city.ifEmpty { toEditEstatePictureEntity.estateEntity.city },
-        price = price.ifEmpty { toEditEstatePictureEntity.estateEntity.price },
-        isSoldEstate = combinedFlow.first,
-        entryDate = if (combinedFlow.second == application.getString(R.string.click_to_pick_a_date)) {
-            
-            toEditEstatePictureEntity.estateEntity.entryDate.format(
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            ) ?: application.getString(R.string.click_to_pick_a_date)
-        } else {
-            combinedFlow.second
-        },
-        sellingDate = if (combinedFlow.third == application.getString(R.string.click_to_pick_a_date)) {
-            toEditEstatePictureEntity.estateEntity.sellingDate?.format(
-                DateTimeFormatter.ofPattern("dd/MM/yyyy")
-            ) ?: application.getString(R.string.click_to_pick_a_date)
-        } else {
-            combinedFlow.third
-        },
-        titleRes = R.string.edit_property,
-        R.string.modify_button
-    )
+        toEditEstatePictureEntity: EstateWithPictureEntity,
+        estateTypeEntities: List<EstateTypeEntity>,
+        estateTypeId: Int
+    ): EstateFormViewState =
+        EstateFormViewState(
+            agentViewStateItems = realEstateAgentEntities.map {
+                EstateFormAgentViewStateItems(
+                    id = it.id,
+                    image = it.imageResource,
+                    name = it.name,
+                    it.id == realId
+                )
+            },
+            pictureViewStateItems = chosenPictureEntities.map {
+                PictureViewStateItems(
+                    bitmap = it.imagePath,
+                    type = it.description.name,
+                    id = it.id,
+                    true
+                )
+            },
+            pointOfInterestViewStateItems = pointOfInterestList.map {
+                PointOfInterestViewStateItems(
+                    it.pointOfInterestEnum,
+                    it.id,
+                    it.isSelected
+                )
+            },
+            surface = surface.ifEmpty {
+                "${toEditEstatePictureEntity.estateEntity.surface}"
+            },
+            description = description.ifEmpty { toEditEstatePictureEntity.estateEntity.description },
+            roomNumber = roomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.roomNumber}" },
+            bathRoomNumber = bathroomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.bathroomNumber}" },
+            bedRoomNumber = bedroomNumber.ifEmpty { "${toEditEstatePictureEntity.estateEntity.numberOfBedrooms}" },
+            address = address.ifEmpty { toEditEstatePictureEntity.estateEntity.address },
+            city = city.ifEmpty { toEditEstatePictureEntity.estateEntity.city },
+            price = price.ifEmpty { toEditEstatePictureEntity.estateEntity.price },
+            isSoldEstate = combinedFlow.first,
+            entryDate = if (combinedFlow.second == application.getString(R.string.click_to_pick_a_date)) {
+                toEditEstatePictureEntity.estateEntity.entryDate.format(
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                ) ?: application.getString(R.string.click_to_pick_a_date)
+            } else {
+                combinedFlow.second
+            },
+            sellingDate = if (combinedFlow.third == application.getString(R.string.click_to_pick_a_date)) {
+                toEditEstatePictureEntity.estateEntity.sellingDate?.format(
+                    DateTimeFormatter.ofPattern("dd/MM/yyyy")
+                ) ?: application.getString(R.string.click_to_pick_a_date)
+            } else {
+                combinedFlow.third
+            },
+            titleRes = R.string.edit_property,
+            buttonTextRes = R.string.modify_button,
+            estateTypeViewStateItems = estateTypeEntities.map {
+                EstateTypeViewStateItems(
+                    it.id,
+                    it.estateTypeEnum,
+                    it.id == estateTypeId,
+                    false
+                )
+            }
+        )
     
     private fun provideViewStateForCreationMode(
         realEstateAgentEntities: List<RealEstateAgentEntity>,
         chosenPictureEntities: List<EstatePictureEntity>,
         selectedAgent: Int,
         pointOfInterestList: List<PointOfInterestEntity>,
-        combinedFlow: Triple<Boolean, String, String>
-    ): EstateFormViewState = EstateFormViewState(
-        agentViewStateItems = realEstateAgentEntities.map {
-            EstateFormAgentViewStateItems(
-                id = it.id,
-                image = it.imageResource,
-                name = it.name,
-                it.id == selectedAgent
+        combinedFlow: Triple<Boolean, String, String>,
+        estateTypeEntities: List<EstateTypeEntity>,
+        estateTypeId: Int
+    ): EstateFormViewState =
+        EstateFormViewState(
+            agentViewStateItems = realEstateAgentEntities.map {
+                EstateFormAgentViewStateItems(
+                    id = it.id,
+                    image = it.imageResource,
+                    name = it.name,
+                    it.id == selectedAgent
+                )
+            },
+            pictureViewStateItems = chosenPictureEntities.map {
+                PictureViewStateItems(
+                    bitmap = it.imagePath,
+                    type = it.description.name,
+                    id = it.id,
+                    false
+                )
+            },
+            pointOfInterestViewStateItems = pointOfInterestList.map {
+                PointOfInterestViewStateItems(
+                    it.pointOfInterestEnum,
+                    it.id,
+                    it.isSelected
+                )
+            },
+            surface = surface,
+            description = description,
+            roomNumber = roomNumber,
+            bathRoomNumber = bathroomNumber,
+            bedRoomNumber = bedroomNumber,
+            address = address,
+            city = city,
+            price = price,
+            isSoldEstate = combinedFlow.first,
+            entryDate = combinedFlow.second,
+            sellingDate = combinedFlow.third,
+            titleRes = R.string.create_new_property,
+            buttonTextRes = com.despaircorp.shared.R.string.create,
+            estateTypeViewStateItems = estateTypeEntities.map {
+                EstateTypeViewStateItems(
+                    it.id,
+                    it.estateTypeEnum,
+                    it.id == estateTypeId,
+                    false
+                )
+            }
+        )
+    
+    private suspend fun initOnEditMode(
+        estateToEditId: Int,
+        estateWithPictureEntity: EstateWithPictureEntity
+    ) {
+        initEstateStatusMutableFlowForEdition(estateWithPictureEntity = estateWithPictureEntity)
+        initEstateTypeIdFlowForEdition(estateWithPictureEntity = estateWithPictureEntity)
+        initEstateTypeFlowForEdition()
+        initDateFlowsForEdition(estateWithPictureEntity = estateWithPictureEntity)
+        initPointOfInterestFlowForEdition(estateWithPictureEntity = estateWithPictureEntity)
+        initPictureFlowForEdition(estateWithPictureEntity = estateWithPictureEntity)
+        initAgentFlowForEdition(estateToEditId = estateToEditId)
+    }
+    
+    private fun initEstateStatusMutableFlowForEdition(estateWithPictureEntity: EstateWithPictureEntity) {
+        if (isSoldDeadLock) {
+            isSoldDeadLock = false
+            isEstateSoldMutableStateFlow.value =
+                estateWithPictureEntity.estateEntity.status != EstateStatus.FOR_SALE
+        }
+    }
+    
+    private fun initEstateTypeIdFlowForEdition(estateWithPictureEntity: EstateWithPictureEntity) {
+        selectedEstateTypeIdMutableStateFlow.value =
+            estateWithPictureEntity.estateEntity.estateType.id
+    }
+    
+    private fun initEstateTypeFlowForEdition() {
+        val estateTypeList = mutableListOf<EstateTypeEntity>()
+        EstateTypeEnum.entries.forEach {
+            estateTypeList.add(
+                EstateTypeEntity(
+                    isSelected = false,
+                    estateTypeEnum = it,
+                    id = it.id,
+                )
             )
-        },
-        pictureViewStateItems = chosenPictureEntities.map {
-            PictureViewStateItems(
-                bitmap = it.imagePath,
-                type = it.description.name,
-                id = it.id,
-                false
+        }
+        
+        estateTypeListMutableStateFlow.update {
+            it + estateTypeList
+        }
+    }
+    
+    private fun initDateFlowsForEdition(estateWithPictureEntity: EstateWithPictureEntity) {
+        selectedEntryDateMutableStateFlow.value =
+            estateWithPictureEntity.estateEntity.entryDate.format(
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
             )
-        },
-        pointOfInterestViewStateItems = pointOfInterestList.map {
-            PointOfInterestViewStateItems(
-                it.pointOfInterestEnum,
-                it.id,
-                it.isSelected
+        selectedSoldDateMutableStateFlow.value =
+            estateWithPictureEntity.estateEntity.sellingDate?.format(
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+            ) ?: application.getString(R.string.click_to_pick_a_date)
+    }
+    
+    private fun initPointOfInterestFlowForEdition(estateWithPictureEntity: EstateWithPictureEntity) {
+        
+        val pointOfInterestListFromEnumEntries = mutableListOf<PointOfInterestEntity>()
+        PointOfInterestEnum.entries.forEach { pointOfInterestEnum ->
+            pointOfInterestListFromEnumEntries.add(
+                PointOfInterestEntity(
+                    isSelected = false,
+                    pointOfInterestEnum = pointOfInterestEnum,
+                    id = pointOfInterestEnum.id
+                )
             )
-        },
-        surface = surface,
-        description = description,
-        roomNumber = roomNumber,
-        bathRoomNumber = bathroomNumber,
-        bedRoomNumber = bedroomNumber,
-        address = address,
-        city = city,
-        price = price,
-        isSoldEstate = combinedFlow.first,
-        entryDate = combinedFlow.second,
-        sellingDate = combinedFlow.third,
-        titleRes = R.string.create_new_property,
-        com.despaircorp.shared.R.string.create
-    )
+        }
+        
+        val associatedMapOfPointOfInterestSelected =
+            estateWithPictureEntity.estateEntity.pointOfInterest.associateBy { it.id }
+        
+        val newListWithSelectedPointOfInterest = mutableListOf<PointOfInterestEntity>()
+        newListWithSelectedPointOfInterest.clear()
+        
+        pointOfInterestListFromEnumEntries.forEach {
+            if (associatedMapOfPointOfInterestSelected[it.id] != null) {
+                val listFromUser = associatedMapOfPointOfInterestSelected[it.id]
+                newListWithSelectedPointOfInterest.add(
+                    PointOfInterestEntity(
+                        isSelected = true,
+                        pointOfInterestEnum = listFromUser?.pointOfInterestEnum
+                            ?: PointOfInterestEnum.PARK,
+                        id = listFromUser?.id ?: 0
+                    )
+                )
+            } else {
+                newListWithSelectedPointOfInterest.add(
+                    PointOfInterestEntity(
+                        isSelected = false,
+                        pointOfInterestEnum = it.pointOfInterestEnum,
+                        id = it.id
+                    )
+                )
+            }
+        }
+        
+        pointOfInterestListMutableStateFlow.update {
+            it + newListWithSelectedPointOfInterest
+        }
+    }
+    
+    private fun initPictureFlowForEdition(estateWithPictureEntity: EstateWithPictureEntity) {
+        chosenPictureMutableStateFlow.update {
+            it + estateWithPictureEntity.pictures
+        }
+    }
+    
+    private suspend fun initAgentFlowForEdition(estateToEditId: Int) {
+        if (agentSelectionDeadLock) {
+            agentSelectionDeadLock = false
+            selectedAgentMutableStateFlow.value =
+                getEstateWithPictureEntityById.invoke(estateToEditId).estateEntity.agentInChargeId
+        }
+    }
+    
+    private fun initOnCreationMode() {
+        initDateMutableStateFlowsForCreation()
+        initPointOfInterestFlowForCreation()
+        initEstateTypeFlowForCreation()
+    }
+    
+    private fun initDateMutableStateFlowsForCreation() {
+        selectedEntryDateMutableStateFlow.value =
+            application.getString(R.string.click_to_pick_a_date)
+        selectedSoldDateMutableStateFlow.value =
+            application.getString(R.string.click_to_pick_a_date)
+    }
+    
+    private fun initEstateTypeFlowForCreation() {
+        val estateTypeList = mutableListOf<EstateTypeEntity>()
+        EstateTypeEnum.entries.forEach {
+            estateTypeList.add(
+                EstateTypeEntity(
+                    isSelected = false,
+                    estateTypeEnum = it,
+                    id = it.id,
+                )
+            )
+        }
+        estateTypeListMutableStateFlow.update {
+            it + estateTypeList
+        }
+    }
+    
+    private fun initPointOfInterestFlowForCreation() {
+        val list = mutableListOf<PointOfInterestEntity>()
+        PointOfInterestEnum.entries.forEach {
+            list.add(
+                PointOfInterestEntity(
+                    isSelected = false,
+                    pointOfInterestEnum = it,
+                    id = it.id
+                )
+            )
+        }
+        pointOfInterestListMutableStateFlow.update {
+            it + list
+        }
+    }
     
     fun onRemovePointOfInterest(
         id: Int,
@@ -324,9 +455,9 @@ class EstateFormViewModel @Inject constructor(
         pointOfInterestListMutableStateFlow.value = pointOfInterestListMutableStateFlow.value.map {
             if (it.id == id) {
                 PointOfInterestEntity(
-                    false,
-                    it.pointOfInterestEnum,
-                    it.id
+                    isSelected = false,
+                    pointOfInterestEnum = it.pointOfInterestEnum,
+                    id = it.id
                 )
             } else {
                 it
@@ -338,9 +469,9 @@ class EstateFormViewModel @Inject constructor(
         pointOfInterestListMutableStateFlow.value = pointOfInterestListMutableStateFlow.value.map {
             if (it.id == id) {
                 PointOfInterestEntity(
-                    true,
-                    it.pointOfInterestEnum,
-                    it.id
+                    isSelected = true,
+                    pointOfInterestEnum = it.pointOfInterestEnum,
+                    id = it.id
                 )
             } else {
                 it
@@ -369,11 +500,6 @@ class EstateFormViewModel @Inject constructor(
         viewModelScope.launch {
             selectedAgentMutableStateFlow.value = agentId
         }
-        
-    }
-    
-    fun onSpinnerSelectionChanged(selectedItemInput: Any) {
-        type = selectedItemInput.toString()
     }
     
     fun onSurfaceTextChanged(surfaceInput: String) {
@@ -426,11 +552,19 @@ class EstateFormViewModel @Inject constructor(
         sellingDate = localDate
     }
     
+    fun onAddEstateType(id: Int) {
+        selectedEstateTypeIdMutableStateFlow.value = id
+    }
+    
+    fun onRemoveImage(id: Int) {
+        chosenPictureMutableStateFlow.value =
+            chosenPictureMutableStateFlow.value.filter { it.id != id }
+    }
+    
     fun onCreateEstateClicked() {
         viewModelScope.launch {
             val estateToEditId = savedStateHandle.get<Int>(ARG_TO_EDIT_ESTATE_ID) ?: 1
             val isEditMode = savedStateHandle.get<Boolean>(ARG_IS_EDIT_MODE) ?: false
-            
             
             val creationResult = estateFormValidationUseCase.invoke(
                 estateSurface = surface,
@@ -441,15 +575,15 @@ class EstateFormViewModel @Inject constructor(
                 estateAddress = address,
                 estateCity = city,
                 estatePrice = price,
-                estateType = type,
+                estateType = EstateTypeEnum.entries[selectedEstateTypeIdMutableStateFlow.value],
                 estatePointOfInterests = pointOfInterestListMutableStateFlow.value,
                 isEstateSold = isEstateSoldMutableStateFlow.value,
                 estateEntryDate = selectedEntryDateMutableStateFlow.value,
                 estateSoldDate = selectedSoldDateMutableStateFlow.value,
                 estatePictures = chosenPictureMutableStateFlow.value,
                 estateInChargeAgentId = selectedAgentMutableStateFlow.value,
-                estateToEditId,
-                isEditMode
+                estateToEditId = estateToEditId,
+                isEditMode = isEditMode
             )
             
             val result = creationResult.getOrElse {
@@ -458,19 +592,14 @@ class EstateFormViewModel @Inject constructor(
             
             viewActionMutableLiveData.value = if (result is Boolean) {
                 if (isEditMode) {
-                    Event(EstateFormAction.Success(com.despaircorp.shared.R.string.modification_success))
+                    Event(EstateFormAction.Success(R.string.modification_success))
                 } else {
-                    Event(EstateFormAction.Success(com.despaircorp.shared.R.string.creation_success))
+                    Event(EstateFormAction.Success(R.string.creation_success))
                 }
             } else {
                 Event(EstateFormAction.OnError(message = result.toString()))
             }
         }
-    }
-    
-    fun onRemoveImage(id: Int) {
-        chosenPictureMutableStateFlow.value =
-            chosenPictureMutableStateFlow.value.filter { it.id != id }
     }
     
     companion object {
