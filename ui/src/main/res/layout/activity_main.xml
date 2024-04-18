@@ -39,9 +39,378 @@
                     android:padding="4dp"
                     app:menu="@menu/top_menu"
                     app:navigationIcon="@drawable/baseline_dehaze_24"
-                    >
+                    />
                 
-                </androidx.appcompat.widget.Toolbar>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/activity_main_ConstraintLayout_root_filter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorOnBackground"
+                    android:visibility="visible"
+                    >
+                    
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/activity_main_ConstraintLayout_price_and_surface"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        
+                        >
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_surface_root"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toTopOf="@id/activity_main_ConstraintLayout_price_root"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            
+                            >
+                            
+                            
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/activity_main_TextInputLayout_surface_min"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/activity_main_TextInputLayout_surface_max"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:placeholderTextColor="?colorTertiary"
+                                app:suffixText="m2"
+                                >
+                                
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/activity_main_TextInputEditText_surface_min"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="@string/surface_min"
+                                    android:inputType="number"
+                                    android:textColor="?colorTertiary"
+                                    android:textColorHint="?colorTertiary"
+                                    android:textSize="16sp"
+                                    />
+                            
+                            </com.google.android.material.textfield.TextInputLayout>
+                            
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/activity_main_TextInputLayout_surface_max"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/activity_main_TextInputLayout_surface_min"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:placeholderTextColor="?colorTertiary"
+                                app:suffixText="m2"
+                                >
+                                
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/activity_main_TextInputEditText_surface_max"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="@string/surface_max"
+                                    android:inputType="number"
+                                    android:textColor="?colorTertiary"
+                                    android:textColorHint="?colorTertiary"
+                                    android:textSize="16sp"
+                                    />
+                            
+                            </com.google.android.material.textfield.TextInputLayout>
+                        
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_price_root"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_surface_root"
+                            >
+                            
+                            
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/activity_main_TextInputLayout_price_min"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/activity_main_TextInputLayout_price_max"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:placeholderTextColor="?colorTertiary"
+                                app:suffixText="$"
+                                >
+                                
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/activity_main_TextInputEditText_price_min"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="@string/price_min"
+                                    android:inputType="number"
+                                    android:textColor="?colorTertiary"
+                                    android:textColorHint="?colorTertiary"
+                                    android:textSize="16sp"
+                                    />
+                            
+                            </com.google.android.material.textfield.TextInputLayout>
+                            
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/activity_main_TextInputLayout_price_max"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/activity_main_TextInputLayout_price_min"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:placeholderTextColor="?colorTertiary"
+                                app:suffixText="$"
+                                >
+                                
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/activity_main_TextInputEditText_price_max"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="@string/price_max"
+                                    android:inputType="number"
+                                    android:textColor="?colorTertiary"
+                                    android:textColorHint="?colorTertiary"
+                                    android:textSize="16sp"
+                                    />
+                            
+                            </com.google.android.material.textfield.TextInputLayout>
+                        
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/activity_main_ConstraintLayout_status_entry_date_room_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_price_and_surface"
+                        >
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_room_number"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            >
+                            
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/activity_main_TextInputLayout_room"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:placeholderTextColor="?colorTertiary"
+                                >
+                                
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/activity_main_TextInputEditText_room"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:hint="@string/room_number"
+                                    android:inputType="number"
+                                    android:textColor="?colorTertiary"
+                                    android:textColorHint="?colorTertiary"
+                                    android:textSize="16sp"
+                                    />
+                            
+                            </com.google.android.material.textfield.TextInputLayout>
+                        
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_sold_status"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@id/activity_main_ConstraintLayout_entry_date"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_room_number"
+                            >
+                            
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/activity_main_Button_for_sale"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="?colorButtonNormal"
+                                android:text="@string/for_sale"
+                                android:textColor="?colorTertiary"
+                                app:layout_constraintBottom_toTopOf="@id/activity_main_Button_sold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                />
+                            
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/activity_main_Button_sold"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="?colorButtonNormal"
+                                android:text="@string/sold"
+                                android:textColor="?colorTertiary"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/activity_main_Button_for_sale"
+                                />
+                        
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_entry_date"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_margin="16dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/activity_main_ConstraintLayout_sold_status"
+                            app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_room_number"
+                            >
+                            
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/activity_main_Button_entry_date"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:backgroundTint="?colorButtonNormal"
+                                android:text="@string/entry_date"
+                                android:textColor="?colorTertiary"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                />
+                        
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/activity_main_ConstraintLayout_point_of_interest_and_type_root"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_status_entry_date_room_number"
+                        >
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_point_of_interest_root"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toTopOf="@id/activity_main_ConstraintLayout_type_root"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            >
+                            
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/activity_main_RecyclerView_interest_point"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:listitem="@layout/point_of_interest_item_view"
+                                />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                        
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/activity_main_ConstraintLayout_type_root"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_point_of_interest_root"
+                            >
+                            
+                            
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/activity_main_RecyclerView_type_root"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="16dp"
+                                android:orientation="horizontal"
+                                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:listitem="@layout/estate_type_item_view"
+                                />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/activity_main_Button_reset_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:backgroundTint="@color/red"
+                        android:text="@string/reset_filter"
+                        android:textColor="@color/white"
+                        app:chainUseRtl="true"
+                        app:layout_constraintBottom_toTopOf="@id/activity_main_Divider_bottom"
+                        app:layout_constraintEnd_toStartOf="@id/activity_main_Button_apply_filter"
+                        app:layout_constraintHorizontal_chainStyle="packed"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_point_of_interest_and_type_root"
+                        />
+                    
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/activity_main_Button_apply_filter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:backgroundTint="?colorAccent"
+                        android:text="@string/apply_filter"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toTopOf="@id/activity_main_Divider_bottom"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/activity_main_Button_reset_filter"
+                        app:layout_constraintTop_toBottomOf="@id/activity_main_ConstraintLayout_point_of_interest_and_type_root"
+                        />
+                    
+                    <com.google.android.material.divider.MaterialDivider
+                        android:id="@+id/activity_main_Divider_bottom"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:dividerColor="?colorTertiary"
+                        app:dividerThickness="4dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/activity_main_Button_reset_filter"
+                        />
+                
+                </androidx.constraintlayout.widget.ConstraintLayout>
             
             </com.google.android.material.appbar.AppBarLayout>
             

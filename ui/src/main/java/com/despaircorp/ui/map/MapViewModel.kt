@@ -2,6 +2,7 @@ package com.despaircorp.ui.map
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
 import com.despaircorp.domain.estate.GetEstateWithPictureEntityAsFlowUseCase
 import com.despaircorp.domain.location.GetUserLocationAsFlowUseCase
@@ -22,7 +23,7 @@ class MapViewModel @Inject constructor(
         combine(
             getUserLocationAsFlowUseCase.invoke(),
             isUserConnectedToInternetUseCase.invoke(),
-            getEstateWithPictureEntityAsFlowUseCase.invoke()
+            getEstateWithPictureEntityAsFlowUseCase.invoke(SimpleSQLiteQuery(BASE_SQL_QUERY_ARG))
         ) { locationEntity, isConnected, estateWithPictureEntity ->
             
             emit(
@@ -43,5 +44,9 @@ class MapViewModel @Inject constructor(
                 )
             )
         }.collect()
+    }
+    
+    companion object {
+        private const val BASE_SQL_QUERY_ARG = "SELECT * FROM estate_table"
     }
 }

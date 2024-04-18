@@ -6,9 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -22,11 +19,13 @@ import com.despaircorp.ui.databinding.ActivityCreateEstateBinding
 import com.despaircorp.ui.main.details_fragment.picture.EstatePictureListener
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentAdapter
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentListener
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeAdapter
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeListener
 import com.despaircorp.ui.main.estate_form.picture.EstateFormPictureAdapter
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestAdapter
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestListener
-import com.despaircorp.ui.main.main_activity.utils.isNightMode
-import com.despaircorp.ui.main.main_activity.utils.viewBinding
+import com.despaircorp.ui.utils.isNightMode
+import com.despaircorp.ui.utils.viewBinding
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,11 +36,17 @@ import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 @AndroidEntryPoint
-class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
-    EstateFormAgentListener, EstatePictureListener {
+class EstateFormActivity : AppCompatActivity(),
+    PointOfInterestListener,
+    EstateFormAgentListener,
+    EstatePictureListener,
+    EstateTypeListener {
+    
     private val viewModel: EstateFormViewModel by viewModels()
     private val binding by viewBinding { ActivityCreateEstateBinding.inflate(it) }
+    
     private var currentPhotoUri: Uri? = null
+    
     private val pickImageResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -80,7 +85,9 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
         val createEstatePictureAdapter = EstateFormPictureAdapter(this)
         binding.activityCreateEstateRecyclerViewPicture.adapter = createEstatePictureAdapter
         
-        initSpinnerDropDownSelectionChanged()
+        val estateTypeAdapter = EstateTypeAdapter(this)
+        binding.addEstatePopUpRecyclerCiewEstateType.adapter = estateTypeAdapter
+        
         initOnSurfaceTextChanged()
         initOnDescriptionTextChanged()
         onRoomTextChanged()
@@ -89,7 +96,6 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
         onAddressTextChanged()
         onCityTextChanged()
         onPriceTextChanged()
-        initEstateTypeSpinner()
         initSoldAndForSaleButton()
         initEntryDatePicker()
         initSoldDatePicker()
@@ -139,12 +145,12 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
             reactOnSoldAndForSaleButton(it.isSoldEstate)
             binding.addEstatePopUpTextViewTitle.text = getString(it.titleRes)
             binding.addEstatePopUpButtonCreate.text = getString(it.buttonTextRes)
+            estateTypeAdapter.submitList(it.estateTypeViewStateItems)
         }
     }
     
     private fun reactOnSoldAndForSaleButton(isSold: Boolean) {
         if (isSold) {
-            //sold
             if (isNightMode(this)) {
                 binding.addEstatePopUpButtonForSold.setBackgroundColor(
                     getColor(com.despaircorp.ui.R.color.primaryColorDark)
@@ -165,7 +171,6 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
             
             
         } else {
-            //not sold
             if (isNightMode(this)) {
                 binding.addEstatePopUpButtonForSale.setBackgroundColor(
                     getColor(com.despaircorp.ui.R.color.primaryColorDark)
@@ -237,40 +242,6 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
         }
     }
     
-    private fun initSpinnerDropDownSelectionChanged() {
-        binding.addEstatePopUpSpinnerEstateType.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    if (view != null) {
-                        val selectedItem = parent.getItemAtPosition(position)
-                        viewModel.onSpinnerSelectionChanged(selectedItem)
-                    }
-                }
-                
-                override fun onNothingSelected(parent: AdapterView<*>) {
-                }
-            }
-        
-    }
-    
-    private fun initEstateTypeSpinner() {
-        val items = listOf(
-            getString(com.despaircorp.shared.R.string.manor),
-            getString(com.despaircorp.shared.R.string.house),
-            getString(com.despaircorp.shared.R.string.apartment),
-            getString(com.despaircorp.shared.R.string.loft),
-        )
-        val spinnerAdapter =
-            ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, items)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        
-        binding.addEstatePopUpSpinnerEstateType.adapter = spinnerAdapter
-    }
     
     private fun initSoldAndForSaleButton() {
         binding.addEstatePopUpButtonForSale.setOnClickListener {
@@ -405,4 +376,13 @@ class EstateFormActivity : AppCompatActivity(), PointOfInterestListener,
     override fun onDeletePicture(id: Int) {
         viewModel.onRemoveImage(id)
     }
+    
+    override fun onAddEstateTypeClicked(id: Int) {}
+    
+    override fun onRemoveEstateTypeClicked(id: Int) {}
+    
+    override fun onTypeClicked(id: Int) {
+        viewModel.onAddEstateType(id)
+    }
+    
 }

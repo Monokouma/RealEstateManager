@@ -1,6 +1,7 @@
 package com.despaircorp.ui.main.estate_form
 
 import com.despaircorp.ui.main.estate_form.agent.EstateFormAgentViewStateItems
+import com.despaircorp.ui.main.estate_form.estate_type.EstateTypeViewStateItems
 import com.despaircorp.ui.main.estate_form.picture.PictureViewStateItems
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestViewStateItems
 
@@ -20,5 +21,6 @@ data class EstateFormViewState(
     val entryDate: String,
     val sellingDate: String,
     val titleRes: Int,
-    val buttonTextRes: Int
+    val buttonTextRes: Int,
+    val estateTypeViewStateItems: List<EstateTypeViewStateItems>,
 )

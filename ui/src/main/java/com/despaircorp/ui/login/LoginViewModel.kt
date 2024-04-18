@@ -9,7 +9,7 @@ import com.despaircorp.domain.real_estate_agent.IsAgentCurrentlyLoggedInUseCase
 import com.despaircorp.domain.real_estate_agent.LogChosenAgentUseCase
 import com.despaircorp.shared.R
 import com.despaircorp.ui.login.agent.AgentDropDownViewStateItems
-import com.despaircorp.ui.main.main_activity.utils.Event
+import com.despaircorp.ui.utils.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

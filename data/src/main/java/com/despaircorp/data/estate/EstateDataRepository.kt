@@ -1,5 +1,6 @@
 package com.despaircorp.data.estate
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
@@ -33,10 +34,10 @@ class EstateDataRepository @Inject constructor(
         workManager.enqueue(estateInitWorkRequest)
     }
     
-    override fun getEstateWithPictureEntitiesAsFlow(): Flow<List<EstateWithPictureEntity>> =
+    override fun getEstateWithPictureEntitiesAsFlow(query: SupportSQLiteQuery): Flow<List<EstateWithPictureEntity>> =
         entitiesMaperinator
             .mapEstateWithPictureDtoToEntities(
-                estateDao.getEstateWithPictureAsFlow()
+                estateDao.getEstateWithPictureAsFlow(query)
             ).flowOn(coroutineDispatcherProvider.io)
     
     override suspend fun prePopulateEstateTable(estateEntities: List<EstateEntity>) =

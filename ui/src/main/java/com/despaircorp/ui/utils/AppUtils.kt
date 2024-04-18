@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.main_activity.utils
+package com.despaircorp.ui.utils
 
 import java.text.DecimalFormat
 

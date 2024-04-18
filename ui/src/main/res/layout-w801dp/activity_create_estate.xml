@@ -121,6 +121,30 @@
             app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_root_surface_description"
             >
             
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/add_estate_pop_up_TextInputLayout_room"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/add_estate_pop_up_TextInputLayout_bedroom"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:placeholderTextColor="?colorTertiary"
+                >
+                
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/add_estate_pop_up_TextInputEditText_room"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/room_number"
+                    android:inputType="number"
+                    android:textColor="?colorTertiary"
+                    android:textColorHint="?colorTertiary"
+                    android:textSize="16sp"
+                    />
+            
+            </com.google.android.material.textfield.TextInputLayout>
             
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/add_estate_pop_up_TextInputLayout_bedroom"
@@ -129,7 +153,7 @@
                 android:layout_margin="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/add_estate_pop_up_TextInputLayout_bathroom"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/add_estate_pop_up_TextInputLayout_room"
                 app:layout_constraintTop_toTopOf="parent"
                 app:placeholderTextColor="?colorTertiary"
                 >
@@ -173,38 +197,13 @@
             </com.google.android.material.textfield.TextInputLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
         
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/add_estate_pop_up_TextInputLayout_room"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            app:layout_constraintBottom_toTopOf="@id/add_estate_pop_up_ConstraintLayout_location_root"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_room_root"
-            app:placeholderTextColor="?colorTertiary"
-            >
-            
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/add_estate_pop_up_TextInputEditText_room"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/room_number"
-                android:inputType="number"
-                android:textColor="?colorTertiary"
-                android:textColorHint="?colorTertiary"
-                android:textSize="16sp"
-                />
-        
-        </com.google.android.material.textfield.TextInputLayout>
-        
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/add_estate_pop_up_ConstraintLayout_location_root"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_TextInputLayout_room"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_room_root"
             >
             
             <com.google.android.material.textfield.TextInputLayout
@@ -357,6 +356,7 @@
             app:layout_constraintTop_toBottomOf="@id/activity_create_estate_Divider_first"
             >
             
+            
             <TextView
                 android:id="@+id/add_estate_pop_up_TextView_point_of_interest"
                 android:layout_width="0dp"
@@ -410,14 +410,70 @@
             app:layout_constraintTop_toBottomOf="@id/activity_create_estate_Divider_second"
             >
             
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/activity_create_estate_ConstraintLayout_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/activity_create_estate_Constraint_layout_entry_date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                >
+                
+                <TextView
+                    android:id="@+id/add_estate_pop_up_TextView_status"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="@string/status"
+                    android:textAlignment="center"
+                    android:textColor="?colorTertiary"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add_estate_pop_up_Button_for_sale"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:backgroundTint="?colorPrimary"
+                    android:checkable="true"
+                    android:text="@string/for_sale"
+                    android:textColor="?colorTertiary"
+                    app:layout_constraintBottom_toTopOf="@id/add_estate_pop_up_Button_for_sold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_TextView_status"
+                    />
+                
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add_estate_pop_up_Button_for_sold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="8dp"
+                    android:backgroundTint="?colorButtonNormal"
+                    android:checkable="true"
+                    android:text="@string/sold"
+                    android:textColor="?colorTertiary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_Button_for_sale"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
             
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/activity_create_estate_Constraint_layout_entry_date"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/activity_create_estate_Constraint_layout_sold_date"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/activity_create_estate_ConstraintLayout_status"
                 app:layout_constraintTop_toTopOf="parent"
                 >
                 
@@ -437,12 +493,10 @@
                 
                 <TextView
                     android:id="@+id/activity_create_estate_Button_entry_date"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
                     android:backgroundTint="?colorPrimary"
                     android:text="@string/click_to_pick_a_date"
-                    android:textAlignment="center"
                     android:textColor="?colorTertiary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -455,7 +509,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/activity_create_estate_Constraint_layout_sold_date"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/activity_create_estate_Constraint_layout_entry_date"
@@ -478,12 +532,10 @@
                 
                 <TextView
                     android:id="@+id/activity_create_estate_Button_sold_date"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
                     android:backgroundTint="?colorPrimary"
                     android:text="@string/click_to_pick_a_date"
-                    android:textAlignment="center"
                     android:textColor="?colorTertiary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -493,62 +545,6 @@
             
             </androidx.constraintlayout.widget.ConstraintLayout>
         
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/activity_create_estate_ConstraintLayout_status"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_status_and_date"
-            >
-            
-            <TextView
-                android:id="@+id/add_estate_pop_up_TextView_status"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="@string/status"
-                android:textAlignment="center"
-                android:textColor="?colorTertiary"
-                android:textSize="20sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-            
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_estate_pop_up_Button_for_sale"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:backgroundTint="?colorPrimary"
-                android:checkable="true"
-                android:text="@string/for_sale"
-                android:textColor="?colorTertiary"
-                app:layout_constraintBottom_toTopOf="@id/add_estate_pop_up_Button_for_sold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_TextView_status"
-                />
-            
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/add_estate_pop_up_Button_for_sold"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp"
-                android:backgroundTint="?colorButtonNormal"
-                android:checkable="true"
-                android:text="@string/sold"
-                android:textColor="?colorTertiary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_Button_for_sale"
-                />
         </androidx.constraintlayout.widget.ConstraintLayout>
         
         <com.google.android.material.divider.MaterialDivider
@@ -562,7 +558,7 @@
             app:dividerThickness="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/activity_create_estate_ConstraintLayout_status"
+            app:layout_constraintTop_toBottomOf="@id/add_estate_pop_up_ConstraintLayout_status_and_date"
             />
         
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -685,4 +681,4 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 
-    
+

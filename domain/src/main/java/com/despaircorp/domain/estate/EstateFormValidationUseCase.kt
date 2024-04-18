@@ -5,6 +5,7 @@ import com.despaircorp.domain.connectivity.IsUserConnectedToInternetUseCase
 import com.despaircorp.domain.estate.model.EstateCreationStatus
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.despaircorp.domain.estate.model.ToSanitizeEstateEntity
 import com.despaircorp.domain.geocoder.GetLatLngFromAddressUseCase
@@ -33,7 +34,7 @@ class EstateFormValidationUseCase @Inject constructor(
         estateAddress: String,
         estateCity: String,
         estatePrice: String,
-        estateType: String,
+        estateType: EstateTypeEnum,
         estatePointOfInterests: List<PointOfInterestEntity>,
         isEstateSold: Boolean,
         estateEntryDate: String,
