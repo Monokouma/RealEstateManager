@@ -20,6 +20,11 @@ class EstateSqlQueryBuilderUseCase @Inject constructor(
         estateType: List<EstateTypeEntity>?,
         pointsOfInterest: List<PointOfInterestEntity>?
     ): String {
+        
+        //Using WHERE 1=1 is a trick to avoid a problem of knowing if the argument to add to the
+        //base query is the first so the use of WHEN is necessary or it's the second or more argument and the use of AND is necessary
+        //by using a 1=1 condition in every query if a filter is used make the function more easier to read cause every time a filter is added
+        //we only use a AND before the condition
         val queryBuilder = StringBuilder("SELECT * FROM estate_table WHERE 1=1")
         
         surfaceMin?.takeIf { it.isNotBlank() }?.also { queryBuilder.append(" AND surface >= $it") }

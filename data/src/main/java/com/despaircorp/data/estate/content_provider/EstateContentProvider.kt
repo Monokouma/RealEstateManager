@@ -46,7 +46,6 @@ class EstateContentProvider @Inject constructor(
             SAMPLE_DATA_ID -> "vnd.android.cursor.item/com.despaircorp.data.estate.dto.EstateDto"
             else -> throw IllegalArgumentException("Unsupported URI: $uri")
         }
-        
     }
     
     override fun insert(uri: Uri, values: ContentValues?): Uri {
