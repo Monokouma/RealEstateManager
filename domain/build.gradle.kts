@@ -56,7 +56,7 @@ dependencies {
     testImplementation(project(":stubs"))
     // region Hilt x Worker https://developer.android.com/training/dependency-injection/hilt-jetpack#workmanager
     ksp("androidx.hilt:hilt-compiler:1.1.0")
-    
+    implementation("org.chromium.net:cronet-embedded:119.6045.31")
     
     testImplementation("androidx.arch.core:core-testing:2.1.0") {
         // Removes the Mockito dependency bundled with arch core (wtf android ??)

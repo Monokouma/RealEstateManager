@@ -65,7 +65,7 @@ hilt {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
-    
+    implementation("org.chromium.net:cronet-embedded:119.6045.31")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.activity:activity:1.8.0")

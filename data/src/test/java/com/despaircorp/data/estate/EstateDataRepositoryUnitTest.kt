@@ -1,5 +1,6 @@
 package com.despaircorp.data.estate
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import app.cash.turbine.test
@@ -44,12 +45,16 @@ class EstateDataRepositoryUnitTest {
         coEvery { estateDao.exist() } returns true
         coEvery { workManager.enqueue(any<OneTimeWorkRequest>()) } returns mockk()
         
-        coEvery { estateDao.getEstateWithPictureAsFlow() } returns flowOf(
+        coEvery { estateDao.getEstateWithPictureAsFlow(any()) } returns flowOf(
             provideListOfEstateWithPictureDto()
         )
         
         coEvery {
-            entitiesMaperinator.mapEstateWithPictureDtoToEntities(estateDao.getEstateWithPictureAsFlow())
+            entitiesMaperinator.mapEstateWithPictureDtoToEntities(
+                estateDao.getEstateWithPictureAsFlow(
+                    any()
+                )
+            )
         } returns flowOf(provideEstateWithPictureEntities())
         
         coJustRun {
@@ -70,20 +75,25 @@ class EstateDataRepositoryUnitTest {
     
     @Test
     fun `nominal case - get estate picture entities as flow`() = testCoroutineRule.runTest {
-        repository.getEstateWithPictureEntitiesAsFlow().test {
-            val result = awaitItem()
-            awaitComplete()
-            assertThat(result).isEqualTo(provideEstateWithPictureEntities())
-            
-            coVerify {
-                entitiesMaperinator.mapEstateWithPictureDtoToEntities(estateDao.getEstateWithPictureAsFlow())
+        repository.getEstateWithPictureEntitiesAsFlow(SimpleSQLiteQuery("SELECT * FROM estate_table"))
+            .test {
+                val result = awaitItem()
+                awaitComplete()
+                assertThat(result).isEqualTo(provideEstateWithPictureEntities())
+                
+                coVerify {
+                    entitiesMaperinator.mapEstateWithPictureDtoToEntities(
+                        estateDao.getEstateWithPictureAsFlow(
+                            any()
+                        )
+                    )
+                }
+                
+                confirmVerified(
+                    entitiesMaperinator,
+                    estateDao
+                )
             }
-            
-            confirmVerified(
-                entitiesMaperinator,
-                estateDao
-            )
-        }
     }
     
     @Test

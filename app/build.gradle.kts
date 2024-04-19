@@ -70,6 +70,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.48.1")
     ksp("com.google.dagger:hilt-compiler:2.48.1")
     ksp("androidx.hilt:hilt-compiler:1.1.0")
+    implementation("org.chromium.net:cronet-embedded:119.6045.31")
     
     
     testImplementation("androidx.arch.core:core-testing:2.1.0") {

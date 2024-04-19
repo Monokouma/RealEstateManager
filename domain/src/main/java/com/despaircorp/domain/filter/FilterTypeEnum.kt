@@ -1,4 +1,4 @@
-package com.despaircorp.ui.main.master_fragment.filter
+package com.despaircorp.domain.filter
 
 enum class FilterTypeEnum {
     SURFACE_MIN,
@@ -9,6 +9,4 @@ enum class FilterTypeEnum {
     FOR_SALE,
     SOLD,
     ENTRY_DATE,
-    POINT_OF_INTEREST,
-    ESTATE_TYPE
 }
