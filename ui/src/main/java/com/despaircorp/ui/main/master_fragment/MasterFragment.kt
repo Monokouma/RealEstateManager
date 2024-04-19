@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.despaircorp.domain.estate.model.EstateTypeEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
+import com.despaircorp.domain.filter.FilterTypeEnum
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.FragmentMasterBinding
 import com.despaircorp.ui.main.main_activity.MainInterface
 import com.despaircorp.ui.main.master_fragment.estate.EstateAdapter
 import com.despaircorp.ui.main.master_fragment.estate.EstateListener
-import com.despaircorp.ui.main.master_fragment.filter.FilterTypeEnum
 import com.despaircorp.ui.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 

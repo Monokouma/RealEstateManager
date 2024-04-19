@@ -2,7 +2,7 @@ package com.despaircorp.ui.main.main_activity
 
 import com.despaircorp.domain.estate.model.EstateTypeEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
-import com.despaircorp.ui.main.master_fragment.filter.FilterTypeEnum
+import com.despaircorp.domain.filter.FilterTypeEnum
 
 interface MainInterface {
     fun onFilterChangedListener(filterArg: String, filterBy: FilterTypeEnum)

@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import com.bumptech.glide.Glide
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.filter.FilterTypeEnum
 import com.despaircorp.ui.R
 import com.despaircorp.ui.databinding.ActivityMainBinding
 import com.despaircorp.ui.databinding.AddAgentPopUpBinding
@@ -32,7 +33,6 @@ import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestAdap
 import com.despaircorp.ui.main.estate_form.point_of_interest.PointOfInterestListener
 import com.despaircorp.ui.main.loan_simulator.LoanSimulatorActivity
 import com.despaircorp.ui.main.master_fragment.MasterFragment
-import com.despaircorp.ui.main.master_fragment.filter.FilterTypeEnum
 import com.despaircorp.ui.map.MapActivity
 import com.despaircorp.ui.utils.isNightMode
 import com.despaircorp.ui.utils.viewBinding

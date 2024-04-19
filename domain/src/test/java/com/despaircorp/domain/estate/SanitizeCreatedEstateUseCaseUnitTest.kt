@@ -106,16 +106,6 @@ class SanitizeCreatedEstateUseCaseUnitTest {
     
     
     @Test
-    fun `edge case - empty type`() = testCoroutineRule.runTest {
-        val result =
-            useCase.invoke(
-                EntityProvidinator.provideToSanitizeEntity().copy(estateType = "")
-            )
-        
-        assertThat(result).isEqualTo(EstateCreationStatus.EMPTY_TYPE)
-    }
-    
-    @Test
     fun `edge case - empty point of interest`() = testCoroutineRule.runTest {
         val result =
             useCase.invoke(

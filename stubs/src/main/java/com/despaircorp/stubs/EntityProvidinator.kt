@@ -13,6 +13,7 @@ import com.despaircorp.domain.currency.model.CurrencyEntity
 import com.despaircorp.domain.currency.model.CurrencyEnum
 import com.despaircorp.domain.estate.model.EstateEntity
 import com.despaircorp.domain.estate.model.EstateStatus
+import com.despaircorp.domain.estate.model.EstateTypeEnum
 import com.despaircorp.domain.estate.model.EstateWithPictureEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEntity
 import com.despaircorp.domain.estate.model.PointOfInterestEnum
@@ -34,12 +35,12 @@ object EntityProvidinator {
     const val DEFAULT_IMAGE_RESOURCE = 1
     const val DEFAULT_LOGGED_IN_TRUE = true
     const val DEFAULT_ESTATE_DESC = "DEFAULT_ESTATE_DESC"
-    const val DEFAULT_ESTATE_SURFACE = "DEFAULT_ESTATE_SURFACE"
+    const val DEFAULT_ESTATE_SURFACE = 100
     const val DEFAULT_ESTATE_ROOM_NUMBER = 2
     const val DEFAULT_ESTATE_BATH_ROOM_NUMBER = 2
     const val DEFAULT_ESTATE_BED_ROOM_NUMBER = 2
     val DEFAULT_ESTATE_LOCATION = LatLng(0.0, 0.0)
-    const val DEFAULT_ESTATE_TYPE = "DEFAULT_ESTATE_TYPE"
+    val DEFAULT_ESTATE_TYPE = EstateTypeEnum.MANOR
     const val DEFAULT_ESTATE_PRICE = "10.000"
     val DEFAULT_ESTATE_ENTRY_DATE = LocalDate.of(2022, 1, 11)
     val DEFAULT_ESTATE_SOLD_DATE = LocalDate.of(2022, 1, 11)
@@ -124,7 +125,7 @@ object EntityProvidinator {
     fun provideEstateEntity() = EstateEntity(
         id = DEFAULT_ID,
         description = DEFAULT_ESTATE_DESC,
-        surface = "${DEFAULT_ESTATE_SURFACE}m2",
+        surface = DEFAULT_ESTATE_SURFACE,
         roomNumber = DEFAULT_ESTATE_ROOM_NUMBER,
         bathroomNumber = DEFAULT_ESTATE_BATH_ROOM_NUMBER,
         numberOfBedrooms = DEFAULT_ESTATE_BED_ROOM_NUMBER,
@@ -371,7 +372,7 @@ object EntityProvidinator {
     }
     
     fun provideToSanitizeEntity(): ToSanitizeEstateEntity = ToSanitizeEstateEntity(
-        estateSurface = DEFAULT_ESTATE_SURFACE,
+        estateSurface = "$DEFAULT_ESTATE_SURFACE",
         estateDescription = DEFAULT_ESTATE_DESC,
         estateRoomNumber = DEFAULT_ESTATE_ROOM_NUMBER.toString(),
         estateBedroomNumber = DEFAULT_ESTATE_BED_ROOM_NUMBER.toString(),

@@ -65,7 +65,7 @@ class CreateEstateUseCaseUnitTest {
                 EstateEntity(
                     id = 3,
                     description = DEFAULT_ESTATE_DESC,
-                    surface = "${DEFAULT_ESTATE_SURFACE}m2",
+                    surface = DEFAULT_ESTATE_SURFACE,
                     roomNumber = DEFAULT_ESTATE_ROOM_NUMBER,
                     bathroomNumber = DEFAULT_ESTATE_BATH_ROOM_NUMBER,
                     numberOfBedrooms = DEFAULT_ESTATE_BED_ROOM_NUMBER,
@@ -101,7 +101,7 @@ class CreateEstateUseCaseUnitTest {
             insertPictureForEstateCreationUseCase.invoke(
                 emptyList(),
                 3,
-                isEditMode
+                false
             )
         }
     }
@@ -110,7 +110,7 @@ class CreateEstateUseCaseUnitTest {
     fun `nominal case - success`() = testCoroutineRule.runTest {
         
         val result = useCase.invoke(
-            DEFAULT_ESTATE_SURFACE,
+            "$DEFAULT_ESTATE_SURFACE",
             DEFAULT_ESTATE_DESC,
             DEFAULT_ESTATE_ROOM_NUMBER.toString(),
             DEFAULT_ESTATE_BED_ROOM_NUMBER.toString(),
@@ -125,8 +125,8 @@ class CreateEstateUseCaseUnitTest {
             DEFAULT_ESTATE_SOLD_DATE.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
             emptyList(),
             DEFAULT_ID,
-            estateToEditId,
-            isEditMode
+            0,
+            false
         )
         
         assertThat(result.getOrNull()).isEqualTo(true)

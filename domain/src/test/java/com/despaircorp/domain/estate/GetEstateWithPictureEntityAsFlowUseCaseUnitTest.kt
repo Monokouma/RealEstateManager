@@ -1,5 +1,6 @@
 package com.despaircorp.domain.estate
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import app.cash.turbine.test
 import assertk.assertThat
 import assertk.assertions.isEqualTo
@@ -27,21 +28,22 @@ class GetEstateWithPictureEntityAsFlowUseCaseUnitTest {
     
     @Before
     fun setup() {
+        
         coEvery {
-            estateDomainRepository.getEstateWithPictureEntitiesAsFlow()
+            estateDomainRepository.getEstateWithPictureEntitiesAsFlow(any())
         } returns flowOf(provideEstateWithPictureEntities())
     }
     
     @Test
     fun `nominal case`() = testCoroutineRule.runTest {
-        useCase.invoke().test {
+        useCase.invoke(SimpleSQLiteQuery("SELECT * FROM estate_table")).test {
             val result = awaitItem()
             awaitComplete()
             
             assertThat(result).isEqualTo(provideEstateWithPictureEntities())
             
             coVerify {
-                estateDomainRepository.getEstateWithPictureEntitiesAsFlow()
+                estateDomainRepository.getEstateWithPictureEntitiesAsFlow(any())
             }
             
             confirmVerified(estateDomainRepository)
