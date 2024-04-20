@@ -28,6 +28,7 @@ import com.despaircorp.data.utils.TypeConvertinator
 @TypeConverters(TypeConvertinator::class)
 public abstract class RealEstateManagerRoomDatabase : RoomDatabase() {
     abstract fun getRealEstateAgentDao(): RealEstateAgentDao
+    
     abstract fun getEstateDao(): EstateDao
     
     abstract fun getPictureDao(): PictureDao
@@ -35,23 +36,17 @@ public abstract class RealEstateManagerRoomDatabase : RoomDatabase() {
     abstract fun getCurrencyDao(): CurrencyDao
     
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: RealEstateManagerRoomDatabase? = null
         
         fun getDatabase(context: Context): RealEstateManagerRoomDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     RealEstateManagerRoomDatabase::class.java,
                     "real_estate_manager_database"
                 ).build()
-                
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }

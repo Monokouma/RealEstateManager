@@ -9,8 +9,8 @@ class InsertCreatedAgentUseCase @Inject constructor(
     suspend fun invoke(agentName: String, agentPictureRes: Int): Boolean =
         realEstateAgentDomainRepository.insertCreatedAgent(
             CreatedAgentEntity(
-                agentName,
-                agentPictureRes
+                name = agentName,
+                imageResource = agentPictureRes
             )
         ) >= 1L
 }

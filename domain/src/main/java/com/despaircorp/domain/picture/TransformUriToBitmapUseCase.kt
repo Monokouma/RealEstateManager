@@ -9,7 +9,7 @@ import javax.inject.Inject
 class TransformUriToBitmapUseCase @Inject constructor(
     private val application: Application
 ) {
-    suspend fun invoke(uri: Uri): Bitmap? =
+    fun invoke(uri: Uri): Bitmap? =
         application.contentResolver.openInputStream(uri)?.use { inputStream ->
             BitmapFactory.decodeStream(inputStream)
         }

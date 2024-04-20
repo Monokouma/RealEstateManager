@@ -7,7 +7,7 @@ import kotlin.math.pow
 class GetCalculatedLoanEntityUseCase @Inject constructor(
 
 ) {
-    suspend fun invoke(loanAmount: Int, downPayment: Int, termYears: Int): LoanEntity {
+    fun invoke(loanAmount: Int, downPayment: Int, termYears: Int): LoanEntity {
         val interestRate = 3.91
         val principal = loanAmount - downPayment
         val monthlyInterestRate = interestRate / 12 / 100

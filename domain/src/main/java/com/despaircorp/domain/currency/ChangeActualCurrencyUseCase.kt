@@ -7,7 +7,6 @@ import javax.inject.Inject
 class ChangeActualCurrencyUseCase @Inject constructor(
     private val currencyDomainRepository: CurrencyDomainRepository
 ) {
-    
     suspend fun invoke() {
         val actualCurrency = currencyDomainRepository.getActualCurrencyEntity()
         if (actualCurrency.currencyEnum == CurrencyEnum.US_DOLLAR) {

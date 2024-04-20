@@ -173,19 +173,19 @@ object EntitiesMaperinator {
     
     
     fun mapCurrencyDtoToCurrencyEntity(currencyDto: CurrencyDto): CurrencyEntity = CurrencyEntity(
-        currencyDto.currencyEnum ?: CurrencyEnum.US_DOLLAR
+        currencyEnum = currencyDto.currencyEnum ?: CurrencyEnum.US_DOLLAR
     )
     
     fun mapCurrencyDtoToCurrencyEntityAsFlow(currencyDtoAsFlow: Flow<CurrencyDto>): Flow<CurrencyEntity> =
         currencyDtoAsFlow.mapNotNull { currencyDto ->
             currencyDto.currencyEnum?.let {
-                CurrencyEntity(it)
+                CurrencyEntity(currencyEnum = it)
             }
         }
     
     fun mapCurrencyEntityToCurrencyDto(currencyEntity: CurrencyEntity): CurrencyDto = CurrencyDto(
-        1,
-        currencyEntity.currencyEnum
+        id = 1,
+        currencyEnum = currencyEntity.currencyEnum
     )
     
     fun mapEstateDtoToEstateEntity(estateDtoList: List<EstateDto>): List<EstateEntity> =

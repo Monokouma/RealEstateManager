@@ -41,7 +41,7 @@ object EntityProvidinator {
     const val DEFAULT_ESTATE_BED_ROOM_NUMBER = 2
     val DEFAULT_ESTATE_LOCATION = LatLng(0.0, 0.0)
     val DEFAULT_ESTATE_TYPE = EstateTypeEnum.MANOR
-    const val DEFAULT_ESTATE_PRICE = "10.000"
+    const val DEFAULT_ESTATE_PRICE = "10000"
     val DEFAULT_ESTATE_ENTRY_DATE = LocalDate.of(2022, 1, 11)
     val DEFAULT_ESTATE_SOLD_DATE = LocalDate.of(2022, 1, 11)
     val DEFAULT_ESTATE_STATUS = EstateStatus.FOR_SALE
@@ -182,7 +182,13 @@ object EntityProvidinator {
                 city = DEFAULT_ESTATE_CITY,
                 agentInChargeId = DEFAULT_AGENT_IN_CHARGE_ID
             ),
-            emptyList()
+            List(3) {
+                EstatePictureEntity(
+                    id = estateWithPictureId,
+                    imagePath = DEFAULT_BITMAP_FILE_PATH,
+                    description = DEFAULT_PICTURE_TYPE
+                )
+            }
         )
     }
     

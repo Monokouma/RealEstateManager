@@ -65,12 +65,15 @@ hilt {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":shared"))
+    testImplementation(project(":stubs"))
     implementation("org.chromium.net:cronet-embedded:119.6045.31")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
     implementation("androidx.activity:activity:1.8.0")
     implementation("androidx.sqlite:sqlite-ktx:2.4.0")
+    testImplementation(project(":domain"))
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    implementation("org.slf4j:slf4j-nop:2.0.7")
     
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

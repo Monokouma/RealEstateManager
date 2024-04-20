@@ -10,7 +10,6 @@ class IsUserConnectedToInternetUseCase @Inject constructor(
     fun invoke(): Flow<Boolean> = connectivityDomainRepository.isConnectedToInternet().transform {
         emit(
             it == NetworkType.CELLULAR || it == NetworkType.WIFI
-        
         )
     }
 }

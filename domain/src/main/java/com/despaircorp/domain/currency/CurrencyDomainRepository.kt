@@ -5,9 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface CurrencyDomainRepository {
     fun getActualCurrencyAsFlow(): Flow<CurrencyEntity>
-    
     suspend fun getActualCurrencyEntity(): CurrencyEntity
-    
     fun enqueueCurrencyWorker()
     suspend fun isCurrencyTableExist(): Boolean
     suspend fun insertCurrencyEntity(currencyEntity: CurrencyEntity)

@@ -39,9 +39,9 @@ class PictureInitWorker @AssistedInject constructor(
             }
             
             EstatePictureEntity(
-                id,
-                savedImagePath,
-                type
+                id = id,
+                imagePath = savedImagePath,
+                description = type
             )
         }
     
@@ -51,49 +51,42 @@ class PictureInitWorker @AssistedInject constructor(
             pictureDomainRepository.populatePictureTable(
                 listOf(
                     //1
-                    getEstatePictureEntity("first_facade.bmp", 1),
-                    getEstatePictureEntity("first_lounge.bmp", 1),
-                    getEstatePictureEntity("first_kitchen.bmp", 1),
-                    getEstatePictureEntity("first_bedroom.bmp", 1),
-                    getEstatePictureEntity("first_bathroom.bmp", 1),
+                    getEstatePictureEntity(filename = "first_facade.bmp", id = 1),
+                    getEstatePictureEntity(filename = "first_lounge.bmp", id = 1),
+                    getEstatePictureEntity(filename = "first_kitchen.bmp", id = 1),
+                    getEstatePictureEntity(filename = "first_bedroom.bmp", id = 1),
+                    getEstatePictureEntity(filename = "first_bathroom.bmp", id = 1),
                     
                     //2
-                    getEstatePictureEntity("second_facade.bmp", 2),
-                    getEstatePictureEntity("second_lounge.bmp", 2),
-                    getEstatePictureEntity("second_kitchen.bmp", 2),
-                    getEstatePictureEntity("second_bedroom.bmp", 2),
-                    getEstatePictureEntity("second_bathroom.bmp", 2),
+                    getEstatePictureEntity(filename = "second_facade.bmp", id = 2),
+                    getEstatePictureEntity(filename = "second_lounge.bmp", id = 2),
+                    getEstatePictureEntity(filename = "second_kitchen.bmp", id = 2),
+                    getEstatePictureEntity(filename = "second_bedroom.bmp", id = 2),
+                    getEstatePictureEntity(filename = "second_bathroom.bmp", id = 2),
                     
                     //3
-                    getEstatePictureEntity("third_facade.bmp", 3),
-                    getEstatePictureEntity("third_lounge.bmp", 3),
-                    getEstatePictureEntity("third_kitchen.bmp", 3),
-                    getEstatePictureEntity("third_bedroom.bmp", 3),
-                    getEstatePictureEntity("third_bathroom.bmp", 3),
+                    getEstatePictureEntity(filename = "third_facade.bmp", id = 3),
+                    getEstatePictureEntity(filename = "third_lounge.bmp", id = 3),
+                    getEstatePictureEntity(filename = "third_kitchen.bmp", id = 3),
+                    getEstatePictureEntity(filename = "third_bedroom.bmp", id = 3),
+                    getEstatePictureEntity(filename = "third_bathroom.bmp", id = 3),
                     
                     //4
-                    getEstatePictureEntity("fourth_facade.bmp", 4),
-                    getEstatePictureEntity("fourth_lounge.bmp", 4),
-                    getEstatePictureEntity("fourth_kitchen.bmp", 4),
-                    getEstatePictureEntity("fourth_bedroom.bmp", 4),
-                    getEstatePictureEntity("fourth_bathroom.bmp", 4),
+                    getEstatePictureEntity(filename = "fourth_facade.bmp", id = 4),
+                    getEstatePictureEntity(filename = "fourth_lounge.bmp", id = 4),
+                    getEstatePictureEntity(filename = "fourth_kitchen.bmp", id = 4),
+                    getEstatePictureEntity(filename = "fourth_bedroom.bmp", id = 4),
+                    getEstatePictureEntity(filename = "fourth_bathroom.bmp", id = 4),
                     
                     //5
-                    getEstatePictureEntity("fifth_facade.bmp", 5),
-                    getEstatePictureEntity("fifth_lounge.bmp", 5),
-                    getEstatePictureEntity("fifth_kitchen.bmp", 5),
-                    getEstatePictureEntity("fifth_bedroom.bmp", 5),
-                    getEstatePictureEntity("fifth_bathroom.bmp", 5),
-                    
-                    )
+                    getEstatePictureEntity(filename = "fifth_facade.bmp", id = 5),
+                    getEstatePictureEntity(filename = "fifth_lounge.bmp", id = 5),
+                    getEstatePictureEntity(filename = "fifth_kitchen.bmp", id = 5),
+                    getEstatePictureEntity(filename = "fifth_bedroom.bmp", id = 5),
+                    getEstatePictureEntity(filename = "fifth_bathroom.bmp", id = 5),
+                )
             )
-            
-            
         }
-        
-        
         return Result.success()
     }
-    
-    
 }

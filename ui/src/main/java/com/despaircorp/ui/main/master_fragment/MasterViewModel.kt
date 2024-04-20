@@ -125,9 +125,22 @@ class MasterViewModel @Inject constructor(
     }
     
     private fun formatToCorrectNumber(forCurrencyEnum: CurrencyEnum, price: String): String {
+        /*
         val format =
             NumberFormat.getNumberInstance(if (forCurrencyEnum == CurrencyEnum.US_DOLLAR) Locale.US else Locale.FRANCE)
+        
         return format.format(price.toInt())
+        
+         */
+        
+        val locale = if (forCurrencyEnum == CurrencyEnum.US_DOLLAR) Locale.US else Locale.FRANCE
+        val format = NumberFormat.getNumberInstance(locale)
+        
+        // Parse the string to a number using the locale-specific format
+        val number = format.parse(price) ?: throw IllegalArgumentException("Invalid number format")
+        
+        // Format the number back to a string using the same locale-specific format
+        return format.format(number)
     }
     
     fun onEstateClicked(estateId: Int) {
